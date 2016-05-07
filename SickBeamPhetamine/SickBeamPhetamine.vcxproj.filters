@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="code\src\CCamera.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CShader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CInputHandler.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CStaticMesh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CTimer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\RenderingUtilities.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\SCoreEngine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="code\hdr\CCamera.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\CInputHandler.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\CShader.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\CStaticMesh.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\CTimer.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\RenderingUtilities.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\SCoreEngine.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4a617964-414d-4245-a1ba-332d1982e4f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hdr">
+      <UniqueIdentifier>{3ab68260-e232-4ab4-92b3-e4cc2683e010}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
