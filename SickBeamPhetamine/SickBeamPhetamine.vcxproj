@@ -97,6 +97,7 @@
     <ClInclude Include="code\hdr\CShader.h" />
     <ClInclude Include="code\hdr\CStaticMesh.h" />
     <ClInclude Include="code\hdr\CTimer.h" />
+    <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h" />
     <ClInclude Include="code\hdr\RenderingUtilities.h" />
     <ClInclude Include="code\hdr\SCoreEngine.h" />
   </ItemGroup>

@@ -16,15 +16,13 @@
     <ClCompile Include="code\src\CTimer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="code\main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="code\src\RenderingUtilities.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="code\src\SCoreEngine.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="code\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\hdr\CCamera.h">
@@ -46,6 +44,9 @@
       <Filter>hdr</Filter>
     </ClInclude>
     <ClInclude Include="code\hdr\SCoreEngine.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h">
       <Filter>hdr</Filter>
     </ClInclude>
   </ItemGroup>
