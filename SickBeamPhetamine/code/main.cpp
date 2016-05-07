@@ -11,7 +11,7 @@
 int main(int argc, char *argv[]) {
 
 	// Redirect cerr to error.txt
-	std::ofstream out("error.txt");
+	std::ofstream out("log.txt");
 	std::streambuf* orig = std::cerr.rdbuf();
 	std::cerr.rdbuf(out.rdbuf());
 

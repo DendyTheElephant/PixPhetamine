@@ -88,6 +88,7 @@
     <ClCompile Include="code\src\CShader.cpp" />
     <ClCompile Include="code\src\CStaticMesh.cpp" />
     <ClCompile Include="code\src\CTimer.cpp" />
+    <ClCompile Include="code\src\LowLevelRenderingWrapper.cpp" />
     <ClCompile Include="code\src\RenderingUtilities.cpp" />
     <ClCompile Include="code\src\SCoreEngine.cpp" />
   </ItemGroup>
