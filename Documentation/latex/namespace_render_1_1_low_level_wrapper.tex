@@ -1,0 +1,110 @@
+\hypertarget{namespace_render_1_1_low_level_wrapper}{}\section{Render\+:\+:Low\+Level\+Wrapper Namespace Reference}
+\label{namespace_render_1_1_low_level_wrapper}\index{Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_render_1_1_low_level_wrapper_1_1_g_buffer}{G\+Buffer}
+\begin{DoxyCompactList}\small\item\em \hyperlink{struct_render_1_1_low_level_wrapper_1_1_g_buffer}{G\+Buffer} is a custom F\+BO (image buffers) to render the scene and apply some postprocess job. \end{DoxyCompactList}\item 
+struct \hyperlink{struct_render_1_1_low_level_wrapper_1_1_image_buffer}{Image\+Buffer}
+\begin{DoxyCompactList}\small\item\em \hyperlink{struct_render_1_1_low_level_wrapper_1_1_image_buffer}{Image\+Buffer} is a custom F\+BO to render in, usefull for many effects. \end{DoxyCompactList}\item 
+struct \hyperlink{struct_render_1_1_low_level_wrapper_1_1_v_a_o}{V\+AO}
+\begin{DoxyCompactList}\small\item\em My Vertex\+Array\+Object structure to handle 3D models efficiently in V\+R\+AM. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \hyperlink{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52a9a5e6a657b5b4f93f250ff999e4a355b}{T\+E\+X\+T\+U\+RE} = G\+L\+\_\+\+T\+E\+X\+T\+U\+R\+E\+\_\+2D, 
+\hyperlink{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52aca084a1a298f4b03cf1c59cac615419c}{T\+E\+X\+T\+U\+R\+E\+\_\+\+F\+O\+R\+\_\+\+A\+N\+T\+I\+\_\+\+A\+L\+I\+A\+S\+I\+NG} = G\+L\+\_\+\+T\+E\+X\+T\+U\+R\+E\+\_\+2\+D\+\_\+\+M\+U\+L\+T\+I\+S\+A\+M\+P\+LE, 
+\hyperlink{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52a16fce7d878b09ca7c6085f81c0e1396e}{B\+U\+F\+F\+E\+R\+\_\+\+C\+O\+N\+S\+T\+A\+NT} = G\+L\+\_\+\+S\+T\+A\+T\+I\+C\+\_\+\+D\+R\+AW, 
+\hyperlink{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52a3fb7f9e003b932d76cdeaebd425b326f}{B\+U\+F\+F\+E\+R\+\_\+\+D\+Y\+N\+A\+M\+IC} = G\+L\+\_\+\+D\+Y\+N\+A\+M\+I\+C\+\_\+\+D\+R\+AW
+ \}\begin{DoxyCompactList}\small\item\em Unamed enum, to remplace Open\+GL parameters by meaningfull names. \end{DoxyCompactList}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+S\+D\+L\+\_\+\+Window $\ast$ \hyperlink{namespace_render_1_1_low_level_wrapper_ac8b1aade5f9ab4c69dad92a029877b9a}{create\+S\+D\+L\+Window} (const char $\ast$window\+Title, int width, int height)
+\item 
+S\+D\+L\+\_\+\+G\+L\+Context \hyperlink{namespace_render_1_1_low_level_wrapper_a09d5f6c9599e494c5923f0597f66ff09}{init\+Render\+Context} (S\+D\+L\+\_\+\+Window $\ast$S\+D\+L\+Window)
+\item 
+G\+Luint \hyperlink{namespace_render_1_1_low_level_wrapper_a3436b54e4bf188460ffc6e989ebd8131}{create\+G\+Buffer} ()
+\item 
+void \hyperlink{namespace_render_1_1_low_level_wrapper_a860448a754bcf84f87d9cf8c1eb14804}{initialise\+Draw\+Into\+Buffer} (G\+Luint shader, G\+Luint fbo, G\+Lenum $\ast$targets, unsigned short number\+Of\+Targets)
+\item 
+void \hyperlink{namespace_render_1_1_low_level_wrapper_ae47247689f51a034b4fe6cf1ef0ba820}{multi\+Sampling\+Anti\+Aliasing} (\hyperlink{struct_render_1_1_low_level_wrapper_1_1_g_buffer}{G\+Buffer} $\ast$Aliased, \hyperlink{struct_render_1_1_low_level_wrapper_1_1_g_buffer}{G\+Buffer} $\ast$Output, int width, int height)
+\item 
+void \hyperlink{namespace_render_1_1_low_level_wrapper_a88218ae7b3a3d43437d8f641feaf108a}{shutdown\+S\+D\+L\+\_\+\+GL} (S\+D\+L\+\_\+\+Window $\ast$S\+D\+L\+Window, S\+D\+L\+\_\+\+G\+L\+Context G\+L\+Context)
+\end{DoxyCompactItemize}
+
+
+\subsection{Enumeration Type Documentation}
+\subsubsection[{\texorpdfstring{anonymous enum}{anonymous enum}}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}\hypertarget{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52}{}\label{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52}
+
+
+Unamed enum, to remplace Open\+GL parameters by meaningfull names. 
+
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{T\+E\+X\+T\+U\+RE@{T\+E\+X\+T\+U\+RE}!Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}}\index{Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}!T\+E\+X\+T\+U\+RE@{T\+E\+X\+T\+U\+RE}}\item[{\em 
+T\+E\+X\+T\+U\+RE\hypertarget{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52a9a5e6a657b5b4f93f250ff999e4a355b}{}\label{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52a9a5e6a657b5b4f93f250ff999e4a355b}
+}]\index{T\+E\+X\+T\+U\+R\+E\+\_\+\+F\+O\+R\+\_\+\+A\+N\+T\+I\+\_\+\+A\+L\+I\+A\+S\+I\+NG@{T\+E\+X\+T\+U\+R\+E\+\_\+\+F\+O\+R\+\_\+\+A\+N\+T\+I\+\_\+\+A\+L\+I\+A\+S\+I\+NG}!Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}}\index{Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}!T\+E\+X\+T\+U\+R\+E\+\_\+\+F\+O\+R\+\_\+\+A\+N\+T\+I\+\_\+\+A\+L\+I\+A\+S\+I\+NG@{T\+E\+X\+T\+U\+R\+E\+\_\+\+F\+O\+R\+\_\+\+A\+N\+T\+I\+\_\+\+A\+L\+I\+A\+S\+I\+NG}}\item[{\em 
+T\+E\+X\+T\+U\+R\+E\+\_\+\+F\+O\+R\+\_\+\+A\+N\+T\+I\+\_\+\+A\+L\+I\+A\+S\+I\+NG\hypertarget{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52aca084a1a298f4b03cf1c59cac615419c}{}\label{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52aca084a1a298f4b03cf1c59cac615419c}
+}]\index{B\+U\+F\+F\+E\+R\+\_\+\+C\+O\+N\+S\+T\+A\+NT@{B\+U\+F\+F\+E\+R\+\_\+\+C\+O\+N\+S\+T\+A\+NT}!Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}}\index{Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}!B\+U\+F\+F\+E\+R\+\_\+\+C\+O\+N\+S\+T\+A\+NT@{B\+U\+F\+F\+E\+R\+\_\+\+C\+O\+N\+S\+T\+A\+NT}}\item[{\em 
+B\+U\+F\+F\+E\+R\+\_\+\+C\+O\+N\+S\+T\+A\+NT\hypertarget{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52a16fce7d878b09ca7c6085f81c0e1396e}{}\label{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52a16fce7d878b09ca7c6085f81c0e1396e}
+}]\index{B\+U\+F\+F\+E\+R\+\_\+\+D\+Y\+N\+A\+M\+IC@{B\+U\+F\+F\+E\+R\+\_\+\+D\+Y\+N\+A\+M\+IC}!Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}}\index{Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}!B\+U\+F\+F\+E\+R\+\_\+\+D\+Y\+N\+A\+M\+IC@{B\+U\+F\+F\+E\+R\+\_\+\+D\+Y\+N\+A\+M\+IC}}\item[{\em 
+B\+U\+F\+F\+E\+R\+\_\+\+D\+Y\+N\+A\+M\+IC\hypertarget{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52a3fb7f9e003b932d76cdeaebd425b326f}{}\label{namespace_render_1_1_low_level_wrapper_a59e70fb6c29042051b300c88c0343f52a3fb7f9e003b932d76cdeaebd425b326f}
+}]\end{description}
+\end{Desc}
+
+
+\subsection{Function Documentation}
+\index{Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}!create\+G\+Buffer@{create\+G\+Buffer}}
+\index{create\+G\+Buffer@{create\+G\+Buffer}!Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}}
+\subsubsection[{\texorpdfstring{create\+G\+Buffer()}{createGBuffer()}}]{\setlength{\rightskip}{0pt plus 5cm}G\+Luint Render\+::\+Low\+Level\+Wrapper\+::create\+G\+Buffer (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{namespace_render_1_1_low_level_wrapper_a3436b54e4bf188460ffc6e989ebd8131}{}\label{namespace_render_1_1_low_level_wrapper_a3436b54e4bf188460ffc6e989ebd8131}
+\index{Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}!create\+S\+D\+L\+Window@{create\+S\+D\+L\+Window}}
+\index{create\+S\+D\+L\+Window@{create\+S\+D\+L\+Window}!Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}}
+\subsubsection[{\texorpdfstring{create\+S\+D\+L\+Window(const char $\ast$window\+Title, int width, int height)}{createSDLWindow(const char *windowTitle, int width, int height)}}]{\setlength{\rightskip}{0pt plus 5cm}S\+D\+L\+\_\+\+Window$\ast$ Render\+::\+Low\+Level\+Wrapper\+::create\+S\+D\+L\+Window (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{window\+Title, }
+\item[{int}]{width, }
+\item[{int}]{height}
+\end{DoxyParamCaption}
+)}\hypertarget{namespace_render_1_1_low_level_wrapper_ac8b1aade5f9ab4c69dad92a029877b9a}{}\label{namespace_render_1_1_low_level_wrapper_ac8b1aade5f9ab4c69dad92a029877b9a}
+\index{Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}!initialise\+Draw\+Into\+Buffer@{initialise\+Draw\+Into\+Buffer}}
+\index{initialise\+Draw\+Into\+Buffer@{initialise\+Draw\+Into\+Buffer}!Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}}
+\subsubsection[{\texorpdfstring{initialise\+Draw\+Into\+Buffer(\+G\+Luint shader, G\+Luint fbo, G\+Lenum $\ast$targets, unsigned short number\+Of\+Targets)}{initialiseDrawIntoBuffer(GLuint shader, GLuint fbo, GLenum *targets, unsigned short numberOfTargets)}}]{\setlength{\rightskip}{0pt plus 5cm}void Render\+::\+Low\+Level\+Wrapper\+::initialise\+Draw\+Into\+Buffer (
+\begin{DoxyParamCaption}
+\item[{G\+Luint}]{shader, }
+\item[{G\+Luint}]{fbo, }
+\item[{G\+Lenum $\ast$}]{targets, }
+\item[{unsigned short}]{number\+Of\+Targets}
+\end{DoxyParamCaption}
+)}\hypertarget{namespace_render_1_1_low_level_wrapper_a860448a754bcf84f87d9cf8c1eb14804}{}\label{namespace_render_1_1_low_level_wrapper_a860448a754bcf84f87d9cf8c1eb14804}
+\index{Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}!init\+Render\+Context@{init\+Render\+Context}}
+\index{init\+Render\+Context@{init\+Render\+Context}!Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}}
+\subsubsection[{\texorpdfstring{init\+Render\+Context(\+S\+D\+L\+\_\+\+Window $\ast$\+S\+D\+L\+Window)}{initRenderContext(SDL_Window *SDLWindow)}}]{\setlength{\rightskip}{0pt plus 5cm}S\+D\+L\+\_\+\+G\+L\+Context Render\+::\+Low\+Level\+Wrapper\+::init\+Render\+Context (
+\begin{DoxyParamCaption}
+\item[{S\+D\+L\+\_\+\+Window $\ast$}]{S\+D\+L\+Window}
+\end{DoxyParamCaption}
+)}\hypertarget{namespace_render_1_1_low_level_wrapper_a09d5f6c9599e494c5923f0597f66ff09}{}\label{namespace_render_1_1_low_level_wrapper_a09d5f6c9599e494c5923f0597f66ff09}
+\index{Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}!multi\+Sampling\+Anti\+Aliasing@{multi\+Sampling\+Anti\+Aliasing}}
+\index{multi\+Sampling\+Anti\+Aliasing@{multi\+Sampling\+Anti\+Aliasing}!Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}}
+\subsubsection[{\texorpdfstring{multi\+Sampling\+Anti\+Aliasing(\+G\+Buffer $\ast$\+Aliased, G\+Buffer $\ast$\+Output, int width, int height)}{multiSamplingAntiAliasing(GBuffer *Aliased, GBuffer *Output, int width, int height)}}]{\setlength{\rightskip}{0pt plus 5cm}void Render\+::\+Low\+Level\+Wrapper\+::multi\+Sampling\+Anti\+Aliasing (
+\begin{DoxyParamCaption}
+\item[{{\bf G\+Buffer} $\ast$}]{Aliased, }
+\item[{{\bf G\+Buffer} $\ast$}]{Output, }
+\item[{int}]{width, }
+\item[{int}]{height}
+\end{DoxyParamCaption}
+)}\hypertarget{namespace_render_1_1_low_level_wrapper_ae47247689f51a034b4fe6cf1ef0ba820}{}\label{namespace_render_1_1_low_level_wrapper_ae47247689f51a034b4fe6cf1ef0ba820}
+\index{Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}!shutdown\+S\+D\+L\+\_\+\+GL@{shutdown\+S\+D\+L\+\_\+\+GL}}
+\index{shutdown\+S\+D\+L\+\_\+\+GL@{shutdown\+S\+D\+L\+\_\+\+GL}!Render\+::\+Low\+Level\+Wrapper@{Render\+::\+Low\+Level\+Wrapper}}
+\subsubsection[{\texorpdfstring{shutdown\+S\+D\+L\+\_\+\+G\+L(\+S\+D\+L\+\_\+\+Window $\ast$\+S\+D\+L\+Window, S\+D\+L\+\_\+\+G\+L\+Context G\+L\+Context)}{shutdownSDL_GL(SDL_Window *SDLWindow, SDL_GLContext GLContext)}}]{\setlength{\rightskip}{0pt plus 5cm}void Render\+::\+Low\+Level\+Wrapper\+::shutdown\+S\+D\+L\+\_\+\+GL (
+\begin{DoxyParamCaption}
+\item[{S\+D\+L\+\_\+\+Window $\ast$}]{S\+D\+L\+Window, }
+\item[{S\+D\+L\+\_\+\+G\+L\+Context}]{G\+L\+Context}
+\end{DoxyParamCaption}
+)}\hypertarget{namespace_render_1_1_low_level_wrapper_a88218ae7b3a3d43437d8f641feaf108a}{}\label{namespace_render_1_1_low_level_wrapper_a88218ae7b3a3d43437d8f641feaf108a}

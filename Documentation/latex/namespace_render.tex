@@ -1,0 +1,75 @@
+\hypertarget{namespace_render}{}\section{Render Namespace Reference}
+\label{namespace_render}\index{Render@{Render}}
+
+
+Namespace used to group wrapped rendering primitives and the rendering engine.  
+
+
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespace_render_1_1_low_level_wrapper}{Low\+Level\+Wrapper}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+S\+D\+L\+\_\+\+Window $\ast$ \hyperlink{namespace_render_adf29e56ff326677c124861739820b16a}{create\+S\+D\+L\+Window} (const char $\ast$window\+Title, int width, int height)
+\item 
+S\+D\+L\+\_\+\+G\+L\+Context \hyperlink{namespace_render_aad76a251628691722b0712c95bf0bb02}{init\+Render\+Context} (S\+D\+L\+\_\+\+Window $\ast$S\+D\+L\+Window)
+\item 
+void \hyperlink{namespace_render_a886d42ffb43f1ebedbf9bf74a629d674}{initialise\+Draw\+Into\+Buffer} (G\+Luint shader, G\+Luint fbo, G\+Lenum $\ast$targets, unsigned short number\+Of\+Targets)
+\item 
+void \hyperlink{namespace_render_abb1b94ec984a8838a7fe3904dacb5c75}{multi\+Sampling\+Anti\+Aliasing} (G\+Buffer $\ast$Aliased, G\+Buffer $\ast$Output, int width, int height)
+\item 
+void \hyperlink{namespace_render_aab49d380cf878a16923cb047da7a273d}{shutdown\+S\+D\+L\+\_\+\+GL} (S\+D\+L\+\_\+\+Window $\ast$S\+D\+L\+Window, S\+D\+L\+\_\+\+G\+L\+Context G\+L\+Context)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Namespace used to group wrapped rendering primitives and the rendering engine. 
+
+\subsection{Function Documentation}
+\index{Render@{Render}!create\+S\+D\+L\+Window@{create\+S\+D\+L\+Window}}
+\index{create\+S\+D\+L\+Window@{create\+S\+D\+L\+Window}!Render@{Render}}
+\subsubsection[{\texorpdfstring{create\+S\+D\+L\+Window(const char $\ast$window\+Title, int width, int height)}{createSDLWindow(const char *windowTitle, int width, int height)}}]{\setlength{\rightskip}{0pt plus 5cm}S\+D\+L\+\_\+\+Window$\ast$ Render\+::create\+S\+D\+L\+Window (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{window\+Title, }
+\item[{int}]{width, }
+\item[{int}]{height}
+\end{DoxyParamCaption}
+)}\hypertarget{namespace_render_adf29e56ff326677c124861739820b16a}{}\label{namespace_render_adf29e56ff326677c124861739820b16a}
+\index{Render@{Render}!initialise\+Draw\+Into\+Buffer@{initialise\+Draw\+Into\+Buffer}}
+\index{initialise\+Draw\+Into\+Buffer@{initialise\+Draw\+Into\+Buffer}!Render@{Render}}
+\subsubsection[{\texorpdfstring{initialise\+Draw\+Into\+Buffer(\+G\+Luint shader, G\+Luint fbo, G\+Lenum $\ast$targets, unsigned short number\+Of\+Targets)}{initialiseDrawIntoBuffer(GLuint shader, GLuint fbo, GLenum *targets, unsigned short numberOfTargets)}}]{\setlength{\rightskip}{0pt plus 5cm}void Render\+::initialise\+Draw\+Into\+Buffer (
+\begin{DoxyParamCaption}
+\item[{G\+Luint}]{shader, }
+\item[{G\+Luint}]{fbo, }
+\item[{G\+Lenum $\ast$}]{targets, }
+\item[{unsigned short}]{number\+Of\+Targets}
+\end{DoxyParamCaption}
+)}\hypertarget{namespace_render_a886d42ffb43f1ebedbf9bf74a629d674}{}\label{namespace_render_a886d42ffb43f1ebedbf9bf74a629d674}
+\index{Render@{Render}!init\+Render\+Context@{init\+Render\+Context}}
+\index{init\+Render\+Context@{init\+Render\+Context}!Render@{Render}}
+\subsubsection[{\texorpdfstring{init\+Render\+Context(\+S\+D\+L\+\_\+\+Window $\ast$\+S\+D\+L\+Window)}{initRenderContext(SDL_Window *SDLWindow)}}]{\setlength{\rightskip}{0pt plus 5cm}S\+D\+L\+\_\+\+G\+L\+Context Render\+::init\+Render\+Context (
+\begin{DoxyParamCaption}
+\item[{S\+D\+L\+\_\+\+Window $\ast$}]{S\+D\+L\+Window}
+\end{DoxyParamCaption}
+)}\hypertarget{namespace_render_aad76a251628691722b0712c95bf0bb02}{}\label{namespace_render_aad76a251628691722b0712c95bf0bb02}
+\index{Render@{Render}!multi\+Sampling\+Anti\+Aliasing@{multi\+Sampling\+Anti\+Aliasing}}
+\index{multi\+Sampling\+Anti\+Aliasing@{multi\+Sampling\+Anti\+Aliasing}!Render@{Render}}
+\subsubsection[{\texorpdfstring{multi\+Sampling\+Anti\+Aliasing(\+G\+Buffer $\ast$\+Aliased, G\+Buffer $\ast$\+Output, int width, int height)}{multiSamplingAntiAliasing(GBuffer *Aliased, GBuffer *Output, int width, int height)}}]{\setlength{\rightskip}{0pt plus 5cm}void Render\+::multi\+Sampling\+Anti\+Aliasing (
+\begin{DoxyParamCaption}
+\item[{G\+Buffer $\ast$}]{Aliased, }
+\item[{G\+Buffer $\ast$}]{Output, }
+\item[{int}]{width, }
+\item[{int}]{height}
+\end{DoxyParamCaption}
+)}\hypertarget{namespace_render_abb1b94ec984a8838a7fe3904dacb5c75}{}\label{namespace_render_abb1b94ec984a8838a7fe3904dacb5c75}
+\index{Render@{Render}!shutdown\+S\+D\+L\+\_\+\+GL@{shutdown\+S\+D\+L\+\_\+\+GL}}
+\index{shutdown\+S\+D\+L\+\_\+\+GL@{shutdown\+S\+D\+L\+\_\+\+GL}!Render@{Render}}
+\subsubsection[{\texorpdfstring{shutdown\+S\+D\+L\+\_\+\+G\+L(\+S\+D\+L\+\_\+\+Window $\ast$\+S\+D\+L\+Window, S\+D\+L\+\_\+\+G\+L\+Context G\+L\+Context)}{shutdownSDL_GL(SDL_Window *SDLWindow, SDL_GLContext GLContext)}}]{\setlength{\rightskip}{0pt plus 5cm}void Render\+::shutdown\+S\+D\+L\+\_\+\+GL (
+\begin{DoxyParamCaption}
+\item[{S\+D\+L\+\_\+\+Window $\ast$}]{S\+D\+L\+Window, }
+\item[{S\+D\+L\+\_\+\+G\+L\+Context}]{G\+L\+Context}
+\end{DoxyParamCaption}
+)}\hypertarget{namespace_render_aab49d380cf878a16923cb047da7a273d}{}\label{namespace_render_aab49d380cf878a16923cb047da7a273d}
