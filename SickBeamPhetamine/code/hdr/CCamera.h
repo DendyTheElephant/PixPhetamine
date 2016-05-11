@@ -1,3 +1,7 @@
+/// \file		CCamera.h
+///	\author		Daniel Huc
+/// \date		April 2016
+
 #pragma once
 
 /* Standard library includes */
@@ -12,6 +16,11 @@
 
 
 namespace Render {
+	/// \brief		Camera class
+	/// \details	Handling the camera and creates the ViewProjection matrix is easier with this abstraction! \n
+	///				Usage: set the OpenGL camera parameters at the instanciation (static values)\n
+	///				then move this camera with basic primitives (move view along axis, move view by angles, set position) \n
+	///				finally, get the ViewProjection matrix, it's simple, just ask!
 	class CCamera {
 		/* Members */
 	private:
@@ -34,6 +43,9 @@ namespace Render {
 
 		/* Methods */
 	public:
+		/// \brief		Constructor
+		/// \details    Provide the window context, and change initialisation values in the header file (static init).
+		/// \param		window		SDL_Window to provide context.
 		CCamera(SDL_Window* window);
 		void setFOV(const float &newAngle);
 		void moveCameraForward(const float &distance);

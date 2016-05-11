@@ -1,8 +1,8 @@
 /// \file		LowLevelRenderingWrapper.h
 ///	\author		Daniel Huc
 /// \date		April 2016
-/// \brief		Description principale
-/// \details	Sous description
+/// \brief		Custom wrapper to the OpenGL API
+/// \details	Features: VAOs, GBuffers, ImageBuffers, context creation, structures, functions like AntiAliasing filtering and more ...
 #pragma once
 
 /* Standard library includes */
