@@ -8,6 +8,10 @@
 /* Standard library includes */
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <algorithm>
 
 /* External dependencies */
 #include <GL/glew.h>
@@ -62,13 +66,15 @@ namespace Render {
 		///				Post process effects and deffered shading can be applied on the color texture (a VBO is also provided).
 		///				Don't forget to free() after using!
 		struct GBuffer {
-			GLuint id{ 0 };				///< ID of the FBO, used to reference the active FBO in the rendering pipeline
-			GLuint colorTexture{ 0 };	///< ID of the color texture of the scene (classic rendering)
-			GLuint normalTexture{ 0 };	///< ID of the normal texture of the scene (in eyeview coord)
-			GLuint depthTexture{ 0 };	///< ID of the depth texture of the scene (Z Buffer rendering)
-			GLuint typeTexture{ 0 };	///< ID of the texture that references the object type (custom trick)
-			GLuint VBO_Quad{ 0 };		///< Buffer of the vertices used to display a texture (quad, 2 triangles)
-			GLuint VAO_id{ 0 };			///< ID of the VAO, usefull to render the quad texture
+			int		width{ 0 };				///< Texture width
+			int		height{ 0 };			///< Texture height
+			GLuint	id{ 0 };				///< ID of the FBO, used to reference the active FBO in the rendering pipeline
+			GLuint	colorTexture{ 0 };		///< ID of the color texture of the scene (classic rendering)
+			GLuint	normalTexture{ 0 };		///< ID of the normal texture of the scene (in eyeview coord)
+			GLuint	depthTexture{ 0 };		///< ID of the depth texture of the scene (Z Buffer rendering)
+			GLuint	typeTexture{ 0 };		///< ID of the texture that references the object type (custom trick)
+			GLuint	VBO_Quad{ 0 };			///< Buffer of the vertices used to display a texture (quad, 2 triangles)
+			GLuint	VAO_id{ 0 };			///< ID of the VAO, usefull to render the quad texture
 
 			/// \brief	Default constructor, to make static declaration then use with initialize
 			GBuffer() { ; }
@@ -85,10 +91,12 @@ namespace Render {
 		/// \details	Use this to render in a custom texture, apply processes, render in other buffers then display on screen
 		///				Don't forget to free() after using!
 		struct ImageBuffer {
-			GLuint id{ 0 };			///< ID of the FBO, used to reference the active FBO in the rendering pipeline
-			GLuint texture{ 0 };	///< ID of the color texture of the scene (classic rendering)
-			GLuint VBO_Quad{ 0 };	///< Buffer of the vertices used to display a texture (quad, 2 triangles)
-			GLuint VAO_id{ 0 };		///< ID of the VAO, usefull to render the quad texture
+			int		width{ 0 };				///< Texture width
+			int		height{ 0 };			///< Texture height
+			GLuint	id{ 0 };				///< ID of the FBO, used to reference the active FBO in the rendering pipeline
+			GLuint	texture{ 0 };			///< ID of the color texture of the scene (classic rendering)
+			GLuint	VBO_Quad{ 0 };			///< Buffer of the vertices used to display a texture (quad, 2 triangles)
+			GLuint	VAO_id{ 0 };			///< ID of the VAO, usefull to render the quad texture
 
 			/// \brief	Default constructor, to make static declaration then use with initialize
 			ImageBuffer() { ; }
@@ -99,6 +107,52 @@ namespace Render {
 			void initialize(int width, int height);
 			void free();
 		};
+
+
+
+		class CStaticMesh {
+		/* Members */
+		private:
+			VAO*					m_VAO;
+			std::vector<GLfloat>	m_vertices;
+			std::vector<GLfloat>	m_normals;
+			std::vector<GLfloat>	m_colors;
+			std::vector<GLushort>	m_faces;
+
+		/* Methods */
+		public:
+			CStaticMesh(const char* OBJpath);
+			~CStaticMesh();
+
+			GLuint			getVBO() { return m_VAO->id; }
+			unsigned int	getNumberOfFaces() const { return m_faces.size(); }
+		};
+
+
+
+		class CShader {
+		/* Members */
+		public:
+			CShader() { ; }
+			~CShader();
+
+			void load(const char *vertex_file_path, const char *fragment_file_path);
+			void reload(const char *vertex_file_path, const char *fragment_file_path);
+			inline GLuint id() { return m_programId; }
+
+		/* Methods */
+		private:
+			GLuint m_programId{ 0 };
+
+			// String containing the source code of the input file
+			std::string getCode(const char *file_path);
+			// Call it after each shader compilation
+			void checkCompilation(GLuint shaderId);
+			// Call it after linking the program
+			void checkLinks(GLuint programId);
+		};
+
+
 
 		/// \brief		Will open the SDL Window (UI) and initialize OpenGL (render context) in it.
 		/// \details	Use this before anything to set up the context of OpenGL and to display the window. \n

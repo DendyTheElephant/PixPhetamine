@@ -4,19 +4,10 @@
     <ClCompile Include="code\src\CCamera.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="code\src\CShader.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="code\src\CInputHandler.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="code\src\CStaticMesh.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="code\src\CTimer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\RenderingUtilities.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="code\src\SCoreEngine.cpp">
@@ -34,16 +25,7 @@
     <ClInclude Include="code\hdr\CInputHandler.h">
       <Filter>hdr</Filter>
     </ClInclude>
-    <ClInclude Include="code\hdr\CShader.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\CStaticMesh.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
     <ClInclude Include="code\hdr\CTimer.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\RenderingUtilities.h">
       <Filter>hdr</Filter>
     </ClInclude>
     <ClInclude Include="code\hdr\SCoreEngine.h">

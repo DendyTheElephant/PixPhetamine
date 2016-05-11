@@ -2,7 +2,7 @@
 
 namespace Render {
 
-	/* Anonymous namespace for RenderingUtilities private functions */
+	/* Anonymous namespace for RenderingUtilities private functions  ===========================================*/
 	namespace {
 		/* A simple function that prints a message, the error code returned by SDL,
 		* and quits the application */
@@ -11,7 +11,6 @@ namespace Render {
 			SDL_Quit();
 			exit(1);
 		}
-
 
 		void checkSDLError(int line = -1) {
 			const char *error = SDL_GetError();
@@ -84,7 +83,7 @@ namespace Render {
 			glEnableVertexAttribArray(0);
 		}
 	}
-	/* End of Anonymous namespace */
+	/* End of Anonymous namespace ==========================================================================*/
 
 
 
@@ -93,7 +92,9 @@ namespace Render {
 
 
 	namespace LowLevelWrapper {
-
+		/* ======================================================================================================================================================== */
+		/* ======================     [VAO]     =================================================================================================================== */
+		/* ======================================================================================================================================================== */
 		void VAO::loadToGPU(std::vector<GLfloat> &vertices, std::vector<GLfloat> &normals, std::vector<GLfloat> &colors, std::vector<GLushort> &faces, GLenum mode) {
 			// Create some buffers inside the GPU memory
 			glGenVertexArrays(1, &id);
@@ -141,6 +142,10 @@ namespace Render {
 		}
 
 
+
+		/* ======================================================================================================================================================== */
+		/* ======================     [GBuffer]     =============================================================================================================== */
+		/* ======================================================================================================================================================== */
 		void GBuffer::initialize(int width, int height, GLenum textureType) {
 			/* Texture */
 			glActiveTexture(GL_TEXTURE0);
@@ -181,6 +186,11 @@ namespace Render {
 			glDeleteFramebuffers(1, &id);
 		}
 
+
+
+		/* ======================================================================================================================================================== */
+		/* ======================     [ImageBuffer]     =========================================================================================================== */
+		/* ======================================================================================================================================================== */
 		void ImageBuffer::initialize(int width, int height) {
 			/* Texture */
 			glActiveTexture(GL_TEXTURE0);
@@ -207,7 +217,161 @@ namespace Render {
 
 
 
+		/* ======================================================================================================================================================== */
+		/* ======================     [CStaticMesh]     =========================================================================================================== */
+		/* ======================================================================================================================================================== */
+		CStaticMesh::CStaticMesh(const char* OBJpath) {
 
+			/* Fills the RAM with the mesh */
+			std::string line;
+
+			std::ifstream OBJfile(OBJpath, std::ios::in);
+			if (!OBJfile) {
+				std::cerr << "Cannot open: " << OBJpath << std::endl;
+				exit(1);
+			}
+
+			GLfloat posX, posY, posZ, normalX, normalY, normalZ, colorR, colorG, colorB;
+			GLushort vertexNdx1, vertexNdx2, vertexNdx3;
+			while (getline(OBJfile, line)) {
+				if (line.substr(0, 2) == "v ") {
+					std::istringstream s(line.substr(2));
+					s >> posX >> posY >> posZ >> normalX >> normalY >> normalZ >> colorR >> colorG >> colorB;
+					m_vertices.push_back(posX); m_vertices.push_back(posY); m_vertices.push_back(posZ);
+					m_normals.push_back(normalX); m_normals.push_back(normalY); m_normals.push_back(normalZ);
+					m_colors.push_back(colorR); m_colors.push_back(colorG); m_colors.push_back(colorB);
+				}
+				else if (line.substr(0, 2) == "f ") {
+					std::istringstream s(line.substr(2));
+					s >> vertexNdx1 >> vertexNdx2 >> vertexNdx3;
+					m_faces.push_back(vertexNdx1); m_faces.push_back(vertexNdx2); m_faces.push_back(vertexNdx3);
+				}
+			}
+
+			/* Fills the VRAM with the mesh */
+			m_VAO = new VAO();
+			m_VAO->loadToGPU(m_vertices, m_normals, m_colors, m_faces);
+		}
+
+		CStaticMesh::~CStaticMesh() {
+			m_VAO->free();
+		}
+
+
+
+
+		/* ======================================================================================================================================================== */
+		/* ======================     [CShader]     =============================================================================================================== */
+		/* ======================================================================================================================================================== */
+		CShader::~CShader() {
+			if (glIsProgram(m_programId)) {
+				glDeleteProgram(m_programId);
+			}
+		}
+
+		void CShader::load(const char *vertex_file_path,
+			const char *fragment_file_path) {
+
+			// create and compile vertex shader object
+			std::string vertexCode = getCode(vertex_file_path);
+			const char * vertexCodeC = vertexCode.c_str();
+			GLuint vertexId = glCreateShader(GL_VERTEX_SHADER);
+			glShaderSource(vertexId, 1, &(vertexCodeC), NULL);
+			glCompileShader(vertexId);
+			std::cerr << vertex_file_path << " :" << std::endl;
+			checkCompilation(vertexId);
+
+			// create and compile fragment shader object
+			std::string fragmentCode = getCode(fragment_file_path);
+			const char * fragmentCodeC = fragmentCode.c_str();
+			GLuint fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
+			glShaderSource(fragmentId, 1, &(fragmentCodeC), NULL);
+			glCompileShader(fragmentId);
+			std::cerr << fragment_file_path << " :" << std::endl;
+			checkCompilation(fragmentId);
+
+			// create, attach and link program object
+			m_programId = glCreateProgram();
+			glAttachShader(m_programId, vertexId);
+			glAttachShader(m_programId, fragmentId);
+			glLinkProgram(m_programId);
+			checkLinks(m_programId);
+
+			// delete vertex and fragment ids
+			glDeleteShader(vertexId);
+			glDeleteShader(fragmentId);
+		}
+
+
+		void CShader::reload(const char *vertex_file_path,
+			const char *fragment_file_path) {
+
+			// check if the program already contains a shader 
+			if (glIsProgram(m_programId)) {
+				// delete it...
+				glDeleteProgram(m_programId);
+			}
+
+			// ... and reload it
+			load(vertex_file_path, fragment_file_path);
+		}
+
+		void CShader::checkCompilation(GLuint shaderId) {
+			// check if the compilation was successfull (and display syntax errors)
+			// call it after each shader compilation
+			GLint result = GL_FALSE;
+			int infoLogLength;
+
+			glGetShaderiv(shaderId, GL_COMPILE_STATUS, &result);
+			glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+			if (infoLogLength > 0) {
+				std::vector<char> message(infoLogLength + 1);
+				glGetShaderInfoLog(shaderId, infoLogLength, NULL, &message[0]);
+				std::cerr << &message[0] << std::endl;
+			}
+		}
+
+		void CShader::checkLinks(GLuint programId) {
+			// check if links were successfull (and display errors)
+			// call it after linking the program  
+			GLint result = GL_FALSE;
+			int infoLogLength;
+
+			glGetProgramiv(programId, GL_LINK_STATUS, &result);
+			glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+			if (infoLogLength > 0) {
+				std::vector<char> message(infoLogLength + 1);
+				glGetProgramInfoLog(programId, infoLogLength, NULL, &message[0]);
+				std::cerr << &message[0] << std::endl;
+			}
+		}
+
+		std::string CShader::getCode(const char *file_path) {
+			// return a string containing the source code of the input file
+			std::string   shaderCode;
+			std::ifstream shaderStream(file_path, std::ios::in);
+
+			if (!shaderStream.is_open()) {
+				std::cerr << "Unable to open " << file_path << std::endl;
+				return "";
+			}
+
+			std::string line = "";
+			while (getline(shaderStream, line))
+				shaderCode += "\n" + line;
+			shaderStream.close();
+
+			return shaderCode;
+		}
+
+
+
+
+		/* ======================================================================================================================================================== */
+		/* ======================     [Routines]     ============================================================================================================== */
+		/* ======================================================================================================================================================== */
 		void openWindowAndInitializeOpenGL(SDL_Window* SDL_WindowReference, SDL_GLContext* SDL_GLContextReference, const char* windowTitle, int width, int height) {
 			/* Initialize SDL's Video subsystem */
 			if (SDL_Init(SDL_INIT_VIDEO) < 0) {

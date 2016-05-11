@@ -5,7 +5,7 @@ SCoreEngine::SCoreEngine() : m_isRunning(false) {
 	m_GLContext = render::initRenderContext(m_SDLWindow);
 
 	m_InputHandler = new CInputHandler(m_SDLWindow);
-	m_Camera = new CCamera(m_SDLWindow);
+	m_Camera = new Render::CCamera(m_SDLWindow);
 
 	/* ============================================== */
 	/* Insert names of shaders to load in ShaderNames */
@@ -73,7 +73,7 @@ void SCoreEngine::destroyInstance() {
 
 void SCoreEngine::loadShaders() {
 	for (auto const &it_shaderName : m_ShaderNames) {
-		m_ShaderList[it_shaderName] = new CShader();
+		m_ShaderList[it_shaderName] = new Render::CShader();
 		std::string vertexShader = SHADERS_FOLDER + it_shaderName + SHADER_VERTEX_EXTENSION;
 		std::string fragmentShader = SHADERS_FOLDER + it_shaderName + SHADER_FRAGMENT_EXTENSION;
 		m_ShaderList[it_shaderName]->load(vertexShader.c_str(), fragmentShader.c_str());
@@ -83,7 +83,7 @@ void SCoreEngine::loadShaders() {
 void SCoreEngine::loadMeshes() {
 	for (auto const &it_meshName : m_MeshNames) {
 		std::string meshPath = MESHES_FOLDER + it_meshName + MESHES_EXTENSION;
-		m_MeshList[it_meshName] = new CStaticMesh(meshPath.c_str());
+		m_MeshList[it_meshName] = new Render::CStaticMesh(meshPath.c_str());
 	}
 }
 

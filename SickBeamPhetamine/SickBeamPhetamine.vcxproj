@@ -85,21 +85,15 @@
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\src\CCamera.cpp" />
     <ClCompile Include="code\src\CInputHandler.cpp" />
-    <ClCompile Include="code\src\CShader.cpp" />
-    <ClCompile Include="code\src\CStaticMesh.cpp" />
     <ClCompile Include="code\src\CTimer.cpp" />
     <ClCompile Include="code\src\LowLevelRenderingWrapper.cpp" />
-    <ClCompile Include="code\src\RenderingUtilities.cpp" />
     <ClCompile Include="code\src\SCoreEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\hdr\CCamera.h" />
     <ClInclude Include="code\hdr\CInputHandler.h" />
-    <ClInclude Include="code\hdr\CShader.h" />
-    <ClInclude Include="code\hdr\CStaticMesh.h" />
     <ClInclude Include="code\hdr\CTimer.h" />
     <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h" />
-    <ClInclude Include="code\hdr\RenderingUtilities.h" />
     <ClInclude Include="code\hdr\SCoreEngine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
