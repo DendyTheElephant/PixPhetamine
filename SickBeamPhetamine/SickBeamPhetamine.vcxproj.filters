@@ -17,6 +17,12 @@
     <ClCompile Include="code\src\LowLevelRenderingWrapper.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="code\src\CShader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CStaticMesh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\hdr\CCamera.h">
@@ -32,6 +38,12 @@
       <Filter>hdr</Filter>
     </ClInclude>
     <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\CShader.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\CStaticMesh.h">
       <Filter>hdr</Filter>
     </ClInclude>
   </ItemGroup>

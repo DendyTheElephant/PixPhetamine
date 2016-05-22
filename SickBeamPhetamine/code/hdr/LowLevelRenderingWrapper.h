@@ -110,47 +110,6 @@ namespace Render {
 
 
 
-		class CStaticMesh {
-		/* Members */
-		private:
-			VAO*					m_VAO;
-			std::vector<GLfloat>	m_vertices;
-			std::vector<GLfloat>	m_normals;
-			std::vector<GLfloat>	m_colors;
-			std::vector<GLushort>	m_faces;
-
-		/* Methods */
-		public:
-			CStaticMesh(const char* OBJpath);
-			~CStaticMesh();
-
-			GLuint			getVBO() { return m_VAO->id; }
-			unsigned int	getNumberOfFaces() const { return m_faces.size(); }
-		};
-
-
-
-		class CShader {
-		/* Members */
-		public:
-			CShader() { ; }
-			~CShader();
-
-			void load(const char *vertex_file_path, const char *fragment_file_path);
-			void reload(const char *vertex_file_path, const char *fragment_file_path);
-			inline GLuint id() { return m_programId; }
-
-		/* Methods */
-		private:
-			GLuint m_programId{ 0 };
-
-			// String containing the source code of the input file
-			std::string getCode(const char *file_path);
-			// Call it after each shader compilation
-			void checkCompilation(GLuint shaderId);
-			// Call it after linking the program
-			void checkLinks(GLuint programId);
-		};
 
 
 
