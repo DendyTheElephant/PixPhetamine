@@ -1,6 +1,6 @@
 #include "LowLevelRenderingWrapper.h"
 
-namespace Render {
+namespace PixPhetamine {
 
 	/* Anonymous namespace for RenderingUtilities private functions  ===========================================*/
 	namespace {
@@ -12,7 +12,7 @@ namespace Render {
 			exit(1);
 		}
 
-		void checkSDLError(int line = -1) {
+		void checkSDLError(pxInt line = -1) {
 			const char *error = SDL_GetError();
 			if (*error != '\0') {
 				std::cerr << "SDL Error: " << error << std::endl;
@@ -23,7 +23,7 @@ namespace Render {
 			}
 		}
 
-		void checkFrameBuffer(int line = -1) {
+		void checkFrameBuffer(pxInt line = -1) {
 			GLenum status;
 			if ((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE) {
 				std::cerr << "glCheckFramebufferStatus: error " << status << std::endl;
@@ -56,7 +56,7 @@ namespace Render {
 			}
 		}
 
-		void createTexture(GLuint &texture, GLenum textureType, GLenum iFormat, GLenum format, int width, int height) {
+		void createTexture(GLvramLocation &texture, GLenum textureType, GLenum iFormat, GLenum format, pxInt width, pxInt height) {
 			glGenTextures(1, &texture);
 			glBindTexture(textureType, texture);
 			glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -70,9 +70,9 @@ namespace Render {
 			glBindTexture(textureType, 0);
 		}
 
-		void createQuad(GLuint &VAO, GLuint &VBO) {
+		void createQuad(GLvramLocation &VAO, GLvramLocation &VBO) {
 			/* Generation of the Quad VBO (to draw the Post Process image) */
-			const GLfloat quadData[] = { -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, 1.0f, 0.0f,
+			const pxFloat quadData[] = { -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, 1.0f, 0.0f,
 				-1.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f };
 			glGenVertexArrays(1, &VAO);
 			glGenBuffers(1, &VBO);
@@ -95,7 +95,7 @@ namespace Render {
 		/* ======================================================================================================================================================== */
 		/* ======================     [VAO]     =================================================================================================================== */
 		/* ======================================================================================================================================================== */
-		void VAO::loadToGPU(std::vector<GLfloat> &vertices, std::vector<GLfloat> &normals, std::vector<GLfloat> &colors, std::vector<GLushort> &faces, GLenum mode) {
+		void VAO::loadToGPU(pxFloatArray &vertices, pxFloatArray &normals, pxFloatArray &colors, pxUInt16Array &faces, GLenum mode) {
 			// Create some buffers inside the GPU memory
 			glGenVertexArrays(1, &id);
 			glGenBuffers(1, &VBO_Vertices);
@@ -108,19 +108,19 @@ namespace Render {
 
 			// Store mesh positions into buffer inside the GPU memory
 			glBindBuffer(GL_ARRAY_BUFFER, VBO_Vertices);
-			glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), mode);
+			glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(pxFloat), vertices.data(), mode);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
 			glEnableVertexAttribArray(0);
 
 			// Store mesh normals into buffer inside the GPU memory
 			glBindBuffer(GL_ARRAY_BUFFER, VBO_Normals);
-			glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(GLfloat), normals.data(), mode);
+			glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(pxFloat), normals.data(), mode);
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 0, (void *)0);
 			glEnableVertexAttribArray(1);
 
 			// Store mesh colors into buffer inside the GPU memory
 			glBindBuffer(GL_ARRAY_BUFFER, VBO_Colors);
-			glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(GLfloat), colors.data(), mode);
+			glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(pxFloat), colors.data(), mode);
 			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
 			glEnableVertexAttribArray(2);
 
@@ -146,7 +146,7 @@ namespace Render {
 		/* ======================================================================================================================================================== */
 		/* ======================     [GBuffer]     =============================================================================================================== */
 		/* ======================================================================================================================================================== */
-		void GBuffer::initialize(int width, int height, GLenum textureType) {
+		void GBuffer::initialize(pxInt width, pxInt height, GLenum textureType) {
 			/* Texture */
 			glActiveTexture(GL_TEXTURE0);
 			createTexture(colorTexture, textureType, GL_RGBA32F, GL_RGBA, width, height);
@@ -191,7 +191,7 @@ namespace Render {
 		/* ======================================================================================================================================================== */
 		/* ======================     [ImageBuffer]     =========================================================================================================== */
 		/* ======================================================================================================================================================== */
-		void ImageBuffer::initialize(int width, int height) {
+		void ImageBuffer::initialize(pxInt width, pxInt height) {
 			/* Texture */
 			glActiveTexture(GL_TEXTURE0);
 			createTexture(texture, GL_TEXTURE_2D, GL_RGBA32F, GL_RGBA, width, height);
@@ -224,7 +224,7 @@ namespace Render {
 		/* ======================================================================================================================================================== */
 		/* ======================     [Routines]     ============================================================================================================== */
 		/* ======================================================================================================================================================== */
-		void openWindowAndInitializeOpenGL(SDL_Window* SDL_WindowReference, SDL_GLContext* SDL_GLContextReference, const char* windowTitle, int width, int height) {
+		void openWindowAndInitializeOpenGL(SDL_Window* SDL_WindowReference, SDL_GLContext* SDL_GLContextReference, const char* windowTitle, pxInt width, pxInt height) {
 			/* Initialize SDL's Video subsystem */
 			if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 				quit("Unable to initialize SDL"); // Or die on error
@@ -295,7 +295,7 @@ namespace Render {
 		}
 
 
-		void initialiseDrawIntoBuffer(GLuint shader, GLuint fbo, GLenum* targets, unsigned short numberOfTargets) {
+		void initialiseDrawIntoBuffer(GLvramLocation shader, GLvramLocation fbo, GLenum* targets, unsigned short numberOfTargets) {
 			glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
 			/* Set color to clear color */
@@ -315,7 +315,7 @@ namespace Render {
 		}
 
 
-		void multiSamplingAntiAliasing(GBuffer* Aliased, GBuffer* Output, int width, int height) {
+		void multiSamplingAntiAliasing(GBuffer* Aliased, GBuffer* Output, pxInt width, pxInt height) {
 			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, Output->id); // Result is going in the non aliased GBuffer
 			glBindFramebuffer(GL_READ_FRAMEBUFFER, Aliased->id); // From the multi sampled aliased GBuffer
 			glClearColor(0.5, 0.5, 0.5, 1.0);

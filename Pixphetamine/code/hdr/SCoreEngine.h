@@ -14,11 +14,13 @@
 #include <glm/gtc/type_ptr.hpp>
 
 /* Internal headers includes */
+#include "HInternalTypesAliases.h"
 #include "CStaticMesh.h"
 #include "CShader.h"
 #include "CInputHandler.h"
 #include "CCamera.h"
 #include "CTimer.h"
+#include "LowLevelRenderingWrapper.h"
 
 #define WINDOW_WIDTH				1200
 #define WINDOW_HEIGHT				800
@@ -35,10 +37,10 @@
 class SCoreEngine {
 /* Members */
 private:
-	bool m_isRunning;
+	pxBool m_isRunning;
 
-	int m_frame{ 0 };
-	unsigned long int m_elapsedTime{ 0 };
+	pxInt m_frame{ 0 };
+	pxUInt64 m_elapsedTime{ 0 };
 	//CTimer m_frameTimer; // Timer reset on each frame for FPS computation
 	CTimer m_secondTimer; // Timer reset on each second for FPS computation
 	//CTimer m_renderSceneTimer; // Timer that would measure the scene rendering
@@ -50,22 +52,22 @@ private:
 	SDL_GLContext m_GLContext; // Our opengl context handle
 
 	CInputHandler* m_InputHandler; // Retrieve the inputs of player one
-	CCamera* m_Camera; // Camera for the player one
+	PixPhetamine::CCamera* m_Camera; // Camera for the player one
 
 	std::vector<std::string> m_ShaderNames;
 	std::vector<std::string> m_MeshNames;
 
-	std::map<std::string, CShader*> m_ShaderList; // List of the shaders used in the game
-	std::map<std::string, CStaticMesh*> m_MeshList;
+	std::map<std::string, PixPhetamine::CShader*> m_ShaderList; // List of the shaders used in the game
+	std::map<std::string, PixPhetamine::CStaticMesh*> m_MeshList;
 
-	glm::mat4 m_ModelMatrix;
-	glm::mat4 m_ViewProjectionMatrix;
-	glm::mat4 m_ModelViewProjectionMatrix;
+	pxMat4f m_ModelMatrix;
+	pxMat4f m_ViewProjectionMatrix;
+	pxMat4f m_ModelViewProjectionMatrix;
 
-	render::GBuffer* m_GBufferMultiSampled;
-	render::GBuffer* m_GBufferWitoutAliasing;
-	render::ImageBuffer* m_BufferBlurPartial;
-	render::ImageBuffer* m_BufferBlur;
+	PixPhetamine::LowLevelWrapper::GBuffer* m_GBufferMultiSampled;
+	PixPhetamine::LowLevelWrapper::GBuffer* m_GBufferWitoutAliasing;
+	PixPhetamine::LowLevelWrapper::ImageBuffer* m_BufferBlurPartial;
+	PixPhetamine::LowLevelWrapper::ImageBuffer* m_BufferBlur;
 
 /* Methods */
 private:

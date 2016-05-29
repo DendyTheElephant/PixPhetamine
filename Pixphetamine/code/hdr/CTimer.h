@@ -6,14 +6,17 @@
 /* External dependencies */
 #include <SDL2/SDL.h>
 
+/* Internal headers includes */
+#include "HInternalTypesAliases.h"
+
 class CTimer {
 /* Members */
 private:
-	int m_startTicks{ 0 }; // Initial time
-	int m_pausedTicks{ 0 }; // Time on pause
+	pxInt m_startTicks{ 0 }; // Initial time
+	pxInt m_pausedTicks{ 0 }; // Time on pause
 
-	bool m_isPaused{ false }; // Status in pause
-	bool m_isStarted{ false }; // Status in activity
+	pxBool m_isPaused{ false }; // Status in pause
+	pxBool m_isStarted{ false }; // Status in activity
 
 /* Methods */
 public:
@@ -24,8 +27,8 @@ public:
 	void pause();
 	void restart();
 
-	float getElapsedTime(); // Get miliseconds elapsed from start or pause
+	pxFloat getElapsedTime() const; // Get miliseconds elapsed from start or pause
 
-	bool isStarted()	const { return m_isStarted; }
-	bool isPaused()		const { return m_isPaused; }
+	pxBool isStarted()	const { return m_isStarted; }
+	pxBool isPaused()	const { return m_isPaused; }
 };

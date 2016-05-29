@@ -2,27 +2,39 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <exception>
 
 /* Internal headers includes */
 #include "SCoreEngine.h"
 
 
 /* Entry point */
-int main(int argc, char *argv[]) {
-
-	// Redirect cerr to error.txt
-	std::ofstream out("log.txt");
-	std::streambuf* orig = std::cerr.rdbuf();
-	std::cerr.rdbuf(out.rdbuf());
+pxInt main(pxInt argc, char *argv[]) {
 
 	std::cout.precision(2);
 
+// If in debug mode, print cerr in console, else in log.txt
+#ifdef DEBUG
 
-	SCoreEngine* Engine = &SCoreEngine::getInstance();
+#else
+	std::ofstream out("log.txt");
+	std::streambuf* orig = std::cerr.rdbuf();
+	std::cerr.rdbuf(out.rdbuf());
+#endif
+
+	try {
+		
+		SCoreEngine* Engine = &SCoreEngine::getInstance();
+
+		Engine->runGameLoop();
+
+		SCoreEngine::destroyInstance();
 	
-	Engine->runGameLoop();
+	}
+	catch (const std::exception & e) {
+		std::cerr << e.what() << "\n";
+	}
+	
 
-	SCoreEngine::destroyInstance();
-
-	return 0;
+	return EXIT_SUCCESS;
 }

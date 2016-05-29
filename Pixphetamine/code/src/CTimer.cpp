@@ -33,7 +33,7 @@ void CTimer::restart() {
 }
 
 
-float CTimer::getElapsedTime() {
+pxFloat CTimer::getElapsedTime() const {
 	if (m_isStarted == true) {
 		if (m_isPaused == true) {
 			return m_pausedTicks;

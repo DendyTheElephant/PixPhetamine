@@ -20,8 +20,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+/* Internal headers includes */
+#include "HInternalTypesAliases.h"
+
 /// Namespace used to group wrapped rendering primitives and the rendering engine.
-namespace Render {
+namespace PixPhetamine {
 
 	namespace LowLevelWrapper {
 
@@ -41,40 +44,40 @@ namespace Render {
 		///				Use the ID of the VBO to display from the VRAM \n
 		///				Then free ressources on the GPU!
 		struct VAO {
-			GLuint id{ 0 };				///< ID of the VAO, used to reference the active VBO in the rendering pipeline
-			GLuint VBO_Vertices{ 0 };	///< Buffer containing the vertices of the 3D model
-			GLuint VBO_Normals{ 0 };	///< Buffer containing the normals of the 3D model
-			GLuint VBO_Colors{ 0 };		///< Buffer containing the colors of the 3D model
-			GLuint VBO_Indices{ 0 };	///< Buffer containing the indices of the vertices of the 3D model
+			GLvramLocation id{ 0 };				///< ID of the VAO, used to reference the active VBO in the rendering pipeline
+			GLvramLocation VBO_Vertices{ 0 };	///< Buffer containing the vertices of the 3D model
+			GLvramLocation VBO_Normals{ 0 };	///< Buffer containing the normals of the 3D model
+			GLvramLocation VBO_Colors{ 0 };		///< Buffer containing the colors of the 3D model
+			GLvramLocation VBO_Indices{ 0 };	///< Buffer containing the indices of the vertices of the 3D model
 
 			/// \brief		Default constructor, to make static declaration then use with loadToGPU
 			VAO() { ; }
 			/// \brief		Allocate VBOs, send buffers to VRAM, so you can use VAO.
 			/// \details    You have to specify the vertices, normals, colors, faces and then choose the buffer type (see parameters of mode).
-			/// \param		vertices	Vector of GLfloat must be allocated.
-			/// \param		normals		Vector of GLfloat must be allocated.
-			/// \param		colors		Vector of GLfloat must be allocated.
-			/// \param		faces		Vector of GLfloat must be allocated.
+			/// \param		vertices	Vector of pxFloat must be allocated.
+			/// \param		normals		Vector of pxFloat must be allocated.
+			/// \param		colors		Vector of pxFloat must be allocated.
+			/// \param		faces		Vector of pxFloat must be allocated.
 			/// \param		mode		GL_STATIC_DRAW or any parameters from https://www.opengl.org/sdk/docs/man/html/glBufferData.xhtml
-			void loadToGPU(std::vector<GLfloat> &vertices, std::vector<GLfloat> &normals, std::vector<GLfloat> &colors, std::vector<GLushort> &faces, GLenum mode);
+			void loadToGPU(pxFloatArray &vertices, pxFloatArray &normals, pxFloatArray &colors, pxUInt16Array &faces, GLenum mode);
 			void free();
 		};
 
-		/// \brief		GBuffer is a custom FBO (image buffers) to render the scene and apply some postprocess job
+		/// \brief		GBuffer is a custom FBO (image buffers) to PixPhetamine the scene and apply some postprocess job
 		/// \details	The GBuffer is used to get the scene in the screen space, with colors, normals, depth, and
 		///				type of objects in the screen. \n
 		///				Post process effects and deffered shading can be applied on the color texture (a VBO is also provided).
 		///				Don't forget to free() after using!
 		struct GBuffer {
-			int		width{ 0 };				///< Texture width
-			int		height{ 0 };			///< Texture height
-			GLuint	id{ 0 };				///< ID of the FBO, used to reference the active FBO in the rendering pipeline
-			GLuint	colorTexture{ 0 };		///< ID of the color texture of the scene (classic rendering)
-			GLuint	normalTexture{ 0 };		///< ID of the normal texture of the scene (in eyeview coord)
-			GLuint	depthTexture{ 0 };		///< ID of the depth texture of the scene (Z Buffer rendering)
-			GLuint	typeTexture{ 0 };		///< ID of the texture that references the object type (custom trick)
-			GLuint	VBO_Quad{ 0 };			///< Buffer of the vertices used to display a texture (quad, 2 triangles)
-			GLuint	VAO_id{ 0 };			///< ID of the VAO, usefull to render the quad texture
+			pxInt			width{ 0 };				///< Texture width
+			pxInt			height{ 0 };			///< Texture height
+			GLvramLocation	id{ 0 };				///< ID of the FBO, used to reference the active FBO in the rendering pipeline
+			GLvramLocation	colorTexture{ 0 };		///< ID of the color texture of the scene (classic rendering)
+			GLvramLocation	normalTexture{ 0 };		///< ID of the normal texture of the scene (in eyeview coord)
+			GLvramLocation	depthTexture{ 0 };		///< ID of the depth texture of the scene (Z Buffer rendering)
+			GLvramLocation	typeTexture{ 0 };		///< ID of the texture that references the object type (custom trick)
+			GLvramLocation	VBO_Quad{ 0 };			///< Buffer of the vertices used to display a texture (quad, 2 triangles)
+			GLvramLocation	VAO_id{ 0 };			///< ID of the VAO, usefull to PixPhetamine the quad texture
 
 			/// \brief	Default constructor, to make static declaration then use with initialize
 			GBuffer() { ; }
@@ -83,20 +86,20 @@ namespace Render {
 			/// \param		width			Width of the texture
 			/// \param		height			Height of the texture
 			/// \param		textureType		GL_TEXTURE_2D or any parameters from https://www.opengl.org/sdk/docs/man/html/glTexParameter.xhtml
-			void initialize(int width, int height, GLenum textureType);
+			void initialize(pxInt width, pxInt height, GLenum textureType);
 			void free();
 		};
 
-		/// \brief		ImageBuffer is a custom FBO to render in, usefull for many effects.
-		/// \details	Use this to render in a custom texture, apply processes, render in other buffers then display on screen
+		/// \brief		ImageBuffer is a custom FBO to PixPhetamine in, usefull for many effects.
+		/// \details	Use this to PixPhetamine in a custom texture, apply processes, PixPhetamine in other buffers then display on screen
 		///				Don't forget to free() after using!
 		struct ImageBuffer {
-			int		width{ 0 };				///< Texture width
-			int		height{ 0 };			///< Texture height
-			GLuint	id{ 0 };				///< ID of the FBO, used to reference the active FBO in the rendering pipeline
-			GLuint	texture{ 0 };			///< ID of the color texture of the scene (classic rendering)
-			GLuint	VBO_Quad{ 0 };			///< Buffer of the vertices used to display a texture (quad, 2 triangles)
-			GLuint	VAO_id{ 0 };			///< ID of the VAO, usefull to render the quad texture
+			GLvramLocation		width{ 0 };				///< Texture width
+			GLvramLocation		height{ 0 };			///< Texture height
+			GLvramLocation		id{ 0 };				///< ID of the FBO, used to reference the active FBO in the rendering pipeline
+			GLvramLocation		texture{ 0 };			///< ID of the color texture of the scene (classic rendering)
+			GLvramLocation		VBO_Quad{ 0 };			///< Buffer of the vertices used to display a texture (quad, 2 triangles)
+			GLvramLocation		VAO_id{ 0 };			///< ID of the VAO, usefull to PixPhetamine the quad texture
 
 			/// \brief	Default constructor, to make static declaration then use with initialize
 			ImageBuffer() { ; }
@@ -104,7 +107,7 @@ namespace Render {
 			/// \details    Will creates sized texture (GL_TEXTURE_2D), ready to be rendered in.
 			/// \param		width			Width of the texture
 			/// \param		height			Height of the texture
-			void initialize(int width, int height);
+			void initialize(pxInt width, pxInt height);
 			void free();
 		};
 
@@ -113,7 +116,7 @@ namespace Render {
 
 
 
-		/// \brief		Will open the SDL Window (UI) and initialize OpenGL (render context) in it.
+		/// \brief		Will open the SDL Window (UI) and initialize OpenGL (PixPhetamine context) in it.
 		/// \details	Use this before anything to set up the context of OpenGL and to display the window. \n
 		///				Don't forget to shut down display with shutdown_SDL_GL()!
 		/// \param		SDL_WindowReference		Out parameter, will reference the SDL Window that can be processed by this reference
@@ -121,9 +124,9 @@ namespace Render {
 		/// \param		windowTitle				Const char* that will appears in the window caption
 		/// \param		width					Width of the window and openGL viewport
 		/// \param		height					Height of the window and openGL viewport
-		void openWindowAndInitializeOpenGL(SDL_Window* SDL_WindowReference, SDL_GLContext* SDL_GLContextReference, const char* windowTitle, int width, int height);
-		void initialiseDrawIntoBuffer(GLuint shader, GLuint fbo, GLenum* targets, unsigned short numberOfTargets);
-		void multiSamplingAntiAliasing(GBuffer* Aliased, GBuffer* Output, int width, int height);
+		void openWindowAndInitializeOpenGL(SDL_Window* SDL_WindowReference, SDL_GLContext* SDL_GLContextReference, const char* windowTitle, pxInt width, pxInt height);
+		void initialiseDrawIntoBuffer(GLvramLocation shader, GLvramLocation fbo, GLenum* targets, unsigned short numberOfTargets);
+		void multiSamplingAntiAliasing(GBuffer* Aliased, GBuffer* Output, pxInt width, pxInt height);
 		void shutdownSDL_GL(SDL_Window* SDLWindow, SDL_GLContext GLContext);
 
 	}

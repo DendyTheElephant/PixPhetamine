@@ -1,3 +1,6 @@
+/// \file		CInputHandler.h
+///	\author		Daniel Huc
+/// \date		April 2016
 #pragma once
 
 /* Standard library includes */
@@ -6,30 +9,32 @@
 /* External dependencies */
 #include <SDL2/SDL.h>
 
+/* Internal headers includes */
+#include "HInternalTypesAliases.h"
 
 class CInputHandler {
+	/* Members */
 	private:
-	// Attributs
 		SDL_Event event;
-		unsigned int m_mousePositionX;
-		unsigned int m_mousePositionY;
-		int m_mouseMotionX;
-		int m_mouseMotionY;
-		unsigned int m_endEvent;
-		unsigned int m_moveBackward;
-		unsigned int m_moveForward;
-		unsigned int m_moveLeft;
-		unsigned int m_moveRight;
-		unsigned int m_shoot;
-		unsigned int m_bulletTime;
-		unsigned int m_pause;
+		pxUInt m_mousePositionX;
+		pxUInt m_mousePositionY;
+		pxInt m_mouseMotionX;
+		pxInt m_mouseMotionY;
+		pxUInt m_endEvent;
+		pxUInt m_moveBackward;
+		pxUInt m_moveForward;
+		pxUInt m_moveLeft;
+		pxUInt m_moveRight;
+		pxUInt m_shoot;
+		pxUInt m_bulletTime;
+		pxUInt m_pause;
 
 		SDL_Window* m_window;
-		int WINDOW_CENTER_X;
-		int WINDOW_CENTER_Y;
+		pxInt WINDOW_CENTER_X;
+		pxInt WINDOW_CENTER_Y;
 		
 	
-	// Methodes
+	/* Methods */
 		void keyPressed(SDL_KeyboardEvent* key);
 		void keyReleased(SDL_KeyboardEvent* key);
 		void mouseMoved(SDL_MouseMotionEvent* mouse);
@@ -39,16 +44,16 @@ class CInputHandler {
 	
 	public:
 		CInputHandler(SDL_Window* window);
-		unsigned int getMoveForward()	const { return m_moveForward; }
-		unsigned int getMoveBackward()	const { return m_moveBackward; }
-		unsigned int getMoveLeft()		const { return m_moveLeft; }
-		unsigned int getMoveRight()		const { return m_moveRight; }
-		int getMouseMotionX()			{ return m_mouseMotionX; m_mouseMotionX = 0; }
-		int getMouseMotionY()			{ return m_mouseMotionY; m_mouseMotionY = 0; }
-		unsigned int getShoot()			const { return m_shoot; }
-		unsigned int getBulletTime()	const { return m_bulletTime; }
-		unsigned int isNotQuit()		const { return !m_endEvent; }
-		unsigned int isNotPaused()      const { return !m_pause; }
+		pxUInt getMoveForward()		const { return m_moveForward; }
+		pxUInt getMoveBackward()	const { return m_moveBackward; }
+		pxUInt getMoveLeft()		const { return m_moveLeft; }
+		pxUInt getMoveRight()		const { return m_moveRight; }
+		pxInt getMouseMotionX()		{ return m_mouseMotionX; m_mouseMotionX = 0; }
+		pxInt getMouseMotionY()		{ return m_mouseMotionY; m_mouseMotionY = 0; }
+		pxUInt getShoot()			const { return m_shoot; }
+		pxUInt getBulletTime()		const { return m_bulletTime; }
+		pxUInt isNotQuit()			const { return !m_endEvent; }
+		pxUInt isNotPaused()		const { return !m_pause; }
 		
 		void update();
 };

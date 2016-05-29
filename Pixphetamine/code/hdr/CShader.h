@@ -1,27 +1,48 @@
+/// \file		CShader.h
+///	\author		Daniel Huc
+/// \date		April 2016
 #pragma once
 
+/* Standard library includes */
+#include <stdio.h>
+#include <vector>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <cstring>
+
+/* External dependencies */
 #include <GL/glew.h>
 #include <string>
 
-class CShader {
+/* Internal headers includes */
+#include "HInternalTypesAliases.h"
+#include "HExceptions.h"
 
-public:
-	 CShader();
-	 ~CShader();
+namespace PixPhetamine {
+	/// \brief		Shader loader
+	/// \details	Provides a shader code loader, and error displayer (once loaded, you can just reload the shader)
+	class CShader {
 
-	 void load(const char *vertex_file_path, const char *fragment_file_path);
-	 void reload(const char *vertex_file_path, const char *fragment_file_path);
-	 inline GLuint id() {return m_programId;}
+	public:
+		CShader();
+		~CShader();
 
-private:
-	GLuint m_programId;
+		void load(const char * vertexFilePath, const char * fragmentFilePath);
+		void reload(const char * vertexFilePath, const char * fragmentFilePath);
+		inline pxUInt id() { return m_programId; }
 
-	// string containing the source code of the input file
-	std::string getCode(const char *file_path);
+	private:
+		pxUInt m_programId;
 
-	// call it after each shader compilation
-	void checkCompilation(GLuint shaderId);
+		// string containing the source code of the input file
+		std::string CShader::getCode(const char * filePath) const throw(Exception::FileNotFound_Exception);
 
-	// call it after linking the program
-	void checkLinks(GLuint programId);
-};
+		// call it after each shader compilation
+		void checkCompilation(pxUInt shaderId) const;
+
+		// call it after linking the program
+		void checkLinks(pxUInt programId) const;
+	};
+
+}

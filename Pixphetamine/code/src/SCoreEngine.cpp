@@ -1,11 +1,11 @@
 #include "SCoreEngine.h"
 
 SCoreEngine::SCoreEngine() : m_isRunning(false) {
-	m_SDLWindow = render::createSDLWindow(WINDOW_CAPTION, WINDOW_WIDTH, WINDOW_HEIGHT);
-	m_GLContext = render::initRenderContext(m_SDLWindow);
+	m_SDLWindow = PixPhetamine::LowLevelWrapper::createSDLWindow(WINDOW_CAPTION, WINDOW_WIDTH, WINDOW_HEIGHT);
+	m_GLContext = PixPhetamine::LowLevelWrapper::initRenderContext(m_SDLWindow);
 
 	m_InputHandler = new CInputHandler(m_SDLWindow);
-	m_Camera = new Render::CCamera(m_SDLWindow);
+	m_Camera = new PixPhetamine::CCamera(m_SDLWindow);
 
 	/* ============================================== */
 	/* Insert names of shaders to load in ShaderNames */
@@ -28,10 +28,10 @@ SCoreEngine::SCoreEngine() : m_isRunning(false) {
 	loadShaders();
 	loadMeshes();
 
-	m_GBufferMultiSampled = new render::GBuffer();
-	m_GBufferWitoutAliasing = new render::GBuffer();
-	m_BufferBlurPartial = new render::ImageBuffer();
-	m_BufferBlur = new render::ImageBuffer();
+	m_GBufferMultiSampled = new PixPhetamine::LowLevelWrapper::GBuffer();
+	m_GBufferWitoutAliasing = new PixPhetamine::LowLevelWrapper::GBuffer();
+	m_BufferBlurPartial = new PixPhetamine::LowLevelWrapper::ImageBuffer();
+	m_BufferBlur = new PixPhetamine::LowLevelWrapper::ImageBuffer();
 	m_GBufferMultiSampled->initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GL_TEXTURE_2D_MULTISAMPLE);
 	m_GBufferWitoutAliasing->initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GL_TEXTURE_2D);
 	m_BufferBlurPartial->initialize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -39,7 +39,7 @@ SCoreEngine::SCoreEngine() : m_isRunning(false) {
 }
 
 SCoreEngine::~SCoreEngine() {
-	render::shutdownSDL_GL(m_SDLWindow, m_GLContext);
+	PixPhetamine::LowLevelWrapper::shutdownSDL_GL(m_SDLWindow, m_GLContext);
 
 	m_GBufferMultiSampled->free();
 	m_GBufferWitoutAliasing->free();
@@ -73,7 +73,7 @@ void SCoreEngine::destroyInstance() {
 
 void SCoreEngine::loadShaders() {
 	for (auto const &it_shaderName : m_ShaderNames) {
-		m_ShaderList[it_shaderName] = new Render::CShader();
+		m_ShaderList[it_shaderName] = new PixPhetamine::CShader();
 		std::string vertexShader = SHADERS_FOLDER + it_shaderName + SHADER_VERTEX_EXTENSION;
 		std::string fragmentShader = SHADERS_FOLDER + it_shaderName + SHADER_FRAGMENT_EXTENSION;
 		m_ShaderList[it_shaderName]->load(vertexShader.c_str(), fragmentShader.c_str());
@@ -83,7 +83,7 @@ void SCoreEngine::loadShaders() {
 void SCoreEngine::loadMeshes() {
 	for (auto const &it_meshName : m_MeshNames) {
 		std::string meshPath = MESHES_FOLDER + it_meshName + MESHES_EXTENSION;
-		m_MeshList[it_meshName] = new Render::CStaticMesh(meshPath.c_str());
+		m_MeshList[it_meshName] = new PixPhetamine::CStaticMesh(meshPath.c_str());
 	}
 }
 
@@ -99,13 +99,13 @@ void SCoreEngine::runGameLoop() {
 
 	do {
 		
-		const Uint32 startFrameTime = SDL_GetTicks();
+		const pxUInt startFrameTime = SDL_GetTicks();
 
 		m_InputHandler->update();
 		
-		m_Camera->moveView((float)m_InputHandler->getMouseMotionX(), (float)m_InputHandler->getMouseMotionY());
+		m_Camera->moveView((pxFloat)m_InputHandler->getMouseMotionX(), (pxFloat)m_InputHandler->getMouseMotionY());
 
-		float speed = 0.4f;
+		pxFloat speed = 0.4f;
 
 		if (m_InputHandler->getMoveLeft()) {
 			m_Camera->moveCameraLeft(speed);
@@ -121,10 +121,10 @@ void SCoreEngine::runGameLoop() {
 		}
 
 
-		glm::vec3 sunDirectionV = glm::vec3(0.5f, 0.5f, 0.0f);
+		pxVec3f sunDirectionV = pxVec3f(0.5f, 0.5f, 0.0f);
 		sunDirectionV = glm::normalize(sunDirectionV);
-		float sunDirection[3] = { sunDirectionV.x, sunDirectionV.y, sunDirectionV.z };
-		float sunColor[3] = { 1.0f, 1.0f, 1.0f };
+		pxFloat sunDirection[3] = { sunDirectionV.x, sunDirectionV.y, sunDirectionV.z };
+		pxFloat sunColor[3] = { 1.0f, 1.0f, 1.0f };
 
 
 
@@ -133,19 +133,19 @@ void SCoreEngine::runGameLoop() {
 		/* =========================================================================================== */
 		m_ViewProjectionMatrix = m_Camera->getViewProjectionMatrix();
 		GLenum gBufferTargets[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_DEPTH_ATTACHMENT };
-		render::initialiseDrawIntoBuffer(m_ShaderList["basic"]->id(), m_GBufferMultiSampled->id, gBufferTargets, 3);
+		PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["basic"]->id(), m_GBufferMultiSampled->id, gBufferTargets, 3);
 
 		/* Draw LionHeads */
-		float type_fox[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+		pxFloat type_fox[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 		glBindVertexArray(m_MeshList["lionhead"]->getVBO());
 
 		for (size_t i_lionhead = 0; i_lionhead < 100; ++i_lionhead) {
 
-			m_ModelMatrix = glm::mat4();
-			glm::vec3 rotateY(0.0f, 1.0f, 0.0f);
-			m_ModelMatrix = glm::translate(m_ModelMatrix, glm::vec3(-(i_lionhead % 10 * 3.0f), 0.0f, -(i_lionhead / 10 * 3.0f)));
+			m_ModelMatrix = pxMat4f();
+			pxVec3f rotateY(0.0f, 1.0f, 0.0f);
+			m_ModelMatrix = glm::translate(m_ModelMatrix, pxVec3f(-(i_lionhead % 10 * 3.0f), 0.0f, -(i_lionhead / 10 * 3.0f)));
 			//M = glm::rotate(M, 90.0f, rotateY);
-			m_ModelMatrix = glm::scale(m_ModelMatrix, glm::vec3(0.5f, 0.5f, 0.5f));
+			m_ModelMatrix = glm::scale(m_ModelMatrix, pxVec3f(0.5f, 0.5f, 0.5f));
 
 			m_ModelViewProjectionMatrix = m_ViewProjectionMatrix * m_ModelMatrix;
 
@@ -166,7 +166,7 @@ void SCoreEngine::runGameLoop() {
 		/* =========================================================================================== */
 		/* ==== Anti Aliasing filtering ============================================================== */
 		/* =========================================================================================== */
-		render::multiSamplingAntiAliasing(m_GBufferMultiSampled, m_GBufferWitoutAliasing, WINDOW_WIDTH, WINDOW_HEIGHT);
+		PixPhetamine::LowLevelWrapper::multiSamplingAntiAliasing(m_GBufferMultiSampled, m_GBufferWitoutAliasing, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 		/* =========================================================================================== */
 		/* ==== Post Process ========================================================================= */
@@ -175,9 +175,9 @@ void SCoreEngine::runGameLoop() {
 
 		///* Blur ====================================================================================== */
 
-		for (int i = 0; i < 0; ++i) {
+		for (pxInt i = 0; i < 0; ++i) {
 			GLenum blurPassTargets[] = { GL_COLOR_ATTACHMENT0 };
-			render::initialiseDrawIntoBuffer(m_ShaderList["blurH"]->id(), m_BufferBlurPartial->id, blurPassTargets, 1);
+			PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["blurH"]->id(), m_BufferBlurPartial->id, blurPassTargets, 1);
 
 			// send the textures
 			glActiveTexture(GL_TEXTURE0);
@@ -191,7 +191,7 @@ void SCoreEngine::runGameLoop() {
 
 
 
-			render::initialiseDrawIntoBuffer(m_ShaderList["blurV"]->id(), m_BufferBlur->id, blurPassTargets, 1);
+			PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["blurV"]->id(), m_BufferBlur->id, blurPassTargets, 1);
 
 			// send the textures
 			glActiveTexture(GL_TEXTURE0);
@@ -221,17 +221,17 @@ void SCoreEngine::runGameLoop() {
 
 
 
-		if (unsigned int value = m_InputHandler->getShoot()) {
+		if (pxUInt value = m_InputHandler->getShoot()) {
 			/* RGB Split ================================================================================================================ */
 			GLenum rgbPassTarget[] = { GL_COLOR_ATTACHMENT0 };
-			render::initialiseDrawIntoBuffer(m_ShaderList["rgbsplit"]->id(), m_BufferBlur->id, rgbPassTarget, 1);
+			PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["rgbsplit"]->id(), m_BufferBlur->id, rgbPassTarget, 1);
 
 			// send the textures
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture); // Activate the texture to send
 			glUniform1i(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "image"), 0); // Send it to the shader
 
-			GLfloat split = (float)value / 10.0;
+			pxFloat split = (pxFloat)value / 10.0;
 			glUniform1f(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "split"), split);
 
 			// Send quad and draw
