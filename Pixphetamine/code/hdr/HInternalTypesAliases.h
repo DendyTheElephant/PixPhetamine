@@ -11,8 +11,6 @@
 
 /* External dependencies */
 #include <GL/glew.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 
@@ -36,22 +34,17 @@ using pxFloatArray	= std::vector<pxFloat>;
 using pxUInt16Array = std::vector<pxUInt16>;
 
 namespace MathPhetamine {
-	// Function alias for (overloaded) functions
-	const auto& normalize	= static_cast<pxVec3f(*)(pxVec3f const &vec)>							(glm::normalize);
-	const auto& cross		= static_cast<pxVec3f(*)(pxVec3f const &vec1, pxVec3f const &vec2)>		(glm::cross);
-	const auto& mod			=																		(std::fmodf);
-	const auto& toRadians	= static_cast<pxFloat(*)(pxFloat const &value)>							(glm::radians);
-	const auto& clamp		= static_cast<pxFloat(*)(pxFloat const &value, pxFloat const &min,
-								pxFloat const &max)>												(glm::clamp);
+	// Functions redirection, used for abstraction (= simple modularity!)
+	// Will be defined in each .obj that includes this header, but it's only a function pointer so ...
+	static pxVec3f	(*normalize)(pxVec3f const& vector)										= &glm::normalize;
+	static pxVec3f	(*cross)(pxVec3f const& vector1, pxVec3f const& vector2)				= &glm::cross;
+	static pxFloat	(*mod)(pxFloat value, pxFloat module)									= &std::fmod;
+	static pxFloat	(*toRadians)(const pxFloat& value)										= &glm::radians;
+	static pxFloat	(*clamp)(pxFloat const& value, pxFloat const& min, pxFloat const& max)	= &glm::clamp;
 }
 
 
-/* Polymorph Aliases : same as referenced but another name (human sense) */
-
+/* Polymorph Aliases : (human sense) */
 namespace PixPhetamine {
 	using GLvramLocation = GLuint;		/// Used for OpenGL bindings
 }
-
-
-
-

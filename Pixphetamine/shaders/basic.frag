@@ -1,4 +1,4 @@
-#version 400
+#version 330
 
 in vec3 frag_normal;
 in vec3 frag_color;

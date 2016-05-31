@@ -1,7 +1,7 @@
 #include "CStaticMesh.h"
 
 namespace PixPhetamine {
-	CStaticMesh::CStaticMesh(const char* a_objectPath) throw (Exception::FileNotFound_Exception) {
+	CStaticMesh::CStaticMesh(const char* a_objectPath) {//throw (Exception::FileNotFound_Exception) {
 
 		/* Fills the RAM with the mesh */
 		std::string line;

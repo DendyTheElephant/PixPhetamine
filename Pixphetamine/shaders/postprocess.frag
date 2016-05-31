@@ -1,4 +1,4 @@
-#version 400
+#version 330
 
 const vec4 TYPE_FOX = vec4(1.0, 0.0, 0.0, 1.0);
 

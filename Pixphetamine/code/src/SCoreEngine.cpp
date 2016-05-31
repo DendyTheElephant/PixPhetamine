@@ -1,8 +1,7 @@
 #include "SCoreEngine.h"
 
 SCoreEngine::SCoreEngine() : m_isRunning(false) {
-	m_SDLWindow = PixPhetamine::LowLevelWrapper::createSDLWindow(WINDOW_CAPTION, WINDOW_WIDTH, WINDOW_HEIGHT);
-	m_GLContext = PixPhetamine::LowLevelWrapper::initRenderContext(m_SDLWindow);
+	PixPhetamine::LowLevelWrapper::openWindowAndInitializeOpenGL(m_SDLWindow, &m_GLContext, WINDOW_CAPTION, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	m_InputHandler = new CInputHandler(m_SDLWindow);
 	m_Camera = new PixPhetamine::CCamera(m_SDLWindow);
@@ -231,7 +230,7 @@ void SCoreEngine::runGameLoop() {
 			glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture); // Activate the texture to send
 			glUniform1i(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "image"), 0); // Send it to the shader
 
-			pxFloat split = (pxFloat)value / 10.0;
+			pxFloat split = (pxFloat)value / 10.0f;
 			glUniform1f(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "split"), split);
 
 			// Send quad and draw

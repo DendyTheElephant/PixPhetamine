@@ -60,7 +60,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>libs\SDL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>libs\glew\lib;libs\SDL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;SDL2main.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -90,6 +90,7 @@
     <ClCompile Include="code\src\CShader.cpp" />
     <ClCompile Include="code\src\CStaticMesh.cpp" />
     <ClCompile Include="code\src\CTimer.cpp" />
+    <ClCompile Include="code\src\Exceptions.cpp" />
     <ClCompile Include="code\src\LowLevelRenderingWrapper.cpp" />
     <ClCompile Include="code\src\SCoreEngine.cpp" />
     <ClCompile Include="code\src\Utility.cpp" />
@@ -100,7 +101,7 @@
     <ClInclude Include="code\hdr\CShader.h" />
     <ClInclude Include="code\hdr\CStaticMesh.h" />
     <ClInclude Include="code\hdr\CTimer.h" />
-    <ClInclude Include="code\hdr\HExceptions.h" />
+    <ClInclude Include="code\hdr\Exceptions.h" />
     <ClInclude Include="code\hdr\HInternalTypesAliases.h" />
     <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h" />
     <ClInclude Include="code\hdr\SCoreEngine.h" />

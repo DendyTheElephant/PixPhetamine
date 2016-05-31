@@ -16,12 +16,14 @@ namespace PixPhetamine {
 			pxUInt vertexId = glCreateShader(GL_VERTEX_SHADER);
 			pxUInt fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
 
-			auto shaderPaths = std::vector<const char*>(a_vertexPath, a_fragmentPath);
+			std::vector<const char*> shaderPaths;
+			shaderPaths.push_back(a_vertexPath);
+			shaderPaths.push_back(a_fragmentPath);
 
 			for (auto const &shaderPath : shaderPaths) {
 				const char * code = (getCode(shaderPath)).c_str();
 				std::cerr << shaderPath << " :" << std::endl;
-				if (strcmp(shaderPath, a_vertexPath) == true) {
+				if (strcmp(shaderPath, a_vertexPath) == 1) {
 					glShaderSource(vertexId, 1, &(code), NULL);
 					glCompileShader(vertexId);
 					checkCompilation(vertexId);
@@ -91,8 +93,8 @@ namespace PixPhetamine {
 		}
 	}
 
-	std::string CShader::getCode(const char * a_filePath) const throw(Exception::FileNotFound_Exception) {
-		// return a string containing the source code of the input file
+	std::string CShader::getCode(const char * a_filePath) const {
+		// Return a string containing the source code of the input file
 		std::string   shaderCode;
 		std::ifstream shaderStream(a_filePath, std::ios::in);
 

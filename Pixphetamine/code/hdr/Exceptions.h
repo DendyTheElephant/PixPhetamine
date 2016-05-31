@@ -14,6 +14,7 @@
 #include <exception>
 
 /* Internal headers includes */
+#include "HInternalTypesAliases.h"
 #include "Utility.h"
 
 /// Provides custom exceptions for the program
@@ -24,33 +25,24 @@ namespace Exception {
 		/// \brief		Generic exception class (Abstract)
 		/// \details	Defines the structure of program exceptions (with a fancy message)
 		class VGeneric_Exception : public std::exception {
-		/* Members */
+			/* Members */
 		protected:
 			std::string m_message;
 
-		/* Methods */
+			/* Methods */
 		public:
-			VGeneric_Exception(std::string a_file, pxInt a_line) {
-				m_message = Utility::concat(" - Exception raised in file: ", a_file, " at line: ", a_line, "\n", "\t> ");
-			}
-
-			virtual ~VGeneric_Exception() throw() = 0;
-
+			VGeneric_Exception(std::string file, pxInt line);
+			virtual ~VGeneric_Exception() throw() { /***/ }
 			virtual const char * what() const throw() {
 				return m_message.c_str();
 			}
 		};
-	} // End of anonymous namespace
-
-
-
+	} // End of Anonymous namespace
+	
 
 	class FileNotFound_Exception : public VGeneric_Exception {
 	public:
-		FileNotFound_Exception(std::string a_filePath, std::string a_file, pxInt a_line) : VGeneric_Exception(a_file, a_line) {
-			m_message = Utility::concat(m_message, "File not found: ", a_filePath, " !!\n");
-		}
-		virtual ~FileNotFound_Exception() throw() {};
+		FileNotFound_Exception(std::string filePath, std::string file, pxInt line);
 	};
 
 } // End of Exception namespace

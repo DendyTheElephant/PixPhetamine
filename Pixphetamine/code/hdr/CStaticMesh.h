@@ -14,7 +14,7 @@
 /* Internal headers includes */
 #include "HInternalTypesAliases.h"
 #include "LowLevelRenderingWrapper.h"
-#include "HExceptions.h"
+#include "Exceptions.h"
 
 namespace PixPhetamine {
 	class CStaticMesh {
@@ -28,7 +28,7 @@ namespace PixPhetamine {
 
 	/* Methods */
 	public:
-		CStaticMesh(const char* objectPath) throw (Exception::FileNotFound_Exception);
+		CStaticMesh(const char* objectPath);// throw (Exception::FileNotFound_Exception);
 		~CStaticMesh();
 
 		GLvramLocation	getVBO() const				{ return m_VAO->id; }

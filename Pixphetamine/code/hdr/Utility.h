@@ -4,11 +4,11 @@
 #pragma once
 
 /* Standard library includes */
+#include <string>
 
 /* External dependencies */
 
 /* Internal headers includes */
-#include "HInternalTypesAliases.h"
 
 namespace Utility {
 

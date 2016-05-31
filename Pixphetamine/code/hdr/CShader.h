@@ -17,7 +17,7 @@
 
 /* Internal headers includes */
 #include "HInternalTypesAliases.h"
-#include "HExceptions.h"
+#include "Exceptions.h"
 
 namespace PixPhetamine {
 	/// \brief		Shader loader
@@ -36,7 +36,7 @@ namespace PixPhetamine {
 		pxUInt m_programId;
 
 		// string containing the source code of the input file
-		std::string CShader::getCode(const char * filePath) const throw(Exception::FileNotFound_Exception);
+		std::string CShader::getCode(const char * filePath) const;
 
 		// call it after each shader compilation
 		void checkCompilation(pxUInt shaderId) const;

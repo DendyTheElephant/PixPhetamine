@@ -1,0 +1,30 @@
+----------------------------------------------------------------
+Graphics Successfully Initialized
+OpenGL Info
+    Version: 3.2.13440 Core Profile Context 16.200.1010.1002
+     Vendor: ATI Technologies Inc.
+   Renderer: AMD Radeon R9 200 Series
+    Shading: 4.50
+----------------------------------------------------------------
+SDL Error: No OpenGL context has been made current
+ + line: 294
+shaders/basic.vert :
+shaders/basic.frag :
+Vertex and Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
+
+shaders/postprocess.vert :
+shaders/postprocess.frag :
+Vertex and Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
+
+shaders/blurH.vert :
+shaders/blurH.frag :
+Vertex and Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
+
+shaders/blurV.vert :
+shaders/blurV.frag :
+Vertex and Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
+
+shaders/rgbsplit.vert :
+shaders/rgbsplit.frag :
+Vertex and Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
+
