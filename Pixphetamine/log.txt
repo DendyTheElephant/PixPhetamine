@@ -7,24 +7,14 @@ OpenGL Info
     Shading: 4.50
 ----------------------------------------------------------------
 SDL Error: No OpenGL context has been made current
- + line: 294
-shaders/basic.vert :
-shaders/basic.frag :
-Vertex and Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
-
-shaders/postprocess.vert :
-shaders/postprocess.frag :
-Vertex and Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
-
-shaders/blurH.vert :
-shaders/blurH.frag :
-Vertex and Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
-
-shaders/blurV.vert :
-shaders/blurV.frag :
-Vertex and Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
-
-shaders/rgbsplit.vert :
-shaders/rgbsplit.frag :
-Vertex and Fragment shader(s) were not successfully compiled before glLinkProgram() was called.  Link failed. 
-
+ + line: 292
+Compilation of Vertex shader shaders/basic.vert: OK!
+Compilation of Fragment shader shaders/basic.frag: OK!
+Compilation of Vertex shader shaders/postprocess.vert: OK!
+Compilation of Fragment shader shaders/postprocess.frag: OK!
+Compilation of Vertex shader shaders/blurH.vert: OK!
+Compilation of Fragment shader shaders/blurH.frag: OK!
+Compilation of Vertex shader shaders/blurV.vert: OK!
+Compilation of Fragment shader shaders/blurV.frag: OK!
+Compilation of Vertex shader shaders/rgbsplit.vert: OK!
+Compilation of Fragment shader shaders/rgbsplit.frag: OK!

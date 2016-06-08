@@ -49,4 +49,3 @@ void main() {
     //outColor = texture(type_map, texCoord);
     //outColor = vec4(depth,depth,depth,1.0);
 }
-

@@ -124,7 +124,7 @@ namespace PixPhetamine {
 		/// \param		windowTitle				Const char* that will appears in the window caption
 		/// \param		width					Width of the window and openGL viewport
 		/// \param		height					Height of the window and openGL viewport
-		void openWindowAndInitializeOpenGL(SDL_Window* SDL_WindowReference, SDL_GLContext* SDL_GLContextReference, const char* windowTitle, pxInt width, pxInt height);
+		void openWindowAndInitializeOpenGL(SDL_Window*& SDL_WindowReference, SDL_GLContext* SDL_GLContextReference, const char* windowTitle, pxInt width, pxInt height);
 		void initialiseDrawIntoBuffer(GLvramLocation shader, GLvramLocation fbo, GLenum* targets, unsigned short numberOfTargets);
 		void multiSamplingAntiAliasing(GBuffer* Aliased, GBuffer* Output, pxInt width, pxInt height);
 		void shutdownSDL_GL(SDL_Window* SDLWindow, SDL_GLContext GLContext);

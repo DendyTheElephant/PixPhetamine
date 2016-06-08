@@ -307,7 +307,7 @@ void SCoreEngine::runGameLoop() {
 
 
 		/* Swap our back buffer to the front */
-		SDL_GL_SwapWindow(m_SDLWindow);			
+		SDL_GL_SwapWindow(m_SDLWindow);
 
 
 		const Uint32 endFrameTime = SDL_GetTicks();
@@ -320,11 +320,11 @@ void SCoreEngine::runGameLoop() {
 			sprintf_s(m_windowCaption, "%s    FPS: %f", WINDOW_CAPTION, m_frame / (m_elapsedTime / 1000.0));
 			SDL_SetWindowTitle(m_SDLWindow, m_windowCaption);
 
-			/*std::cout << "==========================================" << std::endl;
-			std::cout << "Scene rendering:        " << m_renderSceneTimer.getElapsedTime() << " ms" << std::endl;
-			std::cout << "MSAAfiltering:          " << m_renderAntiAliasingTimer.getElapsedTime() << " ms" << std::endl;
-			std::cout << "Post-process rendering: " << m_renderPostProcessTimer.getElapsedTime() << " ms" << std::endl;
-			std::cout << "==========================================" << std::endl;*/
+			std::cout << "==========================================" << std::endl;
+			std::cout << "Scene rendering:        ";//<< m_renderSceneTimer.getElapsedTime() << " ms" << std::endl;
+			std::cout << "MSAAfiltering:          ";//<< m_renderAntiAliasingTimer.getElapsedTime() << " ms" << std::endl;
+			std::cout << "Post-process rendering: ";//<< m_renderPostProcessTimer.getElapsedTime() << " ms" << std::endl;
+			std::cout << "==========================================" << std::endl;
 
 			m_secondTimer.start();
 		}

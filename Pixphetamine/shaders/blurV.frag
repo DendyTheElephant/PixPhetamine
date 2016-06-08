@@ -1,4 +1,4 @@
-#version 400
+#version 330
 
 const float weight[3] = float[]( 0.2270270270, 0.3162162162, 0.0702702703 );
 

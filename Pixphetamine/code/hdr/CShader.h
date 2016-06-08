@@ -33,7 +33,7 @@ namespace PixPhetamine {
 		inline pxUInt id() { return m_programId; }
 
 	private:
-		pxUInt m_programId;
+		pxUInt m_programId{ 0 };
 
 		// string containing the source code of the input file
 		std::string CShader::getCode(const char * filePath) const;

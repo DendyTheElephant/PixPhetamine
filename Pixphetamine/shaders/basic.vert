@@ -13,7 +13,7 @@ out vec3 frag_color;
 
 
 void main() {
-  gl_Position = MVP * vec4(in_vertex_position, 1.0);
-  frag_normal = in_vertex_normal;
-  frag_color = in_vertex_color;
+	gl_Position = MVP * vec4(in_vertex_position, 1.0);
+	frag_normal = in_vertex_normal;
+	frag_color = in_vertex_color;
 }
