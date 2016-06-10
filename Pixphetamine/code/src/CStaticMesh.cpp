@@ -8,7 +8,7 @@ namespace PixPhetamine {
 
 		std::ifstream objetFile(a_objectPath, std::ios::in);
 		if (!objetFile.is_open()) {
-			throw Exception::FileNotFound_Exception(a_objectPath, __FILE__, __LINE__);
+			std::cerr << "File " << a_objectPath << " not found! In file " << __FILE__ " at line " << __LINE__ << std::endl;
 		}
 
 		pxFloat posX, posY, posZ, normalX, normalY, normalZ, colorR, colorG, colorB;

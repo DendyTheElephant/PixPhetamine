@@ -17,7 +17,6 @@
 
 /* Internal headers includes */
 #include "HInternalTypesAliases.h"
-#include "Exceptions.h"
 
 namespace PixPhetamine {
 	/// \brief		Shader loader

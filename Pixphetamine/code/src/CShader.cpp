@@ -12,52 +12,43 @@ namespace PixPhetamine {
 	}
 
 	void CShader::load(const char* a_vertexPath, const char* a_fragmentPath) {
-		pxUInt vertexId;
-		pxUInt fragmentId;
-		try {
-			vertexId = glCreateShader(GL_VERTEX_SHADER);
-			if (vertexId == 0) {
-				std::cerr << "Creation of Vertex shader failed!" << std::endl;
-			}
-			fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
-			if (vertexId == 0) {
-				std::cerr << "Creation of Fragment shader failed!" << std::endl;
-			}
-
-			// Vertex compilation
-			std::string vertexCodeString = getCode(a_vertexPath);
-			const char * vertexCode = vertexCodeString.c_str();
-			pxInt vertexCodeLength = vertexCodeString.length();
-			glShaderSource(vertexId, 1, &vertexCode, &vertexCodeLength);
-			std::cerr << "Compilation of Vertex shader " << a_vertexPath << ":";
-			glCompileShader(vertexId);
-			checkCompilation(vertexId);
-			
-			// Fragment compilation
-			std::string fragmentCodeString = getCode(a_fragmentPath);
-			const char * fragmentCode = fragmentCodeString.c_str();
-			pxInt fragmentCodeLength = fragmentCodeString.length();
-			glShaderSource(fragmentId, 1, &fragmentCode, &fragmentCodeLength);
-			std::cerr << "Compilation of Fragment shader " << a_fragmentPath << ":";
-			glCompileShader(fragmentId);
-			checkCompilation(fragmentId);
-
-			
-			// Create, Attach and Link program
-			m_programId = glCreateProgram();
-			glAttachShader(m_programId, fragmentId);
-			glAttachShader(m_programId, vertexId);
-			glLinkProgram(m_programId);
-			checkLinks(m_programId);
-
-			glDeleteShader(vertexId);
-			glDeleteShader(fragmentId);
-
-		} catch (const Exception::FileNotFound_Exception &e) {
-			glDeleteShader(vertexId);
-			glDeleteShader(fragmentId);
-			std::cerr << e.what() << std::endl;
+		pxUInt vertexId = glCreateShader(GL_VERTEX_SHADER);
+		if (vertexId == 0) {
+			std::cerr << "Creation of Vertex shader failed!" << std::endl;
 		}
+		pxUInt fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
+		if (vertexId == 0) {
+			std::cerr << "Creation of Fragment shader failed!" << std::endl;
+		}
+
+		// Vertex compilation
+		std::string vertexCodeString = getCode(a_vertexPath);
+		const char * vertexCode = vertexCodeString.c_str();
+		pxInt vertexCodeLength = vertexCodeString.length();
+		glShaderSource(vertexId, 1, &vertexCode, &vertexCodeLength);
+		std::cerr << "Compilation of Vertex shader " << a_vertexPath << ":";
+		glCompileShader(vertexId);
+		checkCompilation(vertexId);
+			
+		// Fragment compilation
+		std::string fragmentCodeString = getCode(a_fragmentPath);
+		const char * fragmentCode = fragmentCodeString.c_str();
+		pxInt fragmentCodeLength = fragmentCodeString.length();
+		glShaderSource(fragmentId, 1, &fragmentCode, &fragmentCodeLength);
+		std::cerr << "Compilation of Fragment shader " << a_fragmentPath << ":";
+		glCompileShader(fragmentId);
+		checkCompilation(fragmentId);
+
+			
+		// Create, Attach and Link program
+		m_programId = glCreateProgram();
+		glAttachShader(m_programId, fragmentId);
+		glAttachShader(m_programId, vertexId);
+		glLinkProgram(m_programId);
+		checkLinks(m_programId);
+
+		glDeleteShader(vertexId);
+		glDeleteShader(fragmentId);
 	}
 
 
@@ -115,7 +106,7 @@ namespace PixPhetamine {
 		std::ifstream shaderStream(a_filePath, std::ios::in);
 
 		if (!shaderStream.is_open()) {
-			throw Exception::FileNotFound_Exception(a_filePath, __FILE__, __LINE__);
+			std::cerr << "File " << a_filePath << " not found! In file " << __FILE__ " at line " << __LINE__ << std::endl;
 			return "";
 		}
 

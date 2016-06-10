@@ -14,7 +14,6 @@
 /* Internal headers includes */
 #include "HInternalTypesAliases.h"
 #include "LowLevelRenderingWrapper.h"
-#include "Exceptions.h"
 
 namespace PixPhetamine {
 	class CStaticMesh {
