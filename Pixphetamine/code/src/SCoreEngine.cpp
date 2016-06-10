@@ -138,7 +138,7 @@ void SCoreEngine::runGameLoop() {
 		pxFloat type_fox[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 		glBindVertexArray(m_MeshList["lionhead"]->getVBO());
 
-		for (size_t i_lionhead = 0; i_lionhead < 100; ++i_lionhead) {
+		for (size_t i_lionhead = 0; i_lionhead < 1; ++i_lionhead) {
 
 			m_ModelMatrix = pxMat4f();
 			pxVec3f rotateY(0.0f, 1.0f, 0.0f);

@@ -280,16 +280,38 @@ namespace PixPhetamine {
 				std::cerr << "GLEW Error: " << glewGetErrorString(status) << "\n";
 				quit("Exit on GLEW Error");
 			}
-			std::cerr << "----------------------------------------------------------------" << std::endl;
-			std::cerr << "Graphics Successfully Initialized" << std::endl;
+
+
+
+
+			// Retrieve the GPU - OpenGL Current specs for the platform --> Log file
+			std::cerr << "=============[ PixPhetamine log-file ]=========================" << std::endl;
+			std::cerr << ">Graphics Successfully Initialized !" << std::endl;
 			std::cerr << "OpenGL Info" << std::endl;
 			std::cerr << "    Version: " << glGetString(GL_VERSION) << std::endl;
 			std::cerr << "     Vendor: " << glGetString(GL_VENDOR) << std::endl;
 			std::cerr << "   Renderer: " << glGetString(GL_RENDERER) << std::endl;
 			std::cerr << "    Shading: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 			std::cerr << "----------------------------------------------------------------" << std::endl;
-
+			std::cerr << ">SDL error messages:" << std::endl;
 			checkSDLError(__LINE__);
+			std::cerr << "----------------------------------------------------------------" << std::endl;
+			std::cerr << ">GPU Specifications for modern GLSL:" << std::endl;
+			pxInt uboBindings, uboSize, uboVertex, uboFragment, uboGeometry; 
+			glGetIntegerv(GL_MAX_UNIFORM_BUFFER_BINDINGS, &uboBindings);
+			glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, &uboSize);
+			glGetIntegerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, &uboVertex);
+			glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_BLOCKS, &uboFragment);
+			glGetIntegerv(GL_MAX_GEOMETRY_UNIFORM_BLOCKS, &uboGeometry);
+			std::cerr << "  Max uniform block bindings: " << uboBindings << std::endl;
+			std::cerr << "      Max uniform block size: " << uboSize << std::endl;
+			std::cerr << "    Max uniform block vertex: " << uboVertex << std::endl;
+			std::cerr << "  Max uniform block fragment: " << uboFragment << std::endl;
+			std::cerr << "  Max uniform block geometry: " << uboGeometry << std::endl;
+			std::cerr << "----------------------------------------------------------------" << std::endl;
+
+			std::cerr << "===============================================================" << std::endl;
+
 		}
 
 
