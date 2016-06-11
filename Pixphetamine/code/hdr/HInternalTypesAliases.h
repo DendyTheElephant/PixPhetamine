@@ -13,7 +13,6 @@
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 
-
 /* Substitution Aliases */
 using pxBool		= GLboolean;		/// 1b boolean GL_TRUE or GL_FALSE
 using pxInt16		= GLshort;			/// Signed 16b integer [-32 768,  32 767]
@@ -42,7 +41,6 @@ namespace MathPhetamine {
 	static pxFloat	(*toRadians)(const pxFloat& value)										= &glm::radians;
 	static pxFloat	(*clamp)(pxFloat const& value, pxFloat const& min, pxFloat const& max)	= &glm::clamp;
 }
-
 
 /* Polymorph Aliases : (human sense) */
 namespace PixPhetamine {

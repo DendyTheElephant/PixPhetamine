@@ -1,6 +1,8 @@
 #include "SCoreEngine.h"
 
 SCoreEngine::SCoreEngine() : m_isRunning(false) {
+	STACK_TRACE;
+
 	PixPhetamine::LowLevelWrapper::openWindowAndInitializeOpenGL(m_SDLWindow, &m_GLContext, WINDOW_CAPTION, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	m_InputHandler = new CInputHandler(m_SDLWindow);
@@ -35,6 +37,14 @@ SCoreEngine::SCoreEngine() : m_isRunning(false) {
 	m_GBufferWitoutAliasing->initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GL_TEXTURE_2D);
 	m_BufferBlurPartial->initialize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	m_BufferBlur->initialize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+	STACK_TRACE;
+
+	ERROR(First error!);
+
+	UNSTACK_TRACE;
+
+	ERROR(Second fucking error!);
 }
 
 SCoreEngine::~SCoreEngine() {
@@ -92,6 +102,7 @@ void SCoreEngine::loadMeshes() {
 
 
 void SCoreEngine::runGameLoop() {
+
 	m_isRunning = true;
 
 	m_secondTimer.start();
@@ -319,13 +330,13 @@ void SCoreEngine::runGameLoop() {
 
 			sprintf_s(m_windowCaption, "%s    FPS: %f", WINDOW_CAPTION, m_frame / (m_elapsedTime / 1000.0));
 			SDL_SetWindowTitle(m_SDLWindow, m_windowCaption);
-
+			/*
 			std::cout << "==========================================" << std::endl;
 			std::cout << "Scene rendering:        ";//<< m_renderSceneTimer.getElapsedTime() << " ms" << std::endl;
 			std::cout << "MSAAfiltering:          ";//<< m_renderAntiAliasingTimer.getElapsedTime() << " ms" << std::endl;
 			std::cout << "Post-process rendering: ";//<< m_renderPostProcessTimer.getElapsedTime() << " ms" << std::endl;
 			std::cout << "==========================================" << std::endl;
-
+			*/
 			m_secondTimer.start();
 		}
 

@@ -2,11 +2,10 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <exception>
 
 /* Internal headers includes */
 #include "SCoreEngine.h"
-
+#include "SError.h"
 
 /* Entry point */
 pxInt main(pxInt argc, char *argv[]) {
@@ -17,24 +16,23 @@ pxInt main(pxInt argc, char *argv[]) {
 #ifdef DEBUG
 
 #else
-	std::ofstream out("log.txt");
-	std::streambuf* orig = std::cerr.rdbuf();
-	std::cerr.rdbuf(out.rdbuf());
+	/*std::ofstream logStream("log.txt");
+	std::ofstream errorStream("error.txt");
+	std::streambuf* originErrorStream = std::cerr.rdbuf();
+	std::cerr.rdbuf(errorStream.rdbuf());
+	*/
 #endif
 
-	try {
-		
-		SCoreEngine* Engine = &SCoreEngine::getInstance();
+	Utility::SError* ErrorLog = &Utility::SError::getInstance();
+	ErrorLog->setOutputFile("error.txt");
 
-		Engine->runGameLoop();
+	SCoreEngine* Engine = &SCoreEngine::getInstance();
 
-		SCoreEngine::destroyInstance();
-	
-	}
-	catch (const std::exception & e) {
-		std::cerr << e.what() << "\n";
-	}
-	
+	Engine->runGameLoop();
+
+	SCoreEngine::destroyInstance();
+
+	Utility::SError::destroyInstance();
 
 	return EXIT_SUCCESS;
 }
