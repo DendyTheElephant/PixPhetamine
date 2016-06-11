@@ -1,5 +1,0 @@
-First error!
-	> File e:\dendy softainement\pixphetaminegit\pixphetamine\pixphetamine\code\src\scoreengine.cpp:41 in function SCoreEngine::SCoreEngine
-	> File e:\dendy softainement\pixphetaminegit\pixphetamine\pixphetamine\code\src\scoreengine.cpp:4 in function SCoreEngine::SCoreEngine
-Second fucking error!
-	> File e:\dendy softainement\pixphetaminegit\pixphetamine\pixphetamine\code\src\scoreengine.cpp:4 in function SCoreEngine::SCoreEngine

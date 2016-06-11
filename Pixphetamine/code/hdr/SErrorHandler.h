@@ -31,6 +31,7 @@
 #define __CONTEXT__ ("> File " __FILE__ ":"  PRINTVALUE(__LINE__) " in function " __CURRENT_FUNCTION__ "\n")
 
 #define STACK_TRACE (&Utility::SErrorHandler::getInstance())->stack(__CONTEXT__)
+#define STACK_MESSAGE(message) (&Utility::SErrorHandler::getInstance())->stackMessage(message)
 #define UNSTACK_TRACE (&Utility::SErrorHandler::getInstance())->unstack()
 #define ERROR(message) (&Utility::SErrorHandler::getInstance())->displayAndCrash(message)
 #define ERROR_CONTINUE(message) (&Utility::SErrorHandler::getInstance())->display(message)
@@ -54,8 +55,9 @@ namespace Utility {
 		static void destroyInstance();
 		
 		void setOutputFile(std::string fileName);
-		void stack(std::string context) { m_errorCallStack.push(context); }
-		void unstack() { if (!m_errorCallStack.empty()) m_errorCallStack.pop(); }
+		void stack(std::string context);
+		void stackMessage(std::string message);
+		void unstack();
 		void display(std::string errorMessage);
 		void displayAndCrash(std::string errorMessage);
 	};

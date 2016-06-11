@@ -26,17 +26,25 @@ SCoreEngine::SCoreEngine() : m_isRunning(false) {
 	m_MeshNames.push_back("sphere");
 	/* =========================================== */
 
+	STACK_MESSAGE("Loading Shaders");
 	loadShaders();
+	STACK_MESSAGE("Loading Shaders [COMPLETE]");
+	STACK_MESSAGE("Loading Meshes");
 	loadMeshes();
+	STACK_MESSAGE("Loading Meshes [COMPLETE]");
 
+	STACK_MESSAGE("Creation of FrameBuffers");
 	m_GBufferMultiSampled = new PixPhetamine::LowLevelWrapper::GBuffer();
 	m_GBufferWitoutAliasing = new PixPhetamine::LowLevelWrapper::GBuffer();
 	m_BufferBlurPartial = new PixPhetamine::LowLevelWrapper::ImageBuffer();
 	m_BufferBlur = new PixPhetamine::LowLevelWrapper::ImageBuffer();
+	STACK_MESSAGE("Creation of FrameBuffers [COMPLETE]");
+	STACK_MESSAGE("Initialisation of FrameBuffers");
 	m_GBufferMultiSampled->initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GL_TEXTURE_2D_MULTISAMPLE);
 	m_GBufferWitoutAliasing->initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GL_TEXTURE_2D);
 	m_BufferBlurPartial->initialize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	m_BufferBlur->initialize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	STACK_MESSAGE("Initialisation of FrameBuffers [COMPLETE]");
 
 	UNSTACK_TRACE;
 }
@@ -100,13 +108,13 @@ void SCoreEngine::loadMeshes() {
 
 
 void SCoreEngine::runGameLoop() {
-	STACK_TRACE;
 
 	m_isRunning = true;
 
 	m_secondTimer.start();
 
 	do {
+		STACK_TRACE;
 		
 		const pxUInt startFrameTime = SDL_GetTicks();
 
@@ -136,7 +144,7 @@ void SCoreEngine::runGameLoop() {
 		pxFloat sunColor[3] = { 1.0f, 1.0f, 1.0f };
 
 
-
+		STACK_MESSAGE("Scene Draw");
 		/* =========================================================================================== */
 		/* ==== Draw the Scene ======================================================================= */
 		/* =========================================================================================== */
@@ -171,7 +179,9 @@ void SCoreEngine::runGameLoop() {
 		// disable shader 
 		glUseProgram(0);
 
-		
+		STACK_MESSAGE("Scene Draw [COMPLETE]");
+		STACK_MESSAGE("Anti Aliasing filtering");
+
 		/* =========================================================================================== */
 		/* ==== Anti Aliasing filtering ============================================================== */
 		/* =========================================================================================== */

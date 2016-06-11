@@ -4,55 +4,35 @@ namespace PixPhetamine {
 
 	/* Anonymous namespace for RenderingUtilities private functions  ===========================================*/
 	namespace {
-		/* A simple function that prints a message, the error code returned by SDL,
-		* and quits the application */
-		void quit(const char *msg) {
-			std::cerr << msg << ", " << SDL_GetError() << std::endl;
-			SDL_Quit();
-			exit(1);
-		}
-
-		void checkSDLError(pxInt line = -1) {
+		void checkSDLError() {
 			const char *error = SDL_GetError();
 			if (*error != '\0') {
-				std::cerr << "SDL Error: " << error << std::endl;
-				if (line != -1) {
-					std::cerr << " + line: " << line << std::endl;
-				}
+				ERROR_CONTINUE("SDL Error: " + std::string(error));
 				SDL_ClearError();
 			}
 		}
 
-		void checkFrameBuffer(pxInt line = -1) {
+		void checkFrameBuffer() {
 			GLenum status;
 			if ((status = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE) {
-				std::cerr << "glCheckFramebufferStatus: error " << status << std::endl;
-				switch (status)
-				{
-				case GL_FRAMEBUFFER_COMPLETE:
-					std::cerr << "Framebuffer complete." << std::endl;
-					break;
+				switch (status) {
 
-				case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-					std::cerr << "[ERROR] Framebuffer incomplete: Attachment is NOT complete." << std::endl;
-					break;
+					case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+						ERROR("Framebuffer error: Framebuffer incomplete, Attachment is NOT complete");
+						break;
 
-				case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-					std::cerr << "[ERROR] Framebuffer incomplete: No image is attached to FBO." << std::endl;
-					break;
+					case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+						ERROR("Framebuffer error: Framebuffer incomplete, No image is attached to FBO");
+						break;
 
-				case GL_FRAMEBUFFER_UNSUPPORTED:
-					std::cerr << "[ERROR] Unsupported by FBO implementation." << std::endl;
-					break;
+					case GL_FRAMEBUFFER_UNSUPPORTED:
+						ERROR("Framebuffer error: Unsupported FBO implementation");
+						break;
 
-				default:
-					std::cerr << "[ERROR] Unknown error." << std::endl;
-					break;
+					default:
+						ERROR("Framebuffer error: Unknown error");
+						break;
 				}
-				if (line != -1) {
-					std::cerr << " + line: " << line << std::endl;
-				}
-				exit(1);
 			}
 		}
 
@@ -147,6 +127,7 @@ namespace PixPhetamine {
 		/* ======================     [GBuffer]     =============================================================================================================== */
 		/* ======================================================================================================================================================== */
 		void GBuffer::initialize(pxInt width, pxInt height, GLenum textureType) {
+			STACK_TRACE;
 			/* Texture */
 			glActiveTexture(GL_TEXTURE0);
 			createTexture(colorTexture, textureType, GL_RGBA32F, GL_RGBA, width, height);
@@ -168,11 +149,13 @@ namespace PixPhetamine {
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, textureType, typeTexture, 0);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, textureType, depthTexture, 0);
 
-			checkFrameBuffer(__LINE__);
+			STACK_MESSAGE("Checking Framebuffer errors");
+			checkFrameBuffer();
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 			createQuad(VAO_id, VBO_Quad);
+			UNSTACK_TRACE;
 		}
 
 
@@ -192,6 +175,7 @@ namespace PixPhetamine {
 		/* ======================     [ImageBuffer]     =========================================================================================================== */
 		/* ======================================================================================================================================================== */
 		void ImageBuffer::initialize(pxInt width, pxInt height) {
+			STACK_TRACE;
 			/* Texture */
 			glActiveTexture(GL_TEXTURE0);
 			createTexture(texture, GL_TEXTURE_2D, GL_RGBA32F, GL_RGBA, width, height);
@@ -201,11 +185,13 @@ namespace PixPhetamine {
 			glBindFramebuffer(GL_FRAMEBUFFER, id);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
 
-			checkFrameBuffer(__LINE__);
+			STACK_TRACE;
+			checkFrameBuffer();
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 			createQuad(VAO_id, VBO_Quad);
+			UNSTACK_TRACE;
 		}
 
 		void ImageBuffer::free() {
@@ -225,9 +211,11 @@ namespace PixPhetamine {
 		/* ======================     [Routines]     ============================================================================================================== */
 		/* ======================================================================================================================================================== */
 		void openWindowAndInitializeOpenGL(SDL_Window*& SDL_WindowReference, SDL_GLContext* SDL_GLContextReference, const char* windowTitle, pxInt width, pxInt height) {
+			STACK_TRACE;
 			/* Initialize SDL's Video subsystem */
 			if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-				quit("Unable to initialize SDL"); // Or die on error
+				STACK_TRACE;
+				ERROR("Unable to initialize SDL!");
 			}
 
 			/* Request opengl 3.2 context.
@@ -261,7 +249,8 @@ namespace PixPhetamine {
 			/* Create our window centered */
 			SDL_WindowReference = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 			if (!SDL_WindowReference) { /* Die if creation failed */
-				quit("Unable to create window");
+				STACK_TRACE;
+				ERROR("Unable to create the window!");
 			}
 
 			/* Hide the cursor (it's an FPS!) */
@@ -277,8 +266,8 @@ namespace PixPhetamine {
 			glewExperimental = GL_TRUE;
 			GLenum status = glewInit();
 			if (status != GLEW_OK) {
-				std::cerr << "GLEW Error: " << glewGetErrorString(status) << "\n";
-				quit("Exit on GLEW Error");
+				STACK_TRACE;
+				ERROR("GLEW Error: "); //+ std::string(glewGetErrorString(status)));
 			}
 
 
@@ -294,7 +283,8 @@ namespace PixPhetamine {
 			std::cerr << "    Shading: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 			std::cerr << "----------------------------------------------------------------" << std::endl;
 			std::cerr << ">SDL error messages:" << std::endl;
-			checkSDLError(__LINE__);
+			STACK_MESSAGE("Checking for SDL errors");
+			checkSDLError();
 			std::cerr << "----------------------------------------------------------------" << std::endl;
 			std::cerr << ">GPU Specifications for modern GLSL:" << std::endl;
 			pxInt uboBindings, uboSize, uboVertex, uboFragment, uboGeometry; 
@@ -311,6 +301,7 @@ namespace PixPhetamine {
 			std::cerr << "----------------------------------------------------------------" << std::endl;
 
 			std::cerr << "===============================================================" << std::endl;
+			UNSTACK_TRACE;
 		}
 
 

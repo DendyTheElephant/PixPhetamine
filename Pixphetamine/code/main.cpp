@@ -16,11 +16,10 @@ pxInt main(pxInt argc, char *argv[]) {
 #ifdef DEBUG
 
 #else
-	/*std::ofstream logStream("log.txt");
-	std::ofstream errorStream("error.txt");
+	std::ofstream logStream("log.txt");
 	std::streambuf* originErrorStream = std::cerr.rdbuf();
-	std::cerr.rdbuf(errorStream.rdbuf());
-	*/
+	std::cerr.rdbuf(logStream.rdbuf());
+	
 #endif
 
 	Utility::SErrorHandler* ErrorLog = &Utility::SErrorHandler::getInstance();
