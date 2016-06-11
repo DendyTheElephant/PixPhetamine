@@ -17,6 +17,7 @@
 
 /* Internal headers includes */
 #include "HInternalTypesAliases.h"
+#include "SErrorHandler.h"
 
 namespace PixPhetamine {
 	/// \brief		Shader loader
@@ -24,7 +25,7 @@ namespace PixPhetamine {
 	class CShader {
 
 	public:
-		CShader();
+		CShader() { /***/ };
 		~CShader();
 
 		void load(const char * vertexFilePath, const char * fragmentFilePath);

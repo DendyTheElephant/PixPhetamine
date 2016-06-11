@@ -1,9 +1,6 @@
 #include "CShader.h"
 
 namespace PixPhetamine {
-	CShader::CShader() {
-
-	}
 
 	CShader::~CShader() {
 		if (glIsProgram(m_programId)) {
@@ -12,13 +9,16 @@ namespace PixPhetamine {
 	}
 
 	void CShader::load(const char* a_vertexPath, const char* a_fragmentPath) {
+		STACK_TRACE;
 		pxUInt vertexId = glCreateShader(GL_VERTEX_SHADER);
 		if (vertexId == 0) {
-			std::cerr << "Creation of Vertex shader failed!" << std::endl;
+			STACK_TRACE;
+			ERROR("Creation of Vertex shader failed!");
 		}
 		pxUInt fragmentId = glCreateShader(GL_FRAGMENT_SHADER);
 		if (vertexId == 0) {
-			std::cerr << "Creation of Fragment shader failed!" << std::endl;
+			STACK_TRACE;
+			ERROR("Creation of Fragment shader failed!");
 		}
 
 		// Vertex compilation
@@ -49,11 +49,12 @@ namespace PixPhetamine {
 
 		glDeleteShader(vertexId);
 		glDeleteShader(fragmentId);
+		UNSTACK_TRACE;
 	}
 
 
 	void CShader::reload(const char *a_vertexPath, const char *a_fragmentPath) {
-
+		STACK_TRACE;
 		// check if the program already contains a shader 
 		if (glIsProgram(m_programId)) {
 			// delete it...
@@ -62,6 +63,7 @@ namespace PixPhetamine {
 
 		// ... and reload it
 		load(a_vertexPath, a_fragmentPath);
+		UNSTACK_TRACE;
 	}
 
 	void CShader::checkCompilation(pxUInt a_shaderId) const {
@@ -101,13 +103,14 @@ namespace PixPhetamine {
 	}
 
 	std::string CShader::getCode(const char * a_filePath) const {
+		STACK_TRACE;
 		// Return a string containing the source code of the input file
 		std::string   shaderCode;
 		std::ifstream shaderStream(a_filePath, std::ios::in);
 
 		if (!shaderStream.is_open()) {
-			std::cerr << "File " << a_filePath << " not found! In file " << __FILE__ " at line " << __LINE__ << std::endl;
-			return "";
+			STACK_TRACE;
+			ERROR("File "+std::string(a_filePath)+" not found!");
 		}
 
 		std::string line = "";
@@ -115,6 +118,7 @@ namespace PixPhetamine {
 			shaderCode += "\n" + line;
 		shaderStream.close();
 
+		UNSTACK_TRACE;
 		return shaderCode;
 	}
 }

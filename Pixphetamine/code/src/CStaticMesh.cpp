@@ -2,13 +2,14 @@
 
 namespace PixPhetamine {
 	CStaticMesh::CStaticMesh(const char* a_objectPath) {//throw (Exception::FileNotFound_Exception) {
-
+		STACK_TRACE;
 		/* Fills the RAM with the mesh */
 		std::string line;
 
 		std::ifstream objetFile(a_objectPath, std::ios::in);
 		if (!objetFile.is_open()) {
-			std::cerr << "File " << a_objectPath << " not found! In file " << __FILE__ " at line " << __LINE__ << std::endl;
+			STACK_TRACE;
+			ERROR("File "+std::string(a_objectPath)+" not found!");
 		}
 
 		pxFloat posX, posY, posZ, normalX, normalY, normalZ, colorR, colorG, colorB;
@@ -31,6 +32,7 @@ namespace PixPhetamine {
 		/* Fills the VRAM with the mesh */
 		m_VAO = new PixPhetamine::LowLevelWrapper::VAO();
 		m_VAO->loadToGPU(m_vertices, m_normals, m_colors, m_faces, GL_STATIC_DRAW);
+		UNSTACK_TRACE;
 	}
 
 	CStaticMesh::~CStaticMesh() {

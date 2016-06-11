@@ -21,7 +21,7 @@
 #include "CCamera.h"
 #include "CTimer.h"
 #include "LowLevelRenderingWrapper.h"
-#include "SError.h"
+#include "SErrorHandler.h"
 
 #define WINDOW_WIDTH				1200
 #define WINDOW_HEIGHT				800

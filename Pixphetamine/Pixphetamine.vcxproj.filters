@@ -26,7 +26,7 @@
     <ClCompile Include="code\src\Utility.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="code\src\SError.cpp">
+    <ClCompile Include="code\src\SErrorHandler.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -58,7 +58,7 @@
     <ClInclude Include="code\hdr\Utility.h">
       <Filter>hdr</Filter>
     </ClInclude>
-    <ClInclude Include="code\hdr\SError.h">
+    <ClInclude Include="code\hdr\SErrorHandler.h">
       <Filter>hdr</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,35 +1,36 @@
-#include "SError.h"
+#include "SErrorHandler.h"
 
 namespace Utility {
 
-	SError::~SError() {
+	SErrorHandler::~SErrorHandler() {
 		if (m_outputStream.is_open()) {
 			m_outputStream.close();
 		}
 	}
 
-	void SError::setOutputFile(std::string a_fileName) {
+	void SErrorHandler::setOutputFile(std::string a_fileName) {
 		m_outputStream.open(a_fileName);
 		m_isErrorStreamSpecified = true;
 	}
 
-	SError& SError::getInstance() {
-		static SError* errorHandler = nullptr;
+	SErrorHandler& SErrorHandler::getInstance() {
+		static SErrorHandler* errorHandler = nullptr;
 		if (errorHandler == nullptr) {
-			errorHandler = new SError();
+			errorHandler = new SErrorHandler();
 		}
 
 		return *errorHandler;
 	}
 
-	void SError::destroyInstance() {
-		static SError* errorHandler = &getInstance();
+	void SErrorHandler::destroyInstance() {
+		static SErrorHandler* errorHandler = &getInstance();
 		if (errorHandler != nullptr) {
 			delete errorHandler;
 		}
 	}
 
-	void SError::display(std::string a_errorMessage) {
+	void SErrorHandler::display(std::string a_errorMessage) {
+		std::streambuf* originErrorStream = nullptr;
 		std::stack<std::string> backupStack;
 		std::string callStack;
 
@@ -40,19 +41,24 @@ namespace Utility {
 		}
 		
 		if (m_isErrorStreamSpecified) {
+			originErrorStream = std::cerr.rdbuf();
 			std::cerr.rdbuf(m_outputStream.rdbuf());
 		}
 		
 		std::cerr << a_errorMessage << std::endl;
 		std::cerr << callStack;
 
+		if (m_isErrorStreamSpecified) {
+			std::cerr.rdbuf(originErrorStream);
+		}
+		
 		while (!backupStack.empty()) {
 			m_errorCallStack.push(backupStack.top());
 			backupStack.pop();
 		}
 	}
 
-	void SError::displayAndCrash(std::string a_errorMessage) {
+	void SErrorHandler::displayAndCrash(std::string a_errorMessage) {
 		display(a_errorMessage);
 		if (m_outputStream.is_open()) {
 			m_outputStream.close();

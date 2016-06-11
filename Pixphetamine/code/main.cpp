@@ -5,7 +5,7 @@
 
 /* Internal headers includes */
 #include "SCoreEngine.h"
-#include "SError.h"
+#include "SErrorHandler.h"
 
 /* Entry point */
 pxInt main(pxInt argc, char *argv[]) {
@@ -23,7 +23,7 @@ pxInt main(pxInt argc, char *argv[]) {
 	*/
 #endif
 
-	Utility::SError* ErrorLog = &Utility::SError::getInstance();
+	Utility::SErrorHandler* ErrorLog = &Utility::SErrorHandler::getInstance();
 	ErrorLog->setOutputFile("error.txt");
 
 	SCoreEngine* Engine = &SCoreEngine::getInstance();
@@ -32,7 +32,7 @@ pxInt main(pxInt argc, char *argv[]) {
 
 	SCoreEngine::destroyInstance();
 
-	Utility::SError::destroyInstance();
+	Utility::SErrorHandler::destroyInstance();
 
 	return EXIT_SUCCESS;
 }

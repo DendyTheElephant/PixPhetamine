@@ -90,7 +90,7 @@
     <ClCompile Include="code\src\CShader.cpp" />
     <ClCompile Include="code\src\CStaticMesh.cpp" />
     <ClCompile Include="code\src\CTimer.cpp" />
-    <ClCompile Include="code\src\SError.cpp" />
+    <ClCompile Include="code\src\SErrorHandler.cpp" />
     <ClCompile Include="code\src\LowLevelRenderingWrapper.cpp" />
     <ClCompile Include="code\src\SCoreEngine.cpp" />
     <ClCompile Include="code\src\Utility.cpp" />
@@ -101,7 +101,7 @@
     <ClInclude Include="code\hdr\CShader.h" />
     <ClInclude Include="code\hdr\CStaticMesh.h" />
     <ClInclude Include="code\hdr\CTimer.h" />
-    <ClInclude Include="code\hdr\SError.h" />
+    <ClInclude Include="code\hdr\SErrorHandler.h" />
     <ClInclude Include="code\hdr\HInternalTypesAliases.h" />
     <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h" />
     <ClInclude Include="code\hdr\SCoreEngine.h" />

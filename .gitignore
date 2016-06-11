@@ -6,7 +6,8 @@
 *.user
 *.sln.docstates
 
-.opensdf
+*.opensdf
+*.txt
 
 # Build results
 
