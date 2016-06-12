@@ -16,7 +16,7 @@ pxInt main(pxInt argc, char *argv[]) {
 #ifdef DEBUG
 
 #else
-	std::ofstream logStream("log.txt");
+	std::ofstream logStream("PixPhetamine.log");
 	std::streambuf* originErrorStream = std::cerr.rdbuf();
 	std::cerr.rdbuf(logStream.rdbuf());
 	

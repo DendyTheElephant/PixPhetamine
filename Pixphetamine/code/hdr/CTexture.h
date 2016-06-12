@@ -7,9 +7,11 @@
 
 /* External dependencies */
 #include <GL/glew.h>
+#include <SDL_image.h>
 
 /* Internal headers includes */
 #include "HInternalTypesAliases.h"
+#include "UErrorHandler.h"
 
 namespace PixPhetamine {
 
@@ -33,7 +35,11 @@ namespace PixPhetamine {
 			TextureType		m_textureType{ NORMAL };
 		
 		/* Methods */
+		private:
+			void initializeTexture(pxUInt16 const& width, pxUInt16 const& height, TextureType const& textureType, pxBool const& willBeMultisampled, const void* data);
+
 		public:
+			CTexture(std::string const& texturePath, TextureType const& textureType, pxBool const& willBeMultisampled);
 			CTexture(pxUInt16 const& width, pxUInt16 const& height, TextureType const& textureType, pxBool const& willBeMultisampled);
 			~CTexture();
 			pxUInt16 getWidth() const { return m_width; }

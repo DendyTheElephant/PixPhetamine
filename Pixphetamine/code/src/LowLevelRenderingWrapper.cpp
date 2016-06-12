@@ -225,9 +225,6 @@ namespace PixPhetamine {
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 			SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 
-			
-
-
 			/* Enable double buffering (one frame delay but complete rendering before update) */
 			SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 			SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
@@ -246,6 +243,10 @@ namespace PixPhetamine {
 			* (Need when two GPU with Optimus for example) */
 			SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
+			/* Hide the cursor (it's an FPS!) */
+			SDL_ShowCursor(0);
+
+
 			/* Create our window centered */
 			SDL_WindowReference = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 			if (!SDL_WindowReference) { /* Die if creation failed */
@@ -253,14 +254,11 @@ namespace PixPhetamine {
 				ERROR("Unable to create the window!");
 			}
 
-			/* Hide the cursor (it's an FPS!) */
-			SDL_ShowCursor(0);
-
-			/* Enable vertical synchronization */
-			SDL_GL_SetSwapInterval(1);
-
 			/* Create our opengl context and attach it to our window */
 			*SDL_GLContextReference = SDL_GL_CreateContext(SDL_WindowReference);
+
+			/* Enable vertical synchronization */
+			//SDL_GL_SetSwapInterval(1);
 
 			/* Sometimes needed to run in "Experimental" to have access to VBO and stuff */
 			glewExperimental = GL_TRUE;
@@ -271,7 +269,8 @@ namespace PixPhetamine {
 			}
 
 
-
+			STACK_MESSAGE("Checking for SDL errors");
+			checkSDLError();
 
 			// Retrieve the GPU - OpenGL Current specs for the platform --> Log file
 			std::cerr << "=============[ PixPhetamine log-file ]=========================" << std::endl;
@@ -281,10 +280,6 @@ namespace PixPhetamine {
 			std::cerr << "     Vendor: " << glGetString(GL_VENDOR) << std::endl;
 			std::cerr << "   Renderer: " << glGetString(GL_RENDERER) << std::endl;
 			std::cerr << "    Shading: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-			std::cerr << "----------------------------------------------------------------" << std::endl;
-			std::cerr << ">SDL error messages:" << std::endl;
-			STACK_MESSAGE("Checking for SDL errors");
-			checkSDLError();
 			std::cerr << "----------------------------------------------------------------" << std::endl;
 			std::cerr << ">GPU Specifications for modern GLSL:" << std::endl;
 			pxInt uboBindings, uboSize, uboVertex, uboFragment, uboGeometry; 
