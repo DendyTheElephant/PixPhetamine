@@ -1,4 +1,4 @@
-/// \file		SErrorHandler.h
+/// \file		UErrorHandler.h
 ///	\author		Daniel Huc
 /// \date		June 2016
 #pragma once
@@ -30,15 +30,15 @@
 // Stack display message (file / line / function)
 #define __CONTEXT__ ("> File " __FILE__ ":"  PRINTVALUE(__LINE__) " in function " __CURRENT_FUNCTION__ "\n")
 
-#define STACK_TRACE (&Utility::SErrorHandler::getInstance())->stack(__CONTEXT__)
-#define STACK_MESSAGE(message) (&Utility::SErrorHandler::getInstance())->stackMessage(message)
-#define UNSTACK_TRACE (&Utility::SErrorHandler::getInstance())->unstack()
-#define ERROR(message) (&Utility::SErrorHandler::getInstance())->displayAndCrash(message)
-#define ERROR_CONTINUE(message) (&Utility::SErrorHandler::getInstance())->display(message)
+#define STACK_TRACE (&Utility::UErrorHandler::getInstance())->stack(__CONTEXT__)
+#define STACK_MESSAGE(message) (&Utility::UErrorHandler::getInstance())->stackMessage(message)
+#define UNSTACK_TRACE (&Utility::UErrorHandler::getInstance())->unstack()
+#define ERROR(message) (&Utility::UErrorHandler::getInstance())->displayAndCrash(message)
+#define ERROR_CONTINUE(message) (&Utility::UErrorHandler::getInstance())->display(message)
 
 namespace Utility {
 
-	class SErrorHandler {
+	class UErrorHandler {
 	/* Members */
 	private:
 		pxBool m_isErrorStreamSpecified{ false };	/// If Error's constructor is default, display error goes to print in cerr!
@@ -47,11 +47,11 @@ namespace Utility {
 
 	/* Methods */
 	private: 
-		SErrorHandler() { /***/ };
-		~SErrorHandler();
+		UErrorHandler() { /***/ };
+		~UErrorHandler();
 
 	public:
-		static SErrorHandler& getInstance();
+		static UErrorHandler& getInstance();
 		static void destroyInstance();
 		
 		void setOutputFile(std::string fileName);

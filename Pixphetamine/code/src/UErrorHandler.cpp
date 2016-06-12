@@ -1,47 +1,47 @@
-#include "SErrorHandler.h"
+#include "UErrorHandler.h"
 
 namespace Utility {
 
-	SErrorHandler::~SErrorHandler() {
+	UErrorHandler::~UErrorHandler() {
 		if (m_outputStream.is_open()) {
 			m_outputStream.close();
 		}
 	}
 
 	/// For error redirection (into a streamfile)
-	void SErrorHandler::setOutputFile(std::string a_fileName) {
+	void UErrorHandler::setOutputFile(std::string a_fileName) {
 		m_outputStream.open(a_fileName);
 		m_isErrorStreamSpecified = true;
 	}
 
 	/// Singleton pattern stuff (unique creation only)
-	SErrorHandler& SErrorHandler::getInstance() {
-		static SErrorHandler* errorHandler = nullptr;
+	UErrorHandler& UErrorHandler::getInstance() {
+		static UErrorHandler* errorHandler = nullptr;
 		if (errorHandler == nullptr) {
-			errorHandler = new SErrorHandler();
+			errorHandler = new UErrorHandler();
 		}
 
 		return *errorHandler;
 	}
 
 	/// Singleton pattern stuff (unique delete only)
-	void SErrorHandler::destroyInstance() {
-		static SErrorHandler* errorHandler = &getInstance();
+	void UErrorHandler::destroyInstance() {
+		static UErrorHandler* errorHandler = &getInstance();
 		if (errorHandler != nullptr) {
 			delete errorHandler;
 		}
 	}
 
-	void SErrorHandler::stack(std::string a_context) {
+	void UErrorHandler::stack(std::string a_context) {
 		m_errorCallStack.push("T");
 		m_errorCallStack.push(a_context);
 	}
 
-	void SErrorHandler::stackMessage(std::string a_message) {
+	void UErrorHandler::stackMessage(std::string a_message) {
 		m_errorCallStack.push(a_message+"\n");
 	}
 
-	void SErrorHandler::unstack() {
+	void UErrorHandler::unstack() {
 		// Drop message stack and call
 		while (m_errorCallStack.top() != "T") {
 			if (!m_errorCallStack.empty()) m_errorCallStack.pop();
@@ -50,7 +50,7 @@ namespace Utility {
 		if (!m_errorCallStack.empty()) m_errorCallStack.pop();
 	}
 
-	void SErrorHandler::display(std::string a_errorMessage) {
+	void UErrorHandler::display(std::string a_errorMessage) {
 		std::streambuf* originErrorStream = nullptr; // Saving cerr stream
 		std::stack<std::string> backupStack; // Backup for stack (if non blocking error, we want to keep the context!)
 		std::string currentMessage;
@@ -88,7 +88,7 @@ namespace Utility {
 		}
 	}
 
-	void SErrorHandler::displayAndCrash(std::string a_errorMessage) {
+	void UErrorHandler::displayAndCrash(std::string a_errorMessage) {
 		display(a_errorMessage);
 		if (m_outputStream.is_open()) {
 			m_outputStream.close();

@@ -4,8 +4,8 @@
 #include <string>
 
 /* Internal headers includes */
-#include "SCoreEngine.h"
-#include "SErrorHandler.h"
+#include "UCoreEngine.h"
+#include "UErrorHandler.h"
 
 /* Entry point */
 pxInt main(pxInt argc, char *argv[]) {
@@ -22,16 +22,16 @@ pxInt main(pxInt argc, char *argv[]) {
 	
 #endif
 
-	Utility::SErrorHandler* ErrorLog = &Utility::SErrorHandler::getInstance();
+	Utility::UErrorHandler* ErrorLog = &Utility::UErrorHandler::getInstance();
 	ErrorLog->setOutputFile("error.txt");
 
-	SCoreEngine* Engine = &SCoreEngine::getInstance();
+	UCoreEngine* Engine = &UCoreEngine::getInstance();
 
 	Engine->runGameLoop();
 
-	SCoreEngine::destroyInstance();
+	UCoreEngine::destroyInstance();
 
-	Utility::SErrorHandler::destroyInstance();
+	Utility::UErrorHandler::destroyInstance();
 
 	return EXIT_SUCCESS;
 }

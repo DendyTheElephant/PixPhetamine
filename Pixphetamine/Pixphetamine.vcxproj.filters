@@ -10,9 +10,6 @@
     <ClCompile Include="code\src\CTimer.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="code\src\SCoreEngine.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\src\LowLevelRenderingWrapper.cpp">
       <Filter>src</Filter>
@@ -26,7 +23,16 @@
     <ClCompile Include="code\src\Utility.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="code\src\SErrorHandler.cpp">
+    <ClCompile Include="code\src\CFrameBuffer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\UCoreEngine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\UErrorHandler.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CTexture.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,9 +44,6 @@
       <Filter>hdr</Filter>
     </ClInclude>
     <ClInclude Include="code\hdr\CTimer.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\SCoreEngine.h">
       <Filter>hdr</Filter>
     </ClInclude>
     <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h">
@@ -58,7 +61,16 @@
     <ClInclude Include="code\hdr\Utility.h">
       <Filter>hdr</Filter>
     </ClInclude>
-    <ClInclude Include="code\hdr\SErrorHandler.h">
+    <ClInclude Include="code\hdr\CFrameBuffer.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\UCoreEngine.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\UErrorHandler.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\CTexture.h">
       <Filter>hdr</Filter>
     </ClInclude>
   </ItemGroup>

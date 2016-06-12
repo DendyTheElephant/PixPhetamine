@@ -1,6 +1,6 @@
-#include "SCoreEngine.h"
+#include "UCoreEngine.h"
 
-SCoreEngine::SCoreEngine() : m_isRunning(false) {
+UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	STACK_TRACE;
 
 	PixPhetamine::LowLevelWrapper::openWindowAndInitializeOpenGL(m_SDLWindow, &m_GLContext, WINDOW_CAPTION, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -49,7 +49,7 @@ SCoreEngine::SCoreEngine() : m_isRunning(false) {
 	UNSTACK_TRACE;
 }
 
-SCoreEngine::~SCoreEngine() {
+UCoreEngine::~UCoreEngine() {
 	PixPhetamine::LowLevelWrapper::shutdownSDL_GL(m_SDLWindow, m_GLContext);
 
 	m_GBufferMultiSampled->free();
@@ -66,23 +66,23 @@ SCoreEngine::~SCoreEngine() {
 	}
 }
 
-SCoreEngine& SCoreEngine::getInstance() {
-	static SCoreEngine* game = nullptr;
+UCoreEngine& UCoreEngine::getInstance() {
+	static UCoreEngine* game = nullptr;
 	if (game == nullptr) {
-		game = new SCoreEngine();
+		game = new UCoreEngine();
 	}
 
 	return *game;
 }
 
-void SCoreEngine::destroyInstance() {
-	static SCoreEngine* game = &getInstance();
+void UCoreEngine::destroyInstance() {
+	static UCoreEngine* game = &getInstance();
 	if (game != nullptr) {
 		delete game;
 	}
 }
 
-void SCoreEngine::loadShaders() {
+void UCoreEngine::loadShaders() {
 	STACK_TRACE;
 	for (auto const &it_shaderName : m_ShaderNames) {
 		m_ShaderList[it_shaderName] = new PixPhetamine::CShader();
@@ -93,7 +93,7 @@ void SCoreEngine::loadShaders() {
 	UNSTACK_TRACE;
 }
 
-void SCoreEngine::loadMeshes() {
+void UCoreEngine::loadMeshes() {
 	STACK_TRACE;
 	for (auto const &it_meshName : m_MeshNames) {
 		std::string meshPath = MESHES_FOLDER + it_meshName + MESHES_EXTENSION;
@@ -107,7 +107,7 @@ void SCoreEngine::loadMeshes() {
 
 
 
-void SCoreEngine::runGameLoop() {
+void UCoreEngine::runGameLoop() {
 
 	m_isRunning = true;
 
@@ -234,7 +234,7 @@ void SCoreEngine::runGameLoop() {
 			// Resolve color multisampling
 			glReadBuffer(GL_COLOR_ATTACHMENT0);
 			glDrawBuffer(GL_COLOR_ATTACHMENT0);
-			glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+			glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 		}
 		
 

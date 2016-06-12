@@ -22,7 +22,7 @@
 
 /* Internal headers includes */
 #include "HInternalTypesAliases.h"
-#include "SErrorHandler.h"
+#include "UErrorHandler.h"
 
 /// Namespace used to group wrapped rendering primitives and the rendering engine.
 namespace PixPhetamine {

@@ -86,25 +86,29 @@
   <ItemGroup>
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\src\CCamera.cpp" />
+    <ClCompile Include="code\src\CFrameBuffer.cpp" />
     <ClCompile Include="code\src\CInputHandler.cpp" />
     <ClCompile Include="code\src\CShader.cpp" />
     <ClCompile Include="code\src\CStaticMesh.cpp" />
+    <ClCompile Include="code\src\CTexture.cpp" />
     <ClCompile Include="code\src\CTimer.cpp" />
-    <ClCompile Include="code\src\SErrorHandler.cpp" />
+    <ClCompile Include="code\src\UErrorHandler.cpp" />
     <ClCompile Include="code\src\LowLevelRenderingWrapper.cpp" />
-    <ClCompile Include="code\src\SCoreEngine.cpp" />
+    <ClCompile Include="code\src\UCoreEngine.cpp" />
     <ClCompile Include="code\src\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\hdr\CCamera.h" />
+    <ClInclude Include="code\hdr\CFrameBuffer.h" />
     <ClInclude Include="code\hdr\CInputHandler.h" />
     <ClInclude Include="code\hdr\CShader.h" />
     <ClInclude Include="code\hdr\CStaticMesh.h" />
+    <ClInclude Include="code\hdr\CTexture.h" />
     <ClInclude Include="code\hdr\CTimer.h" />
-    <ClInclude Include="code\hdr\SErrorHandler.h" />
+    <ClInclude Include="code\hdr\UErrorHandler.h" />
     <ClInclude Include="code\hdr\HInternalTypesAliases.h" />
     <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h" />
-    <ClInclude Include="code\hdr\SCoreEngine.h" />
+    <ClInclude Include="code\hdr\UCoreEngine.h" />
     <ClInclude Include="code\hdr\Utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

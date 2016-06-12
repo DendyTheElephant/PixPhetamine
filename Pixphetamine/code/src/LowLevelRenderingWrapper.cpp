@@ -335,22 +335,22 @@ namespace PixPhetamine {
 			// Resolve color multisampling
 			glReadBuffer(GL_COLOR_ATTACHMENT0);
 			glDrawBuffer(GL_COLOR_ATTACHMENT0);
-			glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+			glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
 			// Resolve normal multisampling
 			glReadBuffer(GL_COLOR_ATTACHMENT1);
 			glDrawBuffer(GL_COLOR_ATTACHMENT1);
-			glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+			glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
 			// Resolve type multisampling
 			glReadBuffer(GL_COLOR_ATTACHMENT2);
 			glDrawBuffer(GL_COLOR_ATTACHMENT2);
-			glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+			glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
 			// Resolve depth multisampling
 			glReadBuffer(GL_DEPTH_ATTACHMENT);
 			glDrawBuffer(GL_DEPTH_ATTACHMENT);
-			glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+			glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_LINEAR);
 		}
 
 

@@ -21,7 +21,7 @@
 #include "CCamera.h"
 #include "CTimer.h"
 #include "LowLevelRenderingWrapper.h"
-#include "SErrorHandler.h"
+#include "UErrorHandler.h"
 
 #define WINDOW_WIDTH				1200
 #define WINDOW_HEIGHT				800
@@ -35,7 +35,7 @@
 
 
 /* Singleton */
-class SCoreEngine {
+class UCoreEngine {
 /* Members */
 private:
 	pxBool m_isRunning;
@@ -72,13 +72,13 @@ private:
 
 /* Methods */
 private:
-	SCoreEngine();
-	~SCoreEngine();
+	UCoreEngine();
+	~UCoreEngine();
 	void loadShaders();
 	void loadMeshes();
 
 public:
-	static SCoreEngine& getInstance();
+	static UCoreEngine& getInstance();
 	static void destroyInstance();
 	void runGameLoop();
 };
