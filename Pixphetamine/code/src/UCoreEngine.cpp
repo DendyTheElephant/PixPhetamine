@@ -85,7 +85,7 @@ void UCoreEngine::destroyInstance() {
 void UCoreEngine::loadShaders() {
 	STACK_TRACE;
 	for (auto const &it_shaderName : m_ShaderNames) {
-		m_ShaderList[it_shaderName] = new PixPhetamine::CShader();
+		m_ShaderList[it_shaderName] = new PixPhetamine::LowLevelWrapper::CShader();
 		std::string vertexShader = SHADERS_FOLDER + it_shaderName + SHADER_VERTEX_EXTENSION;
 		std::string fragmentShader = SHADERS_FOLDER + it_shaderName + SHADER_FRAGMENT_EXTENSION;
 		m_ShaderList[it_shaderName]->load(vertexShader.c_str(), fragmentShader.c_str());

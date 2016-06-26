@@ -38,6 +38,12 @@
     <ClCompile Include="code\src\Display.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="code\src\CPostProcessPass.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\hdr\CPostProcessPass.h">
+      <Filter>hdr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\hdr\CCamera.h">
@@ -74,9 +80,6 @@
       <Filter>hdr</Filter>
     </ClInclude>
     <ClInclude Include="code\hdr\CTexture.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\CPass.h">
       <Filter>hdr</Filter>
     </ClInclude>
     <ClInclude Include="code\hdr\Display.h">

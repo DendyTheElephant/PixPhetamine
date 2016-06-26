@@ -24,7 +24,7 @@ namespace PixPhetamine {
 		/// \brief		Will open the SDL Window (UI) and initialize OpenGL (PixPhetamine context) in it.
 		/// \details	Use this before anything to set up the context of OpenGL and to display the window. \n
 		///				Don't forget to shut down display with shutdown_SDL_GL()!
-		/// \param		SDL_WindowReference		Out parameter, will reference the SDL Window that can be processed by this reference
+		/// \param		SDL_WindowReference		Out parameter, will reference the SDL Window that can be processed by this reference (Reference pointer of a pointer)
 		/// \param		SDL_GL_Context			Out parameter, will reference GL context, in fact not very usefull (needed to shutdown)
 		/// \param		windowTitle				Const char* that will appears in the window caption
 		/// \param		width					Width of the window and openGL viewport

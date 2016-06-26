@@ -1,4 +1,4 @@
-/// \file		CShader.h
+﻿/// \file		CShader.h
 ///	\author		Daniel Huc
 /// \date		April 2016
 #pragma once
@@ -14,35 +14,48 @@
 /* External dependencies */
 #include <GL/glew.h>
 #include <string>
+#include <map>
 
 /* Internal headers includes */
 #include "HInternalTypesAliases.h"
 #include "UErrorHandler.h"
 
 namespace PixPhetamine {
-	/// \brief		Shader loader
-	/// \details	Provides a shader code loader, and error displayer (once loaded, you can just reload the shader)
-	class CShader {
+	
+	namespace LowLevelWrapper {
 
-	public:
-		CShader() { /***/ };
-		~CShader();
 
-		void load(const char * vertexFilePath, const char * fragmentFilePath);
-		void reload(const char * vertexFilePath, const char * fragmentFilePath);
-		inline pxUInt id() { return m_programId; }
+		/// \brief		Shader loader
+		/// \details	Provides a shader code loader, and error displayer (once loaded, you can just reload the shader)
+		class CShader {
+		/* Members */
+		private:
+			pxUInt m_id{ 0 };
+			std::map<std::string, GLvramLocation> m_variableNames;
 
-	private:
-		pxUInt m_programId{ 0 };
+		/* Methods */
+		private:
+			// string containing the source code of the input file
+			std::string CShader::getCode(const char * filePath) const;
+			// call it after each shader compilation
+			void checkCompilation(pxUInt shaderId) const;
+			// call it after linking the program
+			void checkLinks(pxUInt programId) const;
 
-		// string containing the source code of the input file
-		std::string CShader::getCode(const char * filePath) const;
+			void checkUniformsErrors();
 
-		// call it after each shader compilation
-		void checkCompilation(pxUInt shaderId) const;
+		public:
+			CShader() { /***/ };
+			~CShader();
 
-		// call it after linking the program
-		void checkLinks(pxUInt programId) const;
-	};
+			void load(const char * vertexFilePath, const char * fragmentFilePath);
+			void reload(const char * vertexFilePath, const char * fragmentFilePath);
+			inline pxUInt id() { return m_id; }
 
+			void bindVariableName(std::string &const correspondingVariableNameInShader);
+
+			template<typename SHADER_FRIENDLY_TYPE>
+			void sendVariable(std::string &const correspondingVariableNameInShader, SHADER_FRIENDLY_TYPE &const variable);
+		};
+	}
 }

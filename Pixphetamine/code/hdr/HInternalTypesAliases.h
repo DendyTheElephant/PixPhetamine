@@ -26,6 +26,7 @@ using pxFloat64		= GLdouble;			/// Signed 64b floating-point
 using pxVec2i		= glm::i32vec2;		/// Signed 32*2b integer vector
 using pxVec2f		= glm::f32vec2;		/// Signed 32*2b floating-point vector
 using pxVec3f		= glm::f32vec3;		/// Signed 32*3b floating-point vector
+using pxVec4f		= glm::f32vec4;		/// Signed 32*4b floating-point vector
 using pxVec3f64		= glm::f64vec3;		/// Signed 64*3b floating-point vector
 using pxMat4f		= glm::f32mat4;		/// Signed 32*4*4b floating-point matrix
 

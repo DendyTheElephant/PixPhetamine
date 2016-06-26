@@ -4,7 +4,6 @@
 #pragma once
 
 /* Standard library includes */
-#include <iostream>
 #include <map>
 #include <string>
 
