@@ -58,7 +58,7 @@ private:
 	std::vector<std::string> m_ShaderNames;
 	std::vector<std::string> m_MeshNames;
 
-	std::map<std::string, PixPhetamine::CShader*> m_ShaderList; // List of the shaders used in the game
+	std::map<std::string, PixPhetamine::LowLevelWrapper::CShader*> m_ShaderList; // List of the shaders used in the game
 	std::map<std::string, PixPhetamine::CStaticMesh*> m_MeshList;
 
 	pxMat4f m_ModelMatrix;

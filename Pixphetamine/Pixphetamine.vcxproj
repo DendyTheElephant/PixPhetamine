@@ -84,10 +84,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="code\hdr\CPostProcessPass.h" />
     <ClCompile Include="code\main.cpp" />
     <ClCompile Include="code\src\CCamera.cpp" />
     <ClCompile Include="code\src\CFrameBuffer.cpp" />
     <ClCompile Include="code\src\CInputHandler.cpp" />
+    <ClCompile Include="code\src\CPostProcessPass.cpp" />
     <ClCompile Include="code\src\CShader.cpp" />
     <ClCompile Include="code\src\CStaticMesh.cpp" />
     <ClCompile Include="code\src\CTexture.cpp" />
@@ -102,7 +104,6 @@
     <ClInclude Include="code\hdr\CCamera.h" />
     <ClInclude Include="code\hdr\CFrameBuffer.h" />
     <ClInclude Include="code\hdr\CInputHandler.h" />
-    <ClInclude Include="code\hdr\CPass.h" />
     <ClInclude Include="code\hdr\CShader.h" />
     <ClInclude Include="code\hdr\CStaticMesh.h" />
     <ClInclude Include="code\hdr\CTexture.h" />
