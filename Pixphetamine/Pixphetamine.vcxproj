@@ -92,6 +92,7 @@
     <ClCompile Include="code\src\CStaticMesh.cpp" />
     <ClCompile Include="code\src\CTexture.cpp" />
     <ClCompile Include="code\src\CTimer.cpp" />
+    <ClCompile Include="code\src\Display.cpp" />
     <ClCompile Include="code\src\UErrorHandler.cpp" />
     <ClCompile Include="code\src\LowLevelRenderingWrapper.cpp" />
     <ClCompile Include="code\src\UCoreEngine.cpp" />
@@ -101,10 +102,12 @@
     <ClInclude Include="code\hdr\CCamera.h" />
     <ClInclude Include="code\hdr\CFrameBuffer.h" />
     <ClInclude Include="code\hdr\CInputHandler.h" />
+    <ClInclude Include="code\hdr\CPass.h" />
     <ClInclude Include="code\hdr\CShader.h" />
     <ClInclude Include="code\hdr\CStaticMesh.h" />
     <ClInclude Include="code\hdr\CTexture.h" />
     <ClInclude Include="code\hdr\CTimer.h" />
+    <ClInclude Include="code\hdr\Display.h" />
     <ClInclude Include="code\hdr\UErrorHandler.h" />
     <ClInclude Include="code\hdr\HInternalTypesAliases.h" />
     <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h" />
