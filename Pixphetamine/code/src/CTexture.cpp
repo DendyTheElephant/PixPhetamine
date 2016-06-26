@@ -4,7 +4,7 @@ namespace PixPhetamine {
 
 	namespace LowLevelWrapper {
 
-		void CTexture::initializeTexture(pxUInt16 const& a_width, pxUInt16 const& a_height, TextureType const& a_textureType, pxBool const& a_willBeMultisampled, const void* a_data) {
+		void CTexture::initializeTexture(pxUInt16 const& a_width, pxUInt16 const& a_height, ETextureType const& a_textureType, pxBool const& a_willBeMultisampled, const void* a_data) {
 			m_textureType = a_textureType;
 			m_isMultisampled = a_willBeMultisampled;
 			m_width = a_width;
@@ -58,7 +58,7 @@ namespace PixPhetamine {
 			glBindTexture(target, 0);
 		}
 
-		CTexture::CTexture(std::string const& a_texturePath, TextureType const& a_textureType, pxBool const& a_willBeMultisampled) {
+		CTexture::CTexture(std::string const& a_texturePath, ETextureType const& a_textureType, pxBool const& a_willBeMultisampled) {
 			STACK_TRACE;
 			SDL_Surface *image = IMG_Load(a_texturePath.c_str());
 			if (image == NULL) {
@@ -70,7 +70,7 @@ namespace PixPhetamine {
 			UNSTACK_TRACE;
 		}
 
-		CTexture::CTexture(pxUInt16 const& a_width, pxUInt16 const& a_height, TextureType const& a_textureType, pxBool const& a_willBeMultisampled) {
+		CTexture::CTexture(pxUInt16 const& a_width, pxUInt16 const& a_height, ETextureType const& a_textureType, pxBool const& a_willBeMultisampled) {
 			initializeTexture(a_width, a_height, a_textureType, a_willBeMultisampled, nullptr);
 		}
 
