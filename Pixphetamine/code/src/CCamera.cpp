@@ -45,6 +45,18 @@ namespace PixPhetamine {
 	}
 
 
+	void CCamera::moveCameraUp(const pxFloat &a_distance) {
+		m_position = m_position + Y_AXIS * a_distance;
+		m_sight = m_position + m_direction;
+	}
+
+
+	void CCamera::moveCameraDown(const pxFloat &a_distance) {
+		m_position = m_position - Y_AXIS * a_distance;
+		m_sight = m_position + m_direction;
+	}
+
+
 	void CCamera::setPosition(const pxVec3f &a_newPosition) {
 		m_position	= a_newPosition;
 		m_sight		= m_position + m_sight;

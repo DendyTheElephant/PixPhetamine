@@ -64,7 +64,8 @@ namespace PixPhetamine {
 			*SDL_GLContextReference = SDL_GL_CreateContext(SDL_WindowReference);
 
 			/* Enable vertical synchronization */
-			//SDL_GL_SetSwapInterval(1);
+			// FIXME Doesn't seems to work :/
+			//SDL_GL_SetSwapInterval(1); 
 
 			/* Sometimes needed to run in "Experimental" to have access to VBO and stuff */
 			glewExperimental = GL_TRUE;

@@ -136,6 +136,12 @@ void UCoreEngine::runGameLoop() {
 		if (m_InputHandler->getMoveBackward()) {
 			m_Camera->moveCameraBackward(speed);
 		}
+		if (m_InputHandler->getMoveUp()) {
+			m_Camera->moveCameraUp(speed);
+		}
+		if (m_InputHandler->getMoveDown()) {
+			m_Camera->moveCameraDown(speed);
+		}
 
 
 		pxVec3f sunDirectionV = pxVec3f(0.5f, 0.5f, 0.0f);
@@ -194,47 +200,49 @@ void UCoreEngine::runGameLoop() {
 
 		///* Blur ====================================================================================== */
 
-		for (pxInt i = 0; i < 0; ++i) {
-			GLenum blurPassTargets[] = { GL_COLOR_ATTACHMENT0 };
-			PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["blurH"]->id(), m_BufferBlurPartial->id, blurPassTargets, 1);
+		if (pxUInt value = m_InputHandler->getBulletTime()) {
+			for (pxInt i = 0; i < 4; ++i) {
+				GLenum blurPassTargets[] = { GL_COLOR_ATTACHMENT0 };
+				PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["blurH"]->id(), m_BufferBlurPartial->id, blurPassTargets, 1);
 
-			// send the textures
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture); // Activate the texture to send
-			glUniform1i(glGetUniformLocation(m_ShaderList["blurH"]->id(), "image"), 0); // Send it to the shader
+				// send the textures
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture); // Activate the texture to send
+				glUniform1i(glGetUniformLocation(m_ShaderList["blurH"]->id(), "image"), 0); // Send it to the shader
 
-			// Send quad and draw
-			glBindVertexArray(m_BufferBlurPartial->VAO_id);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-			glBindVertexArray(0);
-
-
-
-			PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["blurV"]->id(), m_BufferBlur->id, blurPassTargets, 1);
-
-			// send the textures
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, m_BufferBlurPartial->texture); // Activate the texture to send
-			glUniform1i(glGetUniformLocation(m_ShaderList["blurV"]->id(), "image"), 0); // Send it to the shader
-
-			// Send quad and draw
-			glBindVertexArray(m_BufferBlur->VAO_id);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-			glBindVertexArray(0);
+				// Send quad and draw
+				glBindVertexArray(m_BufferBlurPartial->VAO_id);
+				glDrawArrays(GL_TRIANGLES, 0, 6);
+				glBindVertexArray(0);
 
 
 
-			/* Store the blurred texture to the G Buffer */
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_GBufferWitoutAliasing->id); // Result is going in the non aliased GBuffer
-			glBindFramebuffer(GL_READ_FRAMEBUFFER, m_BufferBlur->id); // From the multi sampled aliased GBuffer
-			glClearColor(0.5, 0.5, 0.5, 1.0);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glDisable(GL_DEPTH);
+				PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["blurV"]->id(), m_BufferBlur->id, blurPassTargets, 1);
 
-			// Resolve color multisampling
-			glReadBuffer(GL_COLOR_ATTACHMENT0);
-			glDrawBuffer(GL_COLOR_ATTACHMENT0);
-			glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+				// send the textures
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, m_BufferBlurPartial->texture); // Activate the texture to send
+				glUniform1i(glGetUniformLocation(m_ShaderList["blurV"]->id(), "image"), 0); // Send it to the shader
+
+				// Send quad and draw
+				glBindVertexArray(m_BufferBlur->VAO_id);
+				glDrawArrays(GL_TRIANGLES, 0, 6);
+				glBindVertexArray(0);
+
+
+
+				/* Store the blurred texture to the G Buffer */
+				glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_GBufferWitoutAliasing->id); // Result is going in the non aliased GBuffer
+				glBindFramebuffer(GL_READ_FRAMEBUFFER, m_BufferBlur->id); // From the multi sampled aliased GBuffer
+				glClearColor(0.5, 0.5, 0.5, 1.0);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				glDisable(GL_DEPTH);
+
+				// Resolve color multisampling
+				glReadBuffer(GL_COLOR_ATTACHMENT0);
+				glDrawBuffer(GL_COLOR_ATTACHMENT0);
+				glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+			}
 		}
 		
 
@@ -251,7 +259,9 @@ void UCoreEngine::runGameLoop() {
 			glUniform1i(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "image"), 0); // Send it to the shader
 
 			pxFloat split = (pxFloat)value / 10.0f;
-			glUniform1f(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "split"), split);
+			m_ShaderList["rgbsplit"]->bindVariableName("split");
+			m_ShaderList["rgbsplit"]->sendVariable("split", split);
+			//glUniform1f(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "split"), split);
 
 			// Send quad and draw
 			glBindVertexArray(m_BufferBlur->VAO_id);

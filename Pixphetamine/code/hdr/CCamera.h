@@ -53,6 +53,8 @@ namespace PixPhetamine {
 		void moveCameraBackward(const pxFloat &distance);
 		void moveCameraLeft(const pxFloat &distance);
 		void moveCameraRight(const pxFloat &distance);
+		void moveCameraUp(const pxFloat &distance);
+		void moveCameraDown(const pxFloat &distance);
 		void setPosition(const pxVec3f &newPosition);
 		void moveView(const pxFloat &dx, const pxFloat &dy);
 		pxMat4f getViewProjectionMatrix();

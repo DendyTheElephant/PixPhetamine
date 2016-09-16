@@ -30,7 +30,7 @@ void main() {
 	//centerCoef = length(texCoord, vec2(0.5, 0.5)); // Length is not a GLSL function... u_u
 	
 	float redColor = texture(image, vec2(texCoord.x + 0.1*sin(split)*centerCoef, texCoord.y)).r;
-    float greenColor = texture(image, vec2(texCoord.x, texCoord.y + + 0.1*sin(split/0.25)*centerCoef)).g;
+    float greenColor = texture(image, vec2(texCoord.x, texCoord.y + 0.1*sin(split/0.25)*centerCoef)).g;
     float blueColor = texture(image, vec2(texCoord.x + 0.1*sin(split/0.5)*centerCoef, texCoord.y)).b;
     
     
