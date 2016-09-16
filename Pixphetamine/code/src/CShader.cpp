@@ -79,7 +79,7 @@ namespace PixPhetamine {
 			glGetShaderiv(a_shaderId, GL_COMPILE_STATUS, &result);
 			glGetShaderiv(a_shaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-			if (infoLogLength > 0) {
+			if (infoLogLength > 1) {
 				std::cerr << std::endl;
 				std::vector<char> message(infoLogLength + 1);
 				glGetShaderInfoLog(a_shaderId, infoLogLength, NULL, &message[0]);
