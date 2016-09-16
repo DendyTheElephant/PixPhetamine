@@ -156,11 +156,11 @@ void UCoreEngine::runGameLoop() {
 		pxFloat type_fox[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 		glBindVertexArray(m_MeshList["lionhead"]->getVBO());
 
-		for (size_t i_lionhead = 0; i_lionhead < 1; ++i_lionhead) {
+		for (size_t i_lionhead = 0; i_lionhead < 3000; ++i_lionhead) {
 
 			m_ModelMatrix = pxMat4f();
 			pxVec3f rotateY(0.0f, 1.0f, 0.0f);
-			m_ModelMatrix = glm::translate(m_ModelMatrix, pxVec3f(-(i_lionhead % 10 * 3.0f), 0.0f, -(i_lionhead / 10 * 3.0f)));
+			m_ModelMatrix = glm::translate(m_ModelMatrix, pxVec3f(-(i_lionhead % 33 * 3.0f), 0.0f, -(i_lionhead / 33 * 3.0f)));
 			//M = glm::rotate(M, 90.0f, rotateY);
 			m_ModelMatrix = glm::scale(m_ModelMatrix, pxVec3f(0.5f, 0.5f, 0.5f));
 
