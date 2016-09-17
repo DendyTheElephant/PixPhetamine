@@ -36,7 +36,7 @@ namespace PixPhetamine {
 		/* Methods */
 		private:
 			// string containing the source code of the input file
-			std::string CShader::getCode(const char * filePath) const;
+            std::string getCode(const char * filePath) const;
 			// call it after each shader compilation
 			void checkCompilation(pxUInt shaderId) const;
 			// call it after linking the program
@@ -45,7 +45,7 @@ namespace PixPhetamine {
 			void checkUniformsErrors();
 
 		public:
-			CShader() { /***/ };
+            CShader() { /***/ }
 			~CShader();
 
 			void load(const char * vertexFilePath, const char * fragmentFilePath);
@@ -55,7 +55,7 @@ namespace PixPhetamine {
 			void bindVariableName(const char * correspondingVariableNameInShader);
 
 			template<typename SHADER_FRIENDLY_TYPE>
-			void sendVariable(const char * correspondingVariableNameInShader, SHADER_FRIENDLY_TYPE &const variable);
+            void sendVariable(const char * correspondingVariableNameInShader, const SHADER_FRIENDLY_TYPE & variable);
 		};
 	}
 }

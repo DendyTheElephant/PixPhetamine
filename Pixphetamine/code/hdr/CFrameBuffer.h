@@ -39,8 +39,8 @@ namespace PixPhetamine {
 			~CFrameBuffer();
 			void addTexture(std::string const& textureName, ETextureType const& textureType);
 			GLvramLocation getId() const { return m_id; }
-			CTexture* getTexture(std::string &const textureName) { return m_texture[textureName]; }
-			GLenum getTextureAttachment(std::string &const textureName) { return m_textureAttachment[textureName]; }
+            CTexture* getTexture(const std::string & textureName) { return m_texture[textureName]; }
+            GLenum getTextureAttachment(const std::string & textureName) { return m_textureAttachment[textureName]; }
 			//void resize(pxUInt16 width, pxUInt16 height, pxBool willBeInterpolated); might be downsample?
 		};
 	}
