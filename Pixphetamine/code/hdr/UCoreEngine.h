@@ -1,3 +1,6 @@
+/// \file		UCoreEngine.h
+/// \author		Daniel Huc, Henry Lefèvre
+/// \date		April 2016
 #pragma once
 
 /* Standard library includes */
@@ -45,11 +48,7 @@ private:
 
 	pxInt m_frame{ 0 };
 	pxUInt64 m_elapsedTime{ 0 };
-	//CTimer m_frameTimer; // Timer reset on each frame for FPS computation
 	CTimer m_secondTimer; // Timer reset on each second for FPS computation
-	//CTimer m_renderSceneTimer; // Timer that would measure the scene rendering
-	//CTimer m_renderAntiAliasingTimer; // Timer that would measure the anti aliasing filtering
-	//CTimer m_renderPostProcessTimer; // Timer that would measure the post process rendering
 	char m_windowCaption[64]; // Window caption (updated on each frame to show FPS)
 
 	SDL_Window* m_SDLWindow; // Our window handle

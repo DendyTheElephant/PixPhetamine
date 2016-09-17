@@ -41,6 +41,9 @@
     <ClCompile Include="code\hdr\CPostProcessPass.h">
       <Filter>hdr</Filter>
     </ClCompile>
+    <ClCompile Include="code\src\SUMeshQuad.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\hdr\CCamera.h">
@@ -77,6 +80,12 @@
       <Filter>hdr</Filter>
     </ClInclude>
     <ClInclude Include="code\hdr\Display.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\SUMeshQuad.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\VSingleton.h">
       <Filter>hdr</Filter>
     </ClInclude>
   </ItemGroup>

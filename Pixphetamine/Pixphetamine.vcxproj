@@ -95,6 +95,7 @@
     <ClCompile Include="code\src\CTexture.cpp" />
     <ClCompile Include="code\src\CTimer.cpp" />
     <ClCompile Include="code\src\Display.cpp" />
+    <ClCompile Include="code\src\SUMeshQuad.cpp" />
     <ClCompile Include="code\src\UErrorHandler.cpp" />
     <ClCompile Include="code\src\LowLevelRenderingWrapper.cpp" />
     <ClCompile Include="code\src\UCoreEngine.cpp" />
@@ -108,10 +109,12 @@
     <ClInclude Include="code\hdr\CTexture.h" />
     <ClInclude Include="code\hdr\CTimer.h" />
     <ClInclude Include="code\hdr\Display.h" />
+    <ClInclude Include="code\hdr\SUMeshQuad.h" />
     <ClInclude Include="code\hdr\UErrorHandler.h" />
     <ClInclude Include="code\hdr\HInternalTypesAliases.h" />
     <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h" />
     <ClInclude Include="code\hdr\UCoreEngine.h" />
+    <ClInclude Include="code\hdr\VSingleton.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

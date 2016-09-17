@@ -8,6 +8,7 @@
 
 *.opensdf
 *.txt
+*.sln
 
 # Build results
 
