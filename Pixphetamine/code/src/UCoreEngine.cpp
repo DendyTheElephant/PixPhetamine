@@ -119,7 +119,7 @@ void UCoreEngine::runGameLoop() {
 		const pxUInt startFrameTime = SDL_GetTicks();
 
 		m_InputHandler->update();
-		
+
 		m_Camera->moveView((pxFloat)m_InputHandler->getMouseMotionX(), (pxFloat)m_InputHandler->getMouseMotionY());
 
 		pxFloat speed = 0.4f;
@@ -347,7 +347,7 @@ void UCoreEngine::runGameLoop() {
 			m_elapsedTime += endFrameTime - startFrameTime;
 			++m_frame;
 
-			sprintf_s(m_windowCaption, "%s    FPS: %f", WINDOW_CAPTION, m_frame / (m_elapsedTime / 1000.0));
+            snprintf(m_windowCaption, 64, "%s    FPS: %f", WINDOW_CAPTION, m_frame / (m_elapsedTime / 1000.0));
 			SDL_SetWindowTitle(m_SDLWindow, m_windowCaption);
 			/*
 			std::cout << "==========================================" << std::endl;
