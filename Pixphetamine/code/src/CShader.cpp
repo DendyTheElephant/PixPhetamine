@@ -79,7 +79,7 @@ namespace PixPhetamine {
 			glGetShaderiv(a_shaderId, GL_COMPILE_STATUS, &result);
 			glGetShaderiv(a_shaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-			if (infoLogLength > 0) {
+			if (infoLogLength > 1) {
 				std::cerr << std::endl;
 				std::vector<char> message(infoLogLength + 1);
 				glGetShaderInfoLog(a_shaderId, infoLogLength, NULL, &message[0]);
@@ -145,10 +145,10 @@ namespace PixPhetamine {
 		}
 
 
-		void CShader::bindVariableName(std::string &const a_correspondingVariableNameInShader) {
+		void CShader::bindVariableName(const char * a_correspondingVariableNameInShader) {
 			STACK_TRACE;
-			m_variableNames[a_correspondingVariableNameInShader] = glGetUniformLocation(m_id, a_correspondingVariableNameInShader.c_str());
-			STACK_MESSAGE("Binding " + a_correspondingVariableNameInShader);
+			m_variableNames[a_correspondingVariableNameInShader] = glGetUniformLocation(m_id, a_correspondingVariableNameInShader);
+			STACK_MESSAGE("Binding " + std::string(a_correspondingVariableNameInShader));
 			checkUniformsErrors();
 			UNSTACK_TRACE;
 		}
@@ -158,42 +158,42 @@ namespace PixPhetamine {
 
 		// Template specification <pxFloat> to send
 		template <> 
-		void CShader::sendVariable(std::string &const a_correspondingVariableNameInShader, pxFloat &const a_variable) {
+		void CShader::sendVariable(const char * a_correspondingVariableNameInShader, pxFloat const& a_variable) {
 			STACK_TRACE;
 			glUniform1f(m_variableNames[a_correspondingVariableNameInShader], a_variable);
-			STACK_MESSAGE("Sending " + a_correspondingVariableNameInShader); checkUniformsErrors(); UNSTACK_TRACE;
+			STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader)); checkUniformsErrors(); UNSTACK_TRACE;
 		}
 
 		// Template specification <pxInt> to send
 		template <>
-		void CShader::sendVariable(std::string &const a_correspondingVariableNameInShader, pxInt &const a_variable) {
+		void CShader::sendVariable(const char * a_correspondingVariableNameInShader, pxInt const& a_variable) {
 			STACK_TRACE; 
 			glUniform1i(m_variableNames[a_correspondingVariableNameInShader], a_variable);	
-			STACK_MESSAGE("Sending " + a_correspondingVariableNameInShader); checkUniformsErrors(); UNSTACK_TRACE;
+			STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader)); checkUniformsErrors(); UNSTACK_TRACE;
 		}
 
 		// Template specification <pxVec3f> to send
 		template <>
-		void CShader::sendVariable(std::string &const a_correspondingVariableNameInShader, pxVec3f &const a_variable) {
+		void CShader::sendVariable(const char * a_correspondingVariableNameInShader, pxVec3f const& a_variable) {
 			STACK_TRACE;
 			glUniform3f(m_variableNames[a_correspondingVariableNameInShader], a_variable[0], a_variable[1], a_variable[2]);
-			STACK_MESSAGE("Sending " + a_correspondingVariableNameInShader); checkUniformsErrors(); UNSTACK_TRACE;
+			STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader)); checkUniformsErrors(); UNSTACK_TRACE;
 		}
 
 		// Template specification <pxVec4f> to send
 		template <>
-		void CShader::sendVariable(std::string &const a_correspondingVariableNameInShader, pxVec4f &const a_variable) {
+		void CShader::sendVariable(const char * a_correspondingVariableNameInShader, pxVec4f const& a_variable) {
 			STACK_TRACE;
 			glUniform4f(m_variableNames[a_correspondingVariableNameInShader], a_variable[0], a_variable[1], a_variable[2], a_variable[3]);
-			STACK_MESSAGE("Sending " + a_correspondingVariableNameInShader); checkUniformsErrors(); UNSTACK_TRACE;
+			STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader)); checkUniformsErrors(); UNSTACK_TRACE;
 		}
 
 		// Template specification <pxMat4f> to send
 		template <>
-		void CShader::sendVariable(std::string &const a_correspondingVariableNameInShader, pxMat4f &const a_variable) {
+		void CShader::sendVariable(const char * a_correspondingVariableNameInShader, pxMat4f const& a_variable) {
 			STACK_TRACE;
 			glUniformMatrix4fv(m_variableNames[a_correspondingVariableNameInShader], 1, GL_FALSE, glm::value_ptr(a_variable));
-			STACK_MESSAGE("Sending " + a_correspondingVariableNameInShader); checkUniformsErrors(); UNSTACK_TRACE;
+			STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader)); checkUniformsErrors(); UNSTACK_TRACE;
 		}
 	}
 }

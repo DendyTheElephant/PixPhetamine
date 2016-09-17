@@ -16,18 +16,20 @@ class CInputHandler {
 	/* Members */
 	private:
 		SDL_Event event;
-		pxUInt m_mousePositionX;
-		pxUInt m_mousePositionY;
-		pxInt m_mouseMotionX;
-		pxInt m_mouseMotionY;
-		pxUInt m_endEvent;
-		pxUInt m_moveBackward;
-		pxUInt m_moveForward;
-		pxUInt m_moveLeft;
-		pxUInt m_moveRight;
-		pxUInt m_shoot;
-		pxUInt m_bulletTime;
-		pxUInt m_pause;
+		pxUInt m_mousePositionX{ 0 };
+		pxUInt m_mousePositionY{ 0 };
+		pxInt m_mouseMotionX{ 0 };
+		pxInt m_mouseMotionY{ 0 };
+		pxUInt m_endEvent{ 0 };
+		pxUInt m_moveBackward{ 0 };
+		pxUInt m_moveForward{ 0 };
+		pxUInt m_moveLeft{ 0 };
+		pxUInt m_moveRight{ 0 };
+		pxUInt m_moveUp{ 0 };
+		pxUInt m_moveDown{ 0 };
+		pxUInt m_shoot{ 0 };
+		pxUInt m_bulletTime{ 0 };
+		pxUInt m_pause{ 0 };
 
 		SDL_Window* m_window;
 		pxInt WINDOW_CENTER_X;
@@ -48,6 +50,8 @@ class CInputHandler {
 		pxUInt getMoveBackward()	const { return m_moveBackward; }
 		pxUInt getMoveLeft()		const { return m_moveLeft; }
 		pxUInt getMoveRight()		const { return m_moveRight; }
+		pxUInt getMoveUp()		const { return m_moveUp; }
+		pxUInt getMoveDown()		const { return m_moveDown; }
 		pxInt getMouseMotionX()		{ return m_mouseMotionX; m_mouseMotionX = 0; }
 		pxInt getMouseMotionY()		{ return m_mouseMotionY; m_mouseMotionY = 0; }
 		pxUInt getShoot()			const { return m_shoot; }

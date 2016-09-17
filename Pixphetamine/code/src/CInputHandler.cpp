@@ -5,15 +5,6 @@ CInputHandler::CInputHandler(SDL_Window* window) {
 	SDL_GetWindowSize(window, &WINDOW_CENTER_X, &WINDOW_CENTER_Y);
 	WINDOW_CENTER_X = WINDOW_CENTER_X / 2;
 	WINDOW_CENTER_Y = WINDOW_CENTER_Y / 2;
-	m_moveForward = 0;
-	m_moveBackward = 0;
-	m_moveLeft = 0;
-	m_moveRight = 0;
-	m_shoot = 0;
-	m_endEvent = 0;
-	m_pause = 0;
-	m_mousePositionX = WINDOW_CENTER_X;
-	m_mousePositionY = WINDOW_CENTER_Y;
 	m_mouseMotionX = 0;
 	m_mouseMotionY = 0;
 	SDL_WarpMouseInWindow(m_window, WINDOW_CENTER_X, WINDOW_CENTER_Y);
@@ -60,6 +51,8 @@ void CInputHandler::incInputTime() {
 	if (m_moveBackward) { m_moveBackward++; }
 	if (m_moveLeft) { m_moveLeft++; }
 	if (m_moveRight) { m_moveRight++; }
+	if (m_moveUp) { m_moveUp++; }
+	if (m_moveDown) { m_moveDown++; }
 	if (m_shoot) { m_shoot++; }
 	if (m_endEvent) { m_endEvent++; }
 }
@@ -78,6 +71,12 @@ void CInputHandler::keyPressed(SDL_KeyboardEvent* key) {
 			break;
 		case SDLK_d:
 			if (m_moveRight == 0) { m_moveRight++; }
+			break;
+		case SDLK_e:
+			if (m_moveUp == 0) { m_moveUp++; }
+			break;
+		case SDLK_a:
+			if (m_moveDown == 0) { m_moveDown++; }
 			break;
 		case SDLK_ESCAPE:
 			if (m_endEvent == 0) { m_endEvent++; }
@@ -99,6 +98,12 @@ void CInputHandler::keyReleased(SDL_KeyboardEvent* key) {
 		break;
 	case SDLK_d:
 		m_moveRight = 0;
+		break;
+	case SDLK_e:
+		m_moveUp = 0;
+		break;
+	case SDLK_a:
+		m_moveDown = 0;
 		break;
 	}
 }

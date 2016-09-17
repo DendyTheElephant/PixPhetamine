@@ -46,6 +46,7 @@ namespace PixPhetamine {
 			pxUInt16 getWidth() const { return m_width; }
 			pxUInt16 getHeight() const { return m_height; }
 			GLvramLocation getID() const { return m_id; }
+			ETextureType getType() const { return m_textureType; }
 		};
 	}
 }

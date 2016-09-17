@@ -43,15 +43,15 @@ namespace PixPhetamine {
 
 			glGenTextures(1, &m_id);
 			glBindTexture(target, m_id);
-			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 			if (a_willBeMultisampled) {
 				glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 8, internalFormat, a_width, a_height, GL_TRUE);
 			}
 			else {
+				glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
 				glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, a_width, a_height, 0, format, GL_FLOAT, data);
 			}
 

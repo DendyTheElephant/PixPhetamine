@@ -2,9 +2,9 @@
 
 UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	STACK_TRACE;
-
-	PixPhetamine::LowLevelWrapper::openWindowAndInitializeOpenGL(m_SDLWindow, &m_GLContext, WINDOW_CAPTION, WINDOW_WIDTH, WINDOW_HEIGHT);
-
+	
+	PixPhetamine::Display::openWindowAndInitializeOpenGL(m_SDLWindow, &m_GLContext, WINDOW_CAPTION, WINDOW_WIDTH, WINDOW_HEIGHT);
+	
 	m_InputHandler = new CInputHandler(m_SDLWindow);
 	m_Camera = new PixPhetamine::CCamera(m_SDLWindow);
 
@@ -39,6 +39,7 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	m_BufferBlurPartial = new PixPhetamine::LowLevelWrapper::ImageBuffer();
 	m_BufferBlur = new PixPhetamine::LowLevelWrapper::ImageBuffer();
 	STACK_MESSAGE("Creation of FrameBuffers [COMPLETE]");
+
 	STACK_MESSAGE("Initialisation of FrameBuffers");
 	m_GBufferMultiSampled->initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GL_TEXTURE_2D_MULTISAMPLE);
 	m_GBufferWitoutAliasing->initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GL_TEXTURE_2D);
@@ -50,7 +51,7 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 }
 
 UCoreEngine::~UCoreEngine() {
-	PixPhetamine::LowLevelWrapper::shutdownSDL_GL(m_SDLWindow, m_GLContext);
+	PixPhetamine::Display::shutdownSDL_GL(m_SDLWindow, m_GLContext);
 
 	m_GBufferMultiSampled->free();
 	m_GBufferWitoutAliasing->free();
@@ -136,6 +137,12 @@ void UCoreEngine::runGameLoop() {
 		if (m_InputHandler->getMoveBackward()) {
 			m_Camera->moveCameraBackward(speed);
 		}
+		if (m_InputHandler->getMoveUp()) {
+			m_Camera->moveCameraUp(speed);
+		}
+		if (m_InputHandler->getMoveDown()) {
+			m_Camera->moveCameraDown(speed);
+		}
 
 
 		pxVec3f sunDirectionV = pxVec3f(0.5f, 0.5f, 0.0f);
@@ -156,11 +163,11 @@ void UCoreEngine::runGameLoop() {
 		pxFloat type_fox[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 		glBindVertexArray(m_MeshList["lionhead"]->getVBO());
 
-		for (size_t i_lionhead = 0; i_lionhead < 1; ++i_lionhead) {
+		for (size_t i_lionhead = 0; i_lionhead < 3000; ++i_lionhead) {
 
 			m_ModelMatrix = pxMat4f();
 			pxVec3f rotateY(0.0f, 1.0f, 0.0f);
-			m_ModelMatrix = glm::translate(m_ModelMatrix, pxVec3f(-(i_lionhead % 10 * 3.0f), 0.0f, -(i_lionhead / 10 * 3.0f)));
+			m_ModelMatrix = glm::translate(m_ModelMatrix, pxVec3f(-(i_lionhead % 33 * 3.0f), 0.0f, -(i_lionhead / 33 * 3.0f)));
 			//M = glm::rotate(M, 90.0f, rotateY);
 			m_ModelMatrix = glm::scale(m_ModelMatrix, pxVec3f(0.5f, 0.5f, 0.5f));
 
@@ -186,55 +193,56 @@ void UCoreEngine::runGameLoop() {
 		/* ==== Anti Aliasing filtering ============================================================== */
 		/* =========================================================================================== */
 		PixPhetamine::LowLevelWrapper::multiSamplingAntiAliasing(m_GBufferMultiSampled, m_GBufferWitoutAliasing, WINDOW_WIDTH, WINDOW_HEIGHT);
-
+		
 		/* =========================================================================================== */
 		/* ==== Post Process ========================================================================= */
 		/* =========================================================================================== */
 
 
 		///* Blur ====================================================================================== */
+		if (pxUInt value = m_InputHandler->getBulletTime()) {
+			for (pxInt i = 0; i < 4; ++i) {
+				GLenum blurPassTargets[] = { GL_COLOR_ATTACHMENT0 };
+				PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["blurH"]->id(), m_BufferBlurPartial->id, blurPassTargets, 1);
 
-		for (pxInt i = 0; i < 0; ++i) {
-			GLenum blurPassTargets[] = { GL_COLOR_ATTACHMENT0 };
-			PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["blurH"]->id(), m_BufferBlurPartial->id, blurPassTargets, 1);
+				// send the textures
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture); // Activate the texture to send
+				glUniform1i(glGetUniformLocation(m_ShaderList["blurH"]->id(), "image"), 0); // Send it to the shader
 
-			// send the textures
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture); // Activate the texture to send
-			glUniform1i(glGetUniformLocation(m_ShaderList["blurH"]->id(), "image"), 0); // Send it to the shader
-
-			// Send quad and draw
-			glBindVertexArray(m_BufferBlurPartial->VAO_id);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-			glBindVertexArray(0);
-
-
-
-			PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["blurV"]->id(), m_BufferBlur->id, blurPassTargets, 1);
-
-			// send the textures
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, m_BufferBlurPartial->texture); // Activate the texture to send
-			glUniform1i(glGetUniformLocation(m_ShaderList["blurV"]->id(), "image"), 0); // Send it to the shader
-
-			// Send quad and draw
-			glBindVertexArray(m_BufferBlur->VAO_id);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-			glBindVertexArray(0);
+				// Send quad and draw
+				glBindVertexArray(m_BufferBlurPartial->VAO_id);
+				glDrawArrays(GL_TRIANGLES, 0, 6);
+				glBindVertexArray(0);
 
 
 
-			/* Store the blurred texture to the G Buffer */
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_GBufferWitoutAliasing->id); // Result is going in the non aliased GBuffer
-			glBindFramebuffer(GL_READ_FRAMEBUFFER, m_BufferBlur->id); // From the multi sampled aliased GBuffer
-			glClearColor(0.5, 0.5, 0.5, 1.0);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glDisable(GL_DEPTH);
+				PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["blurV"]->id(), m_BufferBlur->id, blurPassTargets, 1);
 
-			// Resolve color multisampling
-			glReadBuffer(GL_COLOR_ATTACHMENT0);
-			glDrawBuffer(GL_COLOR_ATTACHMENT0);
-			glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+				// send the textures
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, m_BufferBlurPartial->texture); // Activate the texture to send
+				glUniform1i(glGetUniformLocation(m_ShaderList["blurV"]->id(), "image"), 0); // Send it to the shader
+
+				// Send quad and draw
+				glBindVertexArray(m_BufferBlur->VAO_id);
+				glDrawArrays(GL_TRIANGLES, 0, 6);
+				glBindVertexArray(0);
+
+
+
+				/* Store the blurred texture to the G Buffer */
+				glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_GBufferWitoutAliasing->id); // Result is going in the non aliased GBuffer
+				glBindFramebuffer(GL_READ_FRAMEBUFFER, m_BufferBlur->id); // From the multi sampled aliased GBuffer
+				glClearColor(0.5, 0.5, 0.5, 1.0);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				glDisable(GL_DEPTH_TEST);
+
+				// Resolve color multisampling
+				glReadBuffer(GL_COLOR_ATTACHMENT0);
+				glDrawBuffer(GL_COLOR_ATTACHMENT0);
+				glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+			}
 		}
 		
 
@@ -251,7 +259,9 @@ void UCoreEngine::runGameLoop() {
 			glUniform1i(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "image"), 0); // Send it to the shader
 
 			pxFloat split = (pxFloat)value / 10.0f;
-			glUniform1f(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "split"), split);
+			m_ShaderList["rgbsplit"]->bindVariableName("split");
+			m_ShaderList["rgbsplit"]->sendVariable("split", split);
+			//glUniform1f(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "split"), split);
 
 			// Send quad and draw
 			glBindVertexArray(m_BufferBlur->VAO_id);
@@ -265,7 +275,7 @@ void UCoreEngine::runGameLoop() {
 			glBindFramebuffer(GL_READ_FRAMEBUFFER, m_BufferBlur->id); // From the multi sampled aliased GBuffer
 			glClearColor(0.5, 0.5, 0.5, 1.0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glDisable(GL_DEPTH);
+			glDisable(GL_DEPTH_TEST);
 
 			// Resolve color multisampling
 			glReadBuffer(GL_COLOR_ATTACHMENT0);
@@ -285,7 +295,7 @@ void UCoreEngine::runGameLoop() {
 
 		glClearColor(0.5, 0.5, 0.5, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glDisable(GL_DEPTH);
+		glDisable(GL_DEPTH_TEST);
 
 		glUseProgram(m_ShaderList["postprocess"]->id());
 

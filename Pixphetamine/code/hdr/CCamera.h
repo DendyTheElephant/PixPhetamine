@@ -48,13 +48,15 @@ namespace PixPhetamine {
 		/// \details    Provide the window context, and change initialisation values in the header file (static init).
 		/// \param		window		SDL_Window to provide context.
 		CCamera(SDL_Window* window);
-		void setFOV(const pxFloat &newAngle);
-		void moveCameraForward(const pxFloat &distance);
-		void moveCameraBackward(const pxFloat &distance);
-		void moveCameraLeft(const pxFloat &distance);
-		void moveCameraRight(const pxFloat &distance);
-		void setPosition(const pxVec3f &newPosition);
-		void moveView(const pxFloat &dx, const pxFloat &dy);
+		void setFOV(pxFloat const& newAngle);
+		void moveCameraForward(pxFloat const& distance);
+		void moveCameraBackward(pxFloat const& distance);
+		void moveCameraLeft(pxFloat const& distance);
+		void moveCameraRight(pxFloat const& distance);
+		void moveCameraUp(pxFloat const& distance);
+		void moveCameraDown(pxFloat const& distance);
+		void setPosition(pxVec3f const& newPosition);
+		void moveView(pxFloat const& dx, pxFloat const& dy);
 		pxMat4f getViewProjectionMatrix();
 		pxVec3f getPosition() const { return m_position; }
 		pxVec3f getView() const { return m_direction; }

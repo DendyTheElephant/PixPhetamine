@@ -52,10 +52,10 @@ namespace PixPhetamine {
 			void reload(const char * vertexFilePath, const char * fragmentFilePath);
 			inline pxUInt id() { return m_id; }
 
-			void bindVariableName(std::string &const correspondingVariableNameInShader);
+			void bindVariableName(const char * correspondingVariableNameInShader);
 
 			template<typename SHADER_FRIENDLY_TYPE>
-			void sendVariable(std::string &const correspondingVariableNameInShader, SHADER_FRIENDLY_TYPE &const variable);
+			void sendVariable(const char * correspondingVariableNameInShader, SHADER_FRIENDLY_TYPE const& variable);
 		};
 	}
 }

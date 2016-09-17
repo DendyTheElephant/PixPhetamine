@@ -16,42 +16,54 @@ namespace PixPhetamine {
 	}
 
 
-	void CCamera::setFOV(const pxFloat &a_newAngle) {
+	void CCamera::setFOV(pxFloat const& a_newAngle) {
 		m_viewAngle = a_newAngle;
 	}
 
 
-	void CCamera::moveCameraForward(const pxFloat &a_distance) {
+	void CCamera::moveCameraForward(pxFloat const& a_distance) {
 		m_position	= m_position + m_direction * a_distance;
 		m_sight		= m_position + m_direction;
 	}
 
 
-	void CCamera::moveCameraBackward(const pxFloat &a_distance) {
+	void CCamera::moveCameraBackward(pxFloat const& a_distance) {
 		m_position	= m_position - m_direction * a_distance;
 		m_sight		= m_position + m_direction;
 	}
 
 
-	void CCamera::moveCameraLeft(const pxFloat &a_distance) {
+	void CCamera::moveCameraLeft(pxFloat const& a_distance) {
 		m_position	= m_position + m_strafe * a_distance;
 		m_sight		= m_position + m_direction;
 	}
 
 
-	void CCamera::moveCameraRight(const pxFloat &a_distance) {
+	void CCamera::moveCameraRight(pxFloat const& a_distance) {
 		m_position	= m_position - m_strafe * a_distance;
 		m_sight		= m_position + m_direction;
 	}
 
 
-	void CCamera::setPosition(const pxVec3f &a_newPosition) {
+	void CCamera::moveCameraUp(pxFloat const& a_distance) {
+		m_position = m_position + Y_AXIS * a_distance;
+		m_sight = m_position + m_direction;
+	}
+
+
+	void CCamera::moveCameraDown(pxFloat const& a_distance) {
+		m_position = m_position - Y_AXIS * a_distance;
+		m_sight = m_position + m_direction;
+	}
+
+
+	void CCamera::setPosition(pxVec3f const& a_newPosition) {
 		m_position	= a_newPosition;
 		m_sight		= m_position + m_sight;
 	}
 
 
-	void CCamera::moveView(const pxFloat &a_dx, const pxFloat &a_dy) {
+	void CCamera::moveView(pxFloat const& a_dx, pxFloat const& a_dy) {
 		m_angleX -= a_dx / 5.0;
 		m_angleY -= a_dy / 5.0;
 

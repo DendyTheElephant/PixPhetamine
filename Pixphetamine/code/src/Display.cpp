@@ -16,7 +16,7 @@ namespace PixPhetamine {
 		}
 		/* End of Anonymous namespace */
 
-		void openWindowAndInitializeOpenGL(SDL_Window*& SDL_WindowReference, SDL_GLContext* SDL_GLContextReference, const char* windowTitle, pxInt width, pxInt height) {
+		void openWindowAndInitializeOpenGL(SDL_Window*& SDL_WindowReference, SDL_GLContext* SDL_GLContextReference, const char* windowTitle, pxInt const& width, pxInt const& height) {
 			STACK_TRACE;
 			/* Initialize SDL's Video subsystem */
 			if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -64,7 +64,10 @@ namespace PixPhetamine {
 			*SDL_GLContextReference = SDL_GL_CreateContext(SDL_WindowReference);
 
 			/* Enable vertical synchronization */
-			//SDL_GL_SetSwapInterval(1);
+			SDL_GL_SetSwapInterval(1); 
+
+			STACK_MESSAGE("Checking for OpenGL errors");
+			Utility::UErrorHandler::checkOpenGLErrors();
 
 			/* Sometimes needed to run in "Experimental" to have access to VBO and stuff */
 			glewExperimental = GL_TRUE;
@@ -74,6 +77,8 @@ namespace PixPhetamine {
 				ERROR("GLEW Error: "); //+ std::string(glewGetErrorString(status)));
 			}
 
+			// Catch the GL_INVALID_ENUM error caused by glewInit()! It seems to be non harmfull...
+			glGetError();
 
 			STACK_MESSAGE("Checking for SDL errors");
 			checkSDLError();

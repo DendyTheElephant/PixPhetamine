@@ -7,27 +7,32 @@ uniform float split;
 out vec4 OutColor;
 
 void main() {
-    
-    vec2 delta = vec2(split, 0.0);
 
     ivec2 windowSize = textureSize(image, 0);
-    vec2 texCoord = gl_FragCoord.xy / windowSize;
+    vec2 texCoord = gl_FragCoord.xy / windowSize; // Coordinate of current pixel in [0..1]
     
-    vec4 redColor;
-    vec4 greenColor;
-    vec4 blueColor;
-    vec2 dir;
+	float horizontalProximity;	// Will describe the proximity to the center 
+	float verticalProximity;
+	if (texCoord.x > 0.5) {
+		horizontalProximity = 1.0 - texCoord.x;
+	} else {
+		horizontalProximity = texCoord.x;
+	}
+	if (texCoord.y > 0.5) {
+		verticalProximity = 1.0 - texCoord.y;
+	} else {
+		verticalProximity = texCoord.y;
+	}
+	float centerCoef = horizontalProximity * verticalProximity;
+	
+	
+	// TRY SOMETHING SIMPLE!!!! (like distance?) INSTEAD OF THIS "NEWBIE DUMB HOT-HACK"....
+	//centerCoef = length(texCoord, vec2(0.5, 0.5)); // Length is not a GLSL function... u_u
+	
+	float redColor = texture(image, vec2(texCoord.x + 0.1*sin(split)*centerCoef, texCoord.y)).r;
+    float greenColor = texture(image, vec2(texCoord.x, texCoord.y + 0.1*sin(split/0.25)*centerCoef)).g;
+    float blueColor = texture(image, vec2(texCoord.x + 0.1*sin(split/0.5)*centerCoef, texCoord.y)).b;
     
-    if (texCoord.x < 0.5) { // The pixel is on the left
-        dir = vec2(-0.1,0.0);
-        redColor = texture(image, texCoord + delta);
-        greenColor = texture(image, texCoord);
-        blueColor = texture(image, texCoord);
-    } else {                // The pixel is on the right
-        redColor = texture(image, texCoord);
-        greenColor = texture(image, texCoord);
-        blueColor = texture(image, texCoord + delta);
-    }
     
-    OutColor = vec4(redColor.r, greenColor.g, blueColor.b, 1.0);
+    OutColor = vec4(redColor, greenColor, blueColor, 1.0);
 }

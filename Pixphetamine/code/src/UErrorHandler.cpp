@@ -32,6 +32,41 @@ namespace Utility {
 		}
 	}
 
+	void UErrorHandler::checkOpenGLErrors() {
+		GLenum status = glGetError();
+		if (status != GL_NO_ERROR) {
+			switch (status) {
+			case GL_INVALID_ENUM:
+				ERROR("OpenGL error: GL_INVALID_ENUM");
+				break;
+			case GL_INVALID_OPERATION:
+				ERROR("OpenGL error: GL_INVALID_OPERATION");
+				break;
+			case GL_INVALID_VALUE:
+				ERROR("OpenGL error: GL_INVALID_VALUE");
+				break;
+			case GL_STACK_OVERFLOW:
+				ERROR("OpenGL error: GL_STACK_OVERFLOW");
+				break;
+			case GL_STACK_UNDERFLOW:
+				ERROR("OpenGL error: GL_STACK_UNDERFLOW");
+				break;
+			case GL_OUT_OF_MEMORY:
+				ERROR("OpenGL error: GL_OUT_OF_MEMORY");
+				break;
+			case GL_INVALID_FRAMEBUFFER_OPERATION:
+				ERROR("OpenGL error: GL_INVALID_FRAMEBUFFER_OPERATION");
+				break;
+			case GL_CONTEXT_LOST:
+				ERROR("OpenGL error: GL_CONTEXT_LOST");
+				break;
+			default:
+				ERROR("OpenGL error: Unknown error!");
+				break;
+			}
+		}
+	}
+
 	void UErrorHandler::stack(std::string a_context) {
 		m_errorCallStack.push("T");
 		m_errorCallStack.push(a_context);
