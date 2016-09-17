@@ -348,7 +348,12 @@ void UCoreEngine::runGameLoop() {
 			m_elapsedTime += endFrameTime - startFrameTime;
 			++m_frame;
 
-            		snprintf(m_windowCaption, 64, "%s    FPS: %f", WINDOW_CAPTION, m_frame / (m_elapsedTime / 1000.0));
+#ifdef _MSC_VER
+			sprintf_s(m_windowCaption, "%s    FPS: %f", WINDOW_CAPTION, m_frame / (m_elapsedTime / 1000.0));
+#else
+			snprintf(m_windowCaption, 64, "%s    FPS: %f", WINDOW_CAPTION, m_frame / (m_elapsedTime / 1000.0));
+#endif
+            
 			SDL_SetWindowTitle(m_SDLWindow, m_windowCaption);
 			/*
 			std::cout << "==========================================" << std::endl;

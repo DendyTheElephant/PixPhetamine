@@ -39,6 +39,8 @@
 class UCoreEngine {
 /* Members */
 private:
+	static UCoreEngine* game;
+
 	pxBool m_isRunning;
 
 	pxInt m_frame{ 0 };
