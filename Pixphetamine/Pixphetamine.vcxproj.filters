@@ -20,9 +20,6 @@
     <ClCompile Include="code\src\CStaticMesh.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="code\src\Utility.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="code\src\CFrameBuffer.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -65,9 +62,6 @@
       <Filter>hdr</Filter>
     </ClInclude>
     <ClInclude Include="code\hdr\HInternalTypesAliases.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\Utility.h">
       <Filter>hdr</Filter>
     </ClInclude>
     <ClInclude Include="code\hdr\CFrameBuffer.h">

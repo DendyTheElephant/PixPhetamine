@@ -53,6 +53,7 @@ namespace Utility {
 	public:
 		static UErrorHandler& getInstance();
 		static void destroyInstance();
+		static void checkOpenGLErrors();
 		
 		void setOutputFile(std::string fileName);
 		void stack(std::string context);

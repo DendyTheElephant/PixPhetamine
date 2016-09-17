@@ -29,7 +29,7 @@ namespace PixPhetamine {
 		/// \param		windowTitle				Const char* that will appears in the window caption
 		/// \param		width					Width of the window and openGL viewport
 		/// \param		height					Height of the window and openGL viewport
-		void openWindowAndInitializeOpenGL(SDL_Window*& SDL_WindowReference, SDL_GLContext* SDL_GLContextReference, const char* windowTitle, pxInt width, pxInt height);
+		void openWindowAndInitializeOpenGL(SDL_Window*& SDL_WindowReference, SDL_GLContext* SDL_GLContextReference, const char* windowTitle, pxInt const& width, pxInt const& height);
 		
 		/// \brief		Will close and free the SDL Window (UI) and OpenGL (PixPhetamine context).
 		/// \param		SDL_WindowReference		Out parameter, an opened and initialized window (by SDL)

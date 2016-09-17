@@ -39,10 +39,13 @@ namespace PixPhetamine {
 		void createTexture(GLvramLocation &texture, GLenum textureType, GLenum iFormat, GLenum format, pxInt width, pxInt height) {
 			glGenTextures(1, &texture);
 			glBindTexture(textureType, texture);
-			glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			if (textureType == GL_TEXTURE_2D) {
+				glTexParameteri(textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			}			
+			
 			if (textureType == GL_TEXTURE_2D)
 				glTexImage2D(GL_TEXTURE_2D, 0, iFormat, width, height, 0, format, GL_FLOAT, NULL);
 			else
@@ -131,15 +134,16 @@ namespace PixPhetamine {
 			/* Texture */
 			glActiveTexture(GL_TEXTURE0);
 			createTexture(colorTexture, textureType, GL_RGBA32F, GL_RGBA, width, height);
-
+			
 			glActiveTexture(GL_TEXTURE1);
 			createTexture(normalTexture, textureType, GL_RGBA32F, GL_RGBA, width, height);
-
+			
 			glActiveTexture(GL_TEXTURE2);
 			createTexture(typeTexture, textureType, GL_RGBA32F, GL_RGBA, width, height);
-
+			
 			glActiveTexture(GL_TEXTURE3);
 			createTexture(depthTexture, textureType, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, width, height);
+
 
 			/* Framebuffer to link everything together */
 			glGenFramebuffers(1, &id);
@@ -185,7 +189,7 @@ namespace PixPhetamine {
 			glBindFramebuffer(GL_FRAMEBUFFER, id);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
 
-			STACK_TRACE;
+			STACK_MESSAGE("Checking Framebuffer errors");
 			checkFrameBuffer();
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -321,11 +325,12 @@ namespace PixPhetamine {
 
 
 		void multiSamplingAntiAliasing(GBuffer* Aliased, GBuffer* Output, pxInt width, pxInt height) {
+			STACK_TRACE;
 			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, Output->id); // Result is going in the non aliased GBuffer
 			glBindFramebuffer(GL_READ_FRAMEBUFFER, Aliased->id); // From the multi sampled aliased GBuffer
 			glClearColor(0.5, 0.5, 0.5, 1.0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glDisable(GL_DEPTH);
+			glDisable(GL_DEPTH_TEST);
 
 			// Resolve color multisampling
 			glReadBuffer(GL_COLOR_ATTACHMENT0);
@@ -341,11 +346,25 @@ namespace PixPhetamine {
 			glReadBuffer(GL_COLOR_ATTACHMENT2);
 			glDrawBuffer(GL_COLOR_ATTACHMENT2);
 			glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
+			
 			// Resolve depth multisampling
-			glReadBuffer(GL_DEPTH_ATTACHMENT);
+			/*glReadBuffer(GL_DEPTH_ATTACHMENT);
 			glDrawBuffer(GL_DEPTH_ATTACHMENT);
-			glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_LINEAR);
+			glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+			if (GLenum status = glGetError() != GL_NO_ERROR) {
+				switch (status) {
+				case GL_INVALID_OPERATION:
+					ERROR("Uniform error: See https://www.opengl.org/sdk/docs/man/html/glUniform.xhtml for more details");
+					break;
+				case GL_INVALID_FRAMEBUFFER_OPERATION:
+					ERROR("ERROR HERE");
+					break;
+				default:
+					ERROR("Uniform error: Unknown error");
+					break;
+				}
+			}*/
+			UNSTACK_TRACE;
 		}
 
 

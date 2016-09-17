@@ -55,7 +55,7 @@ namespace PixPhetamine {
 			void bindVariableName(const char * correspondingVariableNameInShader);
 
 			template<typename SHADER_FRIENDLY_TYPE>
-			void sendVariable(const char * correspondingVariableNameInShader, SHADER_FRIENDLY_TYPE &const variable);
+			void sendVariable(const char * correspondingVariableNameInShader, SHADER_FRIENDLY_TYPE const& variable);
 		};
 	}
 }

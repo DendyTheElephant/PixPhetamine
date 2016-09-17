@@ -2,9 +2,9 @@
 
 UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	STACK_TRACE;
-
-	PixPhetamine::LowLevelWrapper::openWindowAndInitializeOpenGL(m_SDLWindow, &m_GLContext, WINDOW_CAPTION, WINDOW_WIDTH, WINDOW_HEIGHT);
-
+	
+	PixPhetamine::Display::openWindowAndInitializeOpenGL(m_SDLWindow, &m_GLContext, WINDOW_CAPTION, WINDOW_WIDTH, WINDOW_HEIGHT);
+	
 	m_InputHandler = new CInputHandler(m_SDLWindow);
 	m_Camera = new PixPhetamine::CCamera(m_SDLWindow);
 
@@ -39,6 +39,7 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	m_BufferBlurPartial = new PixPhetamine::LowLevelWrapper::ImageBuffer();
 	m_BufferBlur = new PixPhetamine::LowLevelWrapper::ImageBuffer();
 	STACK_MESSAGE("Creation of FrameBuffers [COMPLETE]");
+
 	STACK_MESSAGE("Initialisation of FrameBuffers");
 	m_GBufferMultiSampled->initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GL_TEXTURE_2D_MULTISAMPLE);
 	m_GBufferWitoutAliasing->initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GL_TEXTURE_2D);
@@ -50,7 +51,7 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 }
 
 UCoreEngine::~UCoreEngine() {
-	PixPhetamine::LowLevelWrapper::shutdownSDL_GL(m_SDLWindow, m_GLContext);
+	PixPhetamine::Display::shutdownSDL_GL(m_SDLWindow, m_GLContext);
 
 	m_GBufferMultiSampled->free();
 	m_GBufferWitoutAliasing->free();
@@ -192,14 +193,13 @@ void UCoreEngine::runGameLoop() {
 		/* ==== Anti Aliasing filtering ============================================================== */
 		/* =========================================================================================== */
 		PixPhetamine::LowLevelWrapper::multiSamplingAntiAliasing(m_GBufferMultiSampled, m_GBufferWitoutAliasing, WINDOW_WIDTH, WINDOW_HEIGHT);
-
+		
 		/* =========================================================================================== */
 		/* ==== Post Process ========================================================================= */
 		/* =========================================================================================== */
 
 
 		///* Blur ====================================================================================== */
-
 		if (pxUInt value = m_InputHandler->getBulletTime()) {
 			for (pxInt i = 0; i < 4; ++i) {
 				GLenum blurPassTargets[] = { GL_COLOR_ATTACHMENT0 };
@@ -236,7 +236,7 @@ void UCoreEngine::runGameLoop() {
 				glBindFramebuffer(GL_READ_FRAMEBUFFER, m_BufferBlur->id); // From the multi sampled aliased GBuffer
 				glClearColor(0.5, 0.5, 0.5, 1.0);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-				glDisable(GL_DEPTH);
+				glDisable(GL_DEPTH_TEST);
 
 				// Resolve color multisampling
 				glReadBuffer(GL_COLOR_ATTACHMENT0);
@@ -275,7 +275,7 @@ void UCoreEngine::runGameLoop() {
 			glBindFramebuffer(GL_READ_FRAMEBUFFER, m_BufferBlur->id); // From the multi sampled aliased GBuffer
 			glClearColor(0.5, 0.5, 0.5, 1.0);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glDisable(GL_DEPTH);
+			glDisable(GL_DEPTH_TEST);
 
 			// Resolve color multisampling
 			glReadBuffer(GL_COLOR_ATTACHMENT0);
@@ -295,7 +295,7 @@ void UCoreEngine::runGameLoop() {
 
 		glClearColor(0.5, 0.5, 0.5, 1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glDisable(GL_DEPTH);
+		glDisable(GL_DEPTH_TEST);
 
 		glUseProgram(m_ShaderList["postprocess"]->id());
 

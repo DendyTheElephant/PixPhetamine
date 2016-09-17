@@ -39,7 +39,7 @@ namespace MathPhetamine {
 	static pxVec3f	(*normalize)(pxVec3f const& vector)										= &glm::normalize;
 	static pxVec3f	(*cross)(pxVec3f const& vector1, pxVec3f const& vector2)				= &glm::cross;
 	static pxFloat	(*mod)(pxFloat value, pxFloat module)									= &std::fmod;
-	static pxFloat	(*toRadians)(const pxFloat& value)										= &glm::radians;
+	static pxFloat	(*toRadians)(pxFloat const& value)										= &glm::radians;
 	static pxFloat	(*clamp)(pxFloat const& value, pxFloat const& min, pxFloat const& max)	= &glm::clamp;
 }
 
