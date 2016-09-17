@@ -13,6 +13,7 @@
 
 /* Internal headers includes */
 #include "HInternalTypesAliases.h"
+#include "VSingleton.h"
 
 // Define __CURRENT_FUNCTION__ macro to call __func__ define for c++11 gcc or __FUNCTION__ defined for MSVSC!
 #ifndef __CURRENT_FUNCTION__
@@ -37,8 +38,9 @@
 #define ERROR_CONTINUE(message) (&Utility::UErrorHandler::getInstance())->display(message)
 
 namespace Utility {
-
 	class UErrorHandler {
+	//class UErrorHandler : public VSingleton<UErrorHandler> {
+	//	friend class VSingleton<UErrorHandler>;		// VSingleton can now access to UErrorHandler() and ~UErrorHandler() from it's implementation
 	/* Members */
 	private:
 		pxBool m_isErrorStreamSpecified{ false };	/// If Error's constructor is default, display error goes to print in cerr!
