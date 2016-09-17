@@ -1,5 +1,5 @@
 ﻿/// \file		CShader.h
-///	\author		Daniel Huc
+/// \author		Daniel Huc
 /// \date		April 2016
 #pragma once
 

@@ -1,5 +1,7 @@
 #include "UCoreEngine.h"
 
+UCoreEngine* UCoreEngine::game = nullptr;
+
 UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	STACK_TRACE;
 	
@@ -68,19 +70,18 @@ UCoreEngine::~UCoreEngine() {
 }
 
 UCoreEngine& UCoreEngine::getInstance() {
-	static UCoreEngine* game = nullptr;
-	if (game == nullptr) {
-		game = new UCoreEngine();
-	}
+    if (UCoreEngine::game == nullptr) {
+        UCoreEngine::game = new UCoreEngine();
+    }
 
-	return *game;
+    return *game;
 }
 
 void UCoreEngine::destroyInstance() {
-	static UCoreEngine* game = &getInstance();
-	if (game != nullptr) {
-		delete game;
-	}
+    if (UCoreEngine::game != nullptr) {
+        delete UCoreEngine::game;
+        UCoreEngine::game = nullptr;
+    }
 }
 
 void UCoreEngine::loadShaders() {
@@ -120,7 +121,7 @@ void UCoreEngine::runGameLoop() {
 		const pxUInt startFrameTime = SDL_GetTicks();
 
 		m_InputHandler->update();
-		
+
 		m_Camera->moveView((pxFloat)m_InputHandler->getMouseMotionX(), (pxFloat)m_InputHandler->getMouseMotionY());
 
 		pxFloat speed = 0.4f;
@@ -347,7 +348,7 @@ void UCoreEngine::runGameLoop() {
 			m_elapsedTime += endFrameTime - startFrameTime;
 			++m_frame;
 
-			sprintf_s(m_windowCaption, "%s    FPS: %f", WINDOW_CAPTION, m_frame / (m_elapsedTime / 1000.0));
+            		snprintf(m_windowCaption, 64, "%s    FPS: %f", WINDOW_CAPTION, m_frame / (m_elapsedTime / 1000.0));
 			SDL_SetWindowTitle(m_SDLWindow, m_windowCaption);
 			/*
 			std::cout << "==========================================" << std::endl;
