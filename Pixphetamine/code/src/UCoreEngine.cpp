@@ -1,5 +1,7 @@
 #include "UCoreEngine.h"
 
+UCoreEngine* UCoreEngine::game = nullptr;
+
 UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	STACK_TRACE;
 
@@ -67,19 +69,18 @@ UCoreEngine::~UCoreEngine() {
 }
 
 UCoreEngine& UCoreEngine::getInstance() {
-	static UCoreEngine* game = nullptr;
-	if (game == nullptr) {
-		game = new UCoreEngine();
-	}
+    if (UCoreEngine::game == nullptr) {
+        UCoreEngine::game = new UCoreEngine();
+    }
 
-	return *game;
+    return *game;
 }
 
 void UCoreEngine::destroyInstance() {
-	static UCoreEngine* game = &getInstance();
-	if (game != nullptr) {
-		delete game;
-	}
+    if (UCoreEngine::game != nullptr) {
+        delete UCoreEngine::game;
+        UCoreEngine::game = nullptr;
+    }
 }
 
 void UCoreEngine::loadShaders() {
