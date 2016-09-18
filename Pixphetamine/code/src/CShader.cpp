@@ -109,21 +109,6 @@ namespace PixPhetamine {
 		}
 
 
-		void CShader::checkUniformsErrors() {
-			GLenum status;
-			if (status = glGetError() != GL_NO_ERROR) {
-				switch (status) {
-				case GL_INVALID_OPERATION:
-					ERROR("Uniform error: See https://www.opengl.org/sdk/docs/man/html/glUniform.xhtml for more details");
-					break;
-				default:
-					ERROR("Uniform error: Unknown error");
-					break;
-				}
-			}
-		}
-
-
 		std::string CShader::getCode(const char * a_filePath) const {
 			STACK_TRACE;
 			// Return a string containing the source code of the input file
@@ -149,7 +134,7 @@ namespace PixPhetamine {
 			STACK_TRACE;
 			m_variableNames[a_correspondingVariableNameInShader] = glGetUniformLocation(m_id, a_correspondingVariableNameInShader);
 			STACK_MESSAGE("Binding " + std::string(a_correspondingVariableNameInShader));
-			checkUniformsErrors();
+			Utility::UErrorHandler::checkOpenGLErrors();
 			UNSTACK_TRACE;
 		}
 
@@ -160,40 +145,75 @@ namespace PixPhetamine {
 		template <> 
 		void CShader::sendVariable(const char * a_correspondingVariableNameInShader, pxFloat const& a_variable) {
 			STACK_TRACE;
-			glUniform1f(m_variableNames[a_correspondingVariableNameInShader], a_variable);
-			STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader)); checkUniformsErrors(); UNSTACK_TRACE;
+			if (m_variableNames.count(a_correspondingVariableNameInShader) != 0) {
+				glUniform1f(m_variableNames[a_correspondingVariableNameInShader], a_variable);
+				STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader)); 
+				Utility::UErrorHandler::checkOpenGLErrors();
+			}
+			else {
+				ERROR("Error : " + std::string(a_correspondingVariableNameInShader) + " haven't been binded to the shader!");
+			}
+			 UNSTACK_TRACE;
 		}
 
 		// Template specification <pxInt> to send
 		template <>
 		void CShader::sendVariable(const char * a_correspondingVariableNameInShader, pxInt const& a_variable) {
-			STACK_TRACE; 
-			glUniform1i(m_variableNames[a_correspondingVariableNameInShader], a_variable);	
-			STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader)); checkUniformsErrors(); UNSTACK_TRACE;
+			STACK_TRACE;
+			if (m_variableNames.count(a_correspondingVariableNameInShader) != 0) {
+				glUniform1i(m_variableNames[a_correspondingVariableNameInShader], a_variable);
+				STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader));
+				Utility::UErrorHandler::checkOpenGLErrors();
+			}
+			else {
+				ERROR("Error : " + std::string(a_correspondingVariableNameInShader) + " haven't been binded to the shader!");
+			}
+			UNSTACK_TRACE;
 		}
 
 		// Template specification <pxVec3f> to send
 		template <>
 		void CShader::sendVariable(const char * a_correspondingVariableNameInShader, pxVec3f const& a_variable) {
 			STACK_TRACE;
-			glUniform3f(m_variableNames[a_correspondingVariableNameInShader], a_variable[0], a_variable[1], a_variable[2]);
-			STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader)); checkUniformsErrors(); UNSTACK_TRACE;
+			if (m_variableNames.count(a_correspondingVariableNameInShader) != 0) {
+				glUniform3f(m_variableNames[a_correspondingVariableNameInShader], a_variable[0], a_variable[1], a_variable[2]);
+				STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader));
+				Utility::UErrorHandler::checkOpenGLErrors();
+			}
+			else {
+				ERROR("Error : " + std::string(a_correspondingVariableNameInShader) + " haven't been binded to the shader!");
+			}
+			UNSTACK_TRACE;
 		}
 
 		// Template specification <pxVec4f> to send
 		template <>
 		void CShader::sendVariable(const char * a_correspondingVariableNameInShader, pxVec4f const& a_variable) {
 			STACK_TRACE;
-			glUniform4f(m_variableNames[a_correspondingVariableNameInShader], a_variable[0], a_variable[1], a_variable[2], a_variable[3]);
-			STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader)); checkUniformsErrors(); UNSTACK_TRACE;
+			if (m_variableNames.count(a_correspondingVariableNameInShader) != 0) {
+				glUniform4f(m_variableNames[a_correspondingVariableNameInShader], a_variable[0], a_variable[1], a_variable[2], a_variable[3]);
+				STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader));
+				Utility::UErrorHandler::checkOpenGLErrors();
+			}
+			else {
+				ERROR("Error : " + std::string(a_correspondingVariableNameInShader) + " haven't been binded to the shader!");
+			}
+			UNSTACK_TRACE;
 		}
 
 		// Template specification <pxMat4f> to send
 		template <>
 		void CShader::sendVariable(const char * a_correspondingVariableNameInShader, pxMat4f const& a_variable) {
 			STACK_TRACE;
-			glUniformMatrix4fv(m_variableNames[a_correspondingVariableNameInShader], 1, GL_FALSE, glm::value_ptr(a_variable));
-			STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader)); checkUniformsErrors(); UNSTACK_TRACE;
+			if (m_variableNames.count(a_correspondingVariableNameInShader) != 0) {
+				glUniformMatrix4fv(m_variableNames[a_correspondingVariableNameInShader], 1, GL_FALSE, glm::value_ptr(a_variable));
+				STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader));
+				Utility::UErrorHandler::checkOpenGLErrors();
+			}
+			else {
+				ERROR("Error : " + std::string(a_correspondingVariableNameInShader) + " haven't been binded to the shader!");
+			}
+			UNSTACK_TRACE;
 		}
 	}
 }

@@ -26,10 +26,9 @@ namespace PixPhetamine {
 			pxUInt16							m_height{ 0 };				///< Frame height
 			GLvramLocation						m_id{ 0 };					///< ID of the FBO, used to reference the active FBO in the rendering pipeline
 			std::map<std::string, CTexture*>	m_texture;					///< Texture map
-			std::map<std::string, CTexture*>	m_depthTexture;				///< Depth texture map
 			std::map<std::string, GLenum>		m_textureAttachment;		///< Updated with m_texture but stores the attachment in the FBO of the texture
-			std::map<std::string, GLenum>		m_depthTextureAttachment;	///< As depth attachment has a singular value, we want to differentiate it!
 			pxBool								m_isMultisampled{ false };	///< Required for texture generation: is it multisampled texture?
+			pxBool								m_isDepthAttached{ false };	///< A FBO can only hold 1 depth
 
 		/* Methods */
 		private:
@@ -39,9 +38,10 @@ namespace PixPhetamine {
 			~CFrameBuffer();
 			void addTexture(std::string const& textureName, ETextureType const& textureType);
 			GLvramLocation getId() const { return m_id; }
-			CTexture* getTexture(std::string const& textureName) { return m_texture[textureName]; }
-			GLenum getTextureAttachment(std::string const& textureName) { return m_textureAttachment[textureName]; }
-			//void resize(pxUInt16 width, pxUInt16 height, pxBool willBeInterpolated); might be downsample?
+			CTexture* getTexture(const char* textureName) { return m_texture[textureName]; }
+			GLenum getTextureAttachment(const char* textureName) { return m_textureAttachment[textureName]; }
+			pxUInt16 getNumberOfColorAttachments() const;
+			pxBool isDepthAttached() const { return m_isDepthAttached; }
 		};
 	}
 }

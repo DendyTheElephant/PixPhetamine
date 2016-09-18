@@ -36,13 +36,11 @@ namespace PixPhetamine {
 		/* Methods */
 		private:
 			// string containing the source code of the input file
-			std::string CShader::getCode(const char * filePath) const;
+			std::string getCode(const char * filePath) const;
 			// call it after each shader compilation
 			void checkCompilation(pxUInt shaderId) const;
 			// call it after linking the program
 			void checkLinks(pxUInt programId) const;
-
-			void checkUniformsErrors();
 
 		public:
 			CShader() { /***/ };
@@ -53,6 +51,7 @@ namespace PixPhetamine {
 			inline pxUInt id() { return m_id; }
 
 			void bindVariableName(const char * correspondingVariableNameInShader);
+			GLvramLocation getVariableAttachment(const char * correspondingVariableNameInShader) { return m_variableNames[correspondingVariableNameInShader]; }
 
 			template<typename SHADER_FRIENDLY_TYPE>
 			void sendVariable(const char * correspondingVariableNameInShader, SHADER_FRIENDLY_TYPE const& variable);

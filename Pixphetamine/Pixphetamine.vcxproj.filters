@@ -41,7 +41,7 @@
     <ClCompile Include="code\hdr\CPostProcessPass.h">
       <Filter>hdr</Filter>
     </ClCompile>
-    <ClCompile Include="code\src\SUMeshQuad.cpp">
+    <ClCompile Include="code\src\SMeshQuad.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -82,10 +82,10 @@
     <ClInclude Include="code\hdr\Display.h">
       <Filter>hdr</Filter>
     </ClInclude>
-    <ClInclude Include="code\hdr\SUMeshQuad.h">
+    <ClInclude Include="code\hdr\VSingleton.h">
       <Filter>hdr</Filter>
     </ClInclude>
-    <ClInclude Include="code\hdr\VSingleton.h">
+    <ClInclude Include="code\hdr\SMeshQuad.h">
       <Filter>hdr</Filter>
     </ClInclude>
   </ItemGroup>

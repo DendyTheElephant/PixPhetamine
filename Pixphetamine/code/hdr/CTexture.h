@@ -47,6 +47,7 @@ namespace PixPhetamine {
 			pxUInt16 getHeight() const { return m_height; }
 			GLvramLocation getID() const { return m_id; }
 			ETextureType getType() const { return m_textureType; }
+			pxBool isMultisampled() const { return m_isMultisampled; }
 		};
 	}
 }

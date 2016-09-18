@@ -43,9 +43,6 @@ namespace PixPhetamine {
 			for (auto &it_texture : m_texture) {
 				delete (it_texture.second);
 			}
-			for (auto &it_depthTexture : m_depthTexture) {
-				delete (it_depthTexture.second);
-			}
 			glDeleteFramebuffers(1, &m_id);
 		}
 
@@ -56,30 +53,24 @@ namespace PixPhetamine {
 			GLenum textureTarget;
 			(m_isMultisampled) ? textureTarget = GL_TEXTURE_2D : textureTarget = GL_TEXTURE_2D_MULTISAMPLE;
 
-			// Here we want special process for depth textures (because it's the way OpenGL handles it)
+			// Resolve attachment
+			GLvramLocation attachment = m_textureAttachment.size();
+
+			// Create attachment
+			m_textureAttachment[a_textureName] = attachment;
+
+			// Create texture
+			glActiveTexture(GL_TEXTURE + attachment);
+			m_texture[a_textureName] = new CTexture(m_width, m_height, a_textureType, m_isMultisampled);
+			
+			// Framebuffer link
+			glBindFramebuffer(GL_FRAMEBUFFER, m_id);
 			if (a_textureType == DEPTH) {
-				// Create depth attachment
-				m_depthTextureAttachment[a_textureName] = m_depthTexture.size();
-				
-				// Create depth texture
-				glActiveTexture(m_depthTextureAttachment[a_textureName]);
-				m_depthTexture[a_textureName] = new CTexture(m_width, m_height, DEPTH, m_isMultisampled);
-
-				// Framebuffer link
-				glBindFramebuffer(GL_FRAMEBUFFER, m_id);
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, textureTarget, m_texture[a_textureName]->getID(), 0);
-			}
+				m_isDepthAttached = true;
+			} 
 			else {
-				// Create attachment
-				m_textureAttachment[a_textureName] = m_texture.size();
-
-				// Create texture
-				glActiveTexture(m_textureAttachment[a_textureName]);
-				m_texture[a_textureName] = new CTexture(m_width, m_height, a_textureType, m_isMultisampled);
-
-				// Framebuffer link
-				glBindFramebuffer(GL_FRAMEBUFFER, m_id);
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_textureAttachment[a_textureName], textureTarget, m_texture[a_textureName]->getID(), 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment, textureTarget, m_texture[a_textureName]->getID(), 0);
 			}
 
 			STACK_MESSAGE("Checking Framebuffer errors");
@@ -90,8 +81,12 @@ namespace PixPhetamine {
 			UNSTACK_TRACE;
 		}
 
-		/*void CFrameBuffer::resize(pxUInt16 a_width, pxUInt16 a_height, pxBool a_willBeInterpolated) {
 
-		}*/
+		pxUInt16 CFrameBuffer::getNumberOfColorAttachments() const {
+			pxUInt16 number = m_texture.size();
+			if (m_isDepthAttached)
+				number--;
+			return number;
+		}
 	}
 }

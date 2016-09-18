@@ -26,6 +26,8 @@
 #include "LowLevelRenderingWrapper.h"
 #include "UErrorHandler.h"
 #include "Display.h"
+#include "CFrameBuffer.h"
+#include "CPostProcessPass.h"
 
 #define WINDOW_WIDTH				1200
 #define WINDOW_HEIGHT				800
