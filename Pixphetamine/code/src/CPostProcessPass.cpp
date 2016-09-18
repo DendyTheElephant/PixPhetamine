@@ -11,11 +11,14 @@ namespace PixPhetamine {
 			
 			// Verify that the current binded shader is this one! (To optimise performance, prefer not to switch between shaders)
 			// Active the shader with activate(); before sending textures...
-			GLint currentShader;
+			GLint currentShader, currentFBOIn, currentFBOOut;
 			glGetIntegerv(GL_CURRENT_PROGRAM, &currentShader);
-			if (currentShader != m_shader->id()) {
+			glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &currentFBOIn);
+			glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &currentFBOOut);
+			if (currentShader != m_shader->id() || currentFBOOut != m_frameBuffer->getId()) {
 				activate();
 			}
+
 
 			// Active texture unit in shader and bind the correct texture
 			glActiveTexture(GL_TEXTURE0 + a_location);
@@ -35,30 +38,28 @@ namespace PixPhetamine {
 			UNSTACK_TRACE;
 		}
 
-		void CPostProcessPass::process(pxUInt16 a_numberOfOutputTextures, std::string a_outputTextureName ...) {
+		void CPostProcessPass::process(std::initializer_list<const char*> a_textureTargets) {
 			STACK_TRACE;
 
 			// Verify that the current binded shader is this one! (To optimise performance, prefer not to switch between shaders)
 			// Active the shader with activate(); before sending textures...
-			GLint currentShader;
+			GLint currentShader, currentFBOIn, currentFBOOut;
 			glGetIntegerv(GL_CURRENT_PROGRAM, &currentShader);
-			if (currentShader != m_shader->id()) {
+			glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &currentFBOIn);
+			glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &currentFBOOut);
+			if (currentShader != m_shader->id() || currentFBOOut != m_frameBuffer->getId()) {
 				activate();
 			}
 
-			glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer->getId());
-			glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+			glClearColor(0.0f, 0.5f, 0.5f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 			glDisable(GL_DEPTH_TEST);
 
 			std::vector<GLenum> textureUnits;
 			// Witch are the textures where we want to draw
-			va_list targets;						// Args storage
-			va_start(targets, a_outputTextureName);	// Init arguments list
-			for (int i_target = 0; i_target < a_numberOfOutputTextures; ++i_target) {
-				textureUnits.push_back(m_frameBuffer->getTextureAttachment(va_arg(targets, std::string).c_str()));
+			for (auto &it_target : a_textureTargets) {
+				textureUnits.push_back(m_frameBuffer->getTextureAttachment(it_target));
 			}
-			va_end(targets);						// Cleans up the list
 			glDrawBuffers(textureUnits.size(), textureUnits.data()); // Sending the output targets			
 
 			// Draw call

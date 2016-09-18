@@ -265,56 +265,13 @@ void UCoreEngine::runGameLoop() {
 
 			m_BlurPassPartI->activate();
 			m_BlurPassPartI->sendTexture(m_GBufferAA->getTexture("colorTexture"), "image", 0);
-			m_BlurPassPartI->process(1,"processedTexture");
+			m_BlurPassPartI->process({ "processedTexture" });
 
 			m_BlurPassPartII->activate();
 			m_BlurPassPartII->sendTexture(m_BufferBlurPartial->getTexture("processedTexture"), "image", 0);
-			m_BlurPassPartII->process(1, "processedTexture");
+			m_BlurPassPartII->process({ "processedTexture" });
 
 			m_GBufferAA->replaceTexture("colorTexture", m_BufferBlur, "processedTexture");
-
-			/*for (pxInt i = 0; i < 4; ++i) {
-				GLenum blurPassTargets[] = { GL_COLOR_ATTACHMENT0 };
-				PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["blurH"]->id(), m_BufferBlurPartial->id, blurPassTargets, 1);
-
-				// send the textures
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture); // Activate the texture to send
-				glUniform1i(glGetUniformLocation(m_ShaderList["blurH"]->id(), "image"), 0); // Send it to the shader
-
-				// Send quad and draw
-				glBindVertexArray(m_BufferBlurPartial->VAO_id);
-				glDrawArrays(GL_TRIANGLES, 0, 6);
-				glBindVertexArray(0);
-
-
-
-				PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["blurV"]->id(), m_BufferBlur->id, blurPassTargets, 1);
-
-				// send the textures
-				glActiveTexture(GL_TEXTURE0);
-				glBindTexture(GL_TEXTURE_2D, m_BufferBlurPartial->texture); // Activate the texture to send
-				glUniform1i(glGetUniformLocation(m_ShaderList["blurV"]->id(), "image"), 0); // Send it to the shader
-
-				// Send quad and draw
-				glBindVertexArray(m_BufferBlur->VAO_id);
-				glDrawArrays(GL_TRIANGLES, 0, 6);
-				glBindVertexArray(0);
-
-
-
-				// Store the blurred texture to the G Buffer 
-				glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_GBufferWitoutAliasing->id); // Result is going in the non aliased GBuffer
-				glBindFramebuffer(GL_READ_FRAMEBUFFER, m_BufferBlur->id); // From the multi sampled aliased GBuffer
-				glClearColor(0.5, 0.5, 0.5, 1.0);
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-				glDisable(GL_DEPTH_TEST);
-
-				// Resolve color multisampling
-				glReadBuffer(GL_COLOR_ATTACHMENT0);
-				glDrawBuffer(GL_COLOR_ATTACHMENT0);
-				glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-			}*/
 		}
 		
 
@@ -327,43 +284,9 @@ void UCoreEngine::runGameLoop() {
 			m_RGBSplitPass->activate();
 			m_RGBSplitPass->sendTexture(m_GBufferAA->getTexture("colorTexture"), "image", 0);
 			m_RGBSplitPass->sendVariable("split", split);
-			m_RGBSplitPass->process(1, "processedTexture");
+			m_RGBSplitPass->process({ "processedTexture" });
 
 			m_GBufferAA->replaceTexture("colorTexture", m_RGBSplitted, "processedTexture");
-
-			/*
-			GLenum rgbPassTarget[] = { GL_COLOR_ATTACHMENT0 };
-			PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["rgbsplit"]->id(), m_BufferBlur->id, rgbPassTarget, 1);
-
-			// send the textures
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture); // Activate the texture to send
-			glUniform1i(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "image"), 0); // Send it to the shader
-
-			
-			m_ShaderList["rgbsplit"]->bindVariableName("split");
-			m_ShaderList["rgbsplit"]->sendVariable("split", split);
-			//glUniform1f(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "split"), split);
-
-			// Send quad and draw
-			glBindVertexArray(m_BufferBlur->VAO_id);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-			glBindVertexArray(0);
-
-
-
-			// Store the blurred texture to the G Buffer
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_GBufferWitoutAliasing->id); // Result is going in the non aliased GBuffer
-			glBindFramebuffer(GL_READ_FRAMEBUFFER, m_BufferBlur->id); // From the multi sampled aliased GBuffer
-			glClearColor(0.5, 0.5, 0.5, 1.0);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glDisable(GL_DEPTH_TEST);
-
-			// Resolve color multisampling
-			glReadBuffer(GL_COLOR_ATTACHMENT0);
-			glDrawBuffer(GL_COLOR_ATTACHMENT0);
-			glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-			*/
 		}
 		
 

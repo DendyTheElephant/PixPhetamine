@@ -44,7 +44,7 @@ namespace PixPhetamine {
 			pxUInt16 getWidth() const { return m_width; }
 			pxUInt16 getHeight() const { return m_height; }
 			LowLevelWrapper::CTexture* getTexture(const char* textureName) { return m_texture[textureName]; }
-			GLenum getTextureAttachment(const char* textureName) { return m_textureAttachment[textureName]; }
+			GLenum getTextureAttachment(const char* textureName) { if (m_textureAttachment.count(textureName) == 0) { ERROR(std::string(textureName)+" not found!"); } return m_textureAttachment[textureName]; }
 		};
 	}
 }

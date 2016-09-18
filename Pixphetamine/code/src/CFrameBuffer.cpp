@@ -70,12 +70,7 @@ namespace PixPhetamine {
 			glBindFramebuffer(GL_FRAMEBUFFER, m_id);
 
 			// Attachment
-			if (a_textureType == LowLevelWrapper::DEPTH) {
-				glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, m_texture[a_textureName]->getID(), 0);
-			} 
-			else {
-				glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, m_texture[a_textureName]->getID(), 0);
-			}
+			glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, m_texture[a_textureName]->getID(), 0);
 
 			STACK_MESSAGE("Checking Framebuffer errors");
 			checkFrameBufferErrors();
