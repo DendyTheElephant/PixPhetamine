@@ -20,7 +20,7 @@
 #ifdef _MSC_VER
 #define __CURRENT_FUNCTION__ __FUNCTION__
 #else
-#define __CURRENT_FUNCTION__ __func__
+#define __CURRENT_FUNCTION__ PRINTVALUE(__func__)
 #endif
 #endif
 
