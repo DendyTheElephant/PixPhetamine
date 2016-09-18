@@ -15,10 +15,10 @@ namespace PixPhetamine {
 			// Active and bind the correct texture
 			glActiveTexture(GL_TEXTURE0 + m_inputFrame->getTextureAttachment(a_textureName));
 			if (texture->isMultisampled()) {
-				glBindTexture(GL_TEXTURE_2D, texture->getID());
+				glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture->getID());
 			}
 			else {
-				glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, texture->getID());
+				glBindTexture(GL_TEXTURE_2D, texture->getID());
 			}
 			
 			// Send it to the shader

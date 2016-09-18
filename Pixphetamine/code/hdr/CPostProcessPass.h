@@ -1,5 +1,5 @@
 /// \file		CPostProcessPass.h
-///	\author		Daniel Huc
+/// \author		Daniel Huc
 /// \date		June 2016
 #pragma once
 
@@ -33,14 +33,15 @@ namespace PixPhetamine {
 
 		/* Methods */
 		public:
-			CPostProcessPass(LowLevelWrapper::CShader* shader, LowLevelWrapper::CFrameBuffer* inputFrame, LowLevelWrapper::CFrameBuffer* outputFrame) :
-				m_shader(shader), m_inputFrame(inputFrame), m_processedFrame(outputFrame) {/***/}
+			CPostProcessPass(LowLevelWrapper::CShader* shader, LowLevelWrapper::CFrameBuffer* inputFrame, LowLevelWrapper::CFrameBuffer* outputFrame) { 
+				m_shader = shader; m_inputFrame = inputFrame; m_processedFrame = outputFrame; 
+			}
 			~CPostProcessPass() {/***/}
 
-			void bindVariableName(const char* correspondingVariableNameInShader) { m_shader->bindVariableName(correspondingVariableNameInShader); }
+			void bindVariableName(const char* correspondingVariableNameInShader) { glGetError(); m_shader->bindVariableName(correspondingVariableNameInShader); }
 
 			// Process
-			void sendTexture(const char * correspondingVariableNameInShader, const char* textureName, pxUInt16 location);
+			void sendTexture(const char * correspondingVariableNameInShader, const char * textureName, pxUInt16 location);
 			void process();
 			template<typename SHADER_FRIENDLY_TYPE>
 			void sendVariable(const char * correspondingVariableNameInShader, SHADER_FRIENDLY_TYPE const& variable) {

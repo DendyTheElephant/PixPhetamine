@@ -248,9 +248,35 @@ void UCoreEngine::runGameLoop() {
 		
 
 
-
+		PixPhetamine::LowLevelWrapper::CFrameBuffer* processedFrame;
 		if (pxUInt value = m_InputHandler->getShoot()) {
 			/* RGB Split ================================================================================================================ */
+			
+			pxFloat split = (pxFloat)value / 10.0f;
+
+			using namespace PixPhetamine::PostProcess;
+			using namespace PixPhetamine::LowLevelWrapper;
+
+			CFrameBuffer* sceneFrame = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
+			processedFrame = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
+
+			CPostProcessPass* rgbSplitPass = new CPostProcessPass(m_ShaderList["rgbsplit"], sceneFrame, processedFrame);
+
+			glUseProgram(m_ShaderList["rgbsplit"]->id());
+
+			sceneFrame->addTexture("colorTexture", NORMAL);
+			processedFrame->addTexture("processedTexture", NORMAL);
+			
+			rgbSplitPass->bindVariableName("image");
+			rgbSplitPass->bindVariableName("split");
+
+			rgbSplitPass->sendTexture("image", "colorTexture", 0);
+
+			rgbSplitPass->sendVariable("split", split);
+
+			rgbSplitPass->process();
+			
+			/*
 			GLenum rgbPassTarget[] = { GL_COLOR_ATTACHMENT0 };
 			PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["rgbsplit"]->id(), m_BufferBlur->id, rgbPassTarget, 1);
 
@@ -259,7 +285,7 @@ void UCoreEngine::runGameLoop() {
 			glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture); // Activate the texture to send
 			glUniform1i(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "image"), 0); // Send it to the shader
 
-			pxFloat split = (pxFloat)value / 10.0f;
+			
 			m_ShaderList["rgbsplit"]->bindVariableName("split");
 			m_ShaderList["rgbsplit"]->sendVariable("split", split);
 			//glUniform1f(glGetUniformLocation(m_ShaderList["rgbsplit"]->id(), "split"), split);
@@ -271,7 +297,7 @@ void UCoreEngine::runGameLoop() {
 
 
 
-			/* Store the blurred texture to the G Buffer */
+			// Store the blurred texture to the G Buffer
 			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_GBufferWitoutAliasing->id); // Result is going in the non aliased GBuffer
 			glBindFramebuffer(GL_READ_FRAMEBUFFER, m_BufferBlur->id); // From the multi sampled aliased GBuffer
 			glClearColor(0.5, 0.5, 0.5, 1.0);
@@ -282,6 +308,7 @@ void UCoreEngine::runGameLoop() {
 			glReadBuffer(GL_COLOR_ATTACHMENT0);
 			glDrawBuffer(GL_COLOR_ATTACHMENT0);
 			glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+			*/
 		}
 		
 
@@ -306,7 +333,11 @@ void UCoreEngine::runGameLoop() {
 
 		// send the textures
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture);
+		
+		if (m_InputHandler->getShoot())
+			glBindTexture(GL_TEXTURE_2D, processedFrame->getTexture("processedTexture")->getID());
+		else 
+			glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture);
 		glUniform1i(glGetUniformLocation(m_ShaderList["postprocess"]->id(), "color_map"), 0);
 
 		glActiveTexture(GL_TEXTURE1);

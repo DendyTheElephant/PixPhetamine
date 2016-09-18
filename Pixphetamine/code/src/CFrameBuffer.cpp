@@ -51,7 +51,7 @@ namespace PixPhetamine {
 			STACK_TRACE;
 			
 			GLenum textureTarget;
-			(m_isMultisampled) ? textureTarget = GL_TEXTURE_2D : textureTarget = GL_TEXTURE_2D_MULTISAMPLE;
+			(m_isMultisampled) ? textureTarget = GL_TEXTURE_2D_MULTISAMPLE : textureTarget = GL_TEXTURE_2D;
 
 			// Resolve attachment
 			GLvramLocation attachment = m_textureAttachment.size();
@@ -60,7 +60,7 @@ namespace PixPhetamine {
 			m_textureAttachment[a_textureName] = attachment;
 
 			// Create texture
-			glActiveTexture(GL_TEXTURE + attachment);
+			glActiveTexture(GL_TEXTURE0 + attachment);
 			m_texture[a_textureName] = new CTexture(m_width, m_height, a_textureType, m_isMultisampled);
 			
 			// Framebuffer link
@@ -75,6 +75,10 @@ namespace PixPhetamine {
 
 			STACK_MESSAGE("Checking Framebuffer errors");
 			checkFrameBufferErrors();
+			STACK_MESSAGE("Checking Framebuffer errors [OK]");
+
+			STACK_MESSAGE("Checking OpenGL errors");
+			Utility::UErrorHandler::checkOpenGLErrors();
 
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			
