@@ -71,8 +71,18 @@ private:
 
 	PixPhetamine::LowLevelWrapper::GBuffer* m_GBufferMultiSampled;
 	PixPhetamine::LowLevelWrapper::GBuffer* m_GBufferWitoutAliasing;
-	PixPhetamine::LowLevelWrapper::ImageBuffer* m_BufferBlurPartial;
-	PixPhetamine::LowLevelWrapper::ImageBuffer* m_BufferBlur;
+	//PixPhetamine::LowLevelWrapper::ImageBuffer* m_BufferBlurPartial;
+	//PixPhetamine::LowLevelWrapper::ImageBuffer* m_BufferBlur;
+
+	PixPhetamine::PostProcess::CFrameBuffer* m_GBufferMS;
+	PixPhetamine::PostProcess::CFrameBuffer* m_GBufferAA;
+	PixPhetamine::PostProcess::CFrameBuffer* m_RGBSplitted;
+	PixPhetamine::PostProcess::CFrameBuffer* m_BufferBlurPartial;
+	PixPhetamine::PostProcess::CFrameBuffer* m_BufferBlur;
+
+	PixPhetamine::PostProcess::CPostProcessPass* m_BlurPassPartI;
+	PixPhetamine::PostProcess::CPostProcessPass* m_BlurPassPartII;
+	PixPhetamine::PostProcess::CPostProcessPass* m_RGBSplitPass;
 
 /* Methods */
 private:

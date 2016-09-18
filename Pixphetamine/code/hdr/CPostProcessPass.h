@@ -27,22 +27,22 @@ namespace PixPhetamine {
 		/* Members */
 		private:
 			LowLevelWrapper::CShader*		m_shader{ nullptr };
-			LowLevelWrapper::CFrameBuffer*	m_inputFrame{ nullptr };
-			LowLevelWrapper::CFrameBuffer*	m_processedFrame{ nullptr };
+			CFrameBuffer*					m_frameBuffer{ nullptr };
 			LowLevelWrapper::SMeshQuad		m_quad;
 
 		/* Methods */
 		public:
-			CPostProcessPass(LowLevelWrapper::CShader* shader, LowLevelWrapper::CFrameBuffer* inputFrame, LowLevelWrapper::CFrameBuffer* outputFrame) { 
-				m_shader = shader; m_inputFrame = inputFrame; m_processedFrame = outputFrame; 
+			CPostProcessPass(LowLevelWrapper::CShader* shader, CFrameBuffer* frameBuffer) { 
+				m_shader = shader; m_frameBuffer = frameBuffer;
 			}
 			~CPostProcessPass() {/***/}
 
-			void bindVariableName(const char* correspondingVariableNameInShader) { glGetError(); m_shader->bindVariableName(correspondingVariableNameInShader); }
+			void bindVariableName(const char* correspondingVariableNameInShader) { m_shader->bindVariableName(correspondingVariableNameInShader); }
 
 			// Process
-			void sendTexture(const char * correspondingVariableNameInShader, const char * textureName, pxUInt16 location);
-			void process();
+			void activate() const { glUseProgram(m_shader->id()); }
+			void sendTexture(LowLevelWrapper::CTexture* textureToSend, const char* correspondingVariableNameInShader, pxUInt16 textureUnitLocation);
+			void process(pxUInt16 a_numberOfOutputTextures, std::string outputTextureName ...);
 			template<typename SHADER_FRIENDLY_TYPE>
 			void sendVariable(const char * correspondingVariableNameInShader, SHADER_FRIENDLY_TYPE const& variable) {
 				m_shader->sendVariable(correspondingVariableNameInShader, variable);

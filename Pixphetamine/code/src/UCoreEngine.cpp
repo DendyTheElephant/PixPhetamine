@@ -1,6 +1,7 @@
 #include "UCoreEngine.h"
 
 UCoreEngine* UCoreEngine::game = nullptr;
+using namespace PixPhetamine::PostProcess;
 
 UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	STACK_TRACE;
@@ -36,18 +37,51 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	STACK_MESSAGE("Loading Meshes [COMPLETE]");
 
 	STACK_MESSAGE("Creation of FrameBuffers");
+	m_GBufferMS = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, true);
+	m_GBufferAA = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
+	m_RGBSplitted = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
+	m_BufferBlurPartial = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
+	m_BufferBlur = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
+
 	m_GBufferMultiSampled = new PixPhetamine::LowLevelWrapper::GBuffer();
 	m_GBufferWitoutAliasing = new PixPhetamine::LowLevelWrapper::GBuffer();
-	m_BufferBlurPartial = new PixPhetamine::LowLevelWrapper::ImageBuffer();
-	m_BufferBlur = new PixPhetamine::LowLevelWrapper::ImageBuffer();
+	//m_BufferBlurPartial = new PixPhetamine::LowLevelWrapper::ImageBuffer();
+	//m_BufferBlur = new PixPhetamine::LowLevelWrapper::ImageBuffer();
 	STACK_MESSAGE("Creation of FrameBuffers [COMPLETE]");
 
 	STACK_MESSAGE("Initialisation of FrameBuffers");
+	m_GBufferMS->addTexture("colorTexture", PixPhetamine::LowLevelWrapper::NORMAL);
+	m_GBufferMS->addTexture("normalTexture", PixPhetamine::LowLevelWrapper::NORMAL);
+	m_GBufferMS->addTexture("typeTexture", PixPhetamine::LowLevelWrapper::NORMAL);
+	m_GBufferMS->addTexture("depthTexture", PixPhetamine::LowLevelWrapper::DEPTH);
+
+	m_GBufferAA->addTexture("colorTexture", PixPhetamine::LowLevelWrapper::NORMAL);
+	m_GBufferAA->addTexture("normalTexture", PixPhetamine::LowLevelWrapper::NORMAL);
+	m_GBufferAA->addTexture("typeTexture", PixPhetamine::LowLevelWrapper::NORMAL);
+	m_GBufferAA->addTexture("depthTexture", PixPhetamine::LowLevelWrapper::DEPTH);
+
+	m_RGBSplitted->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::NORMAL);
+
+	m_BufferBlurPartial->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::NORMAL);
+
+	m_BufferBlur->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::NORMAL);
+
 	m_GBufferMultiSampled->initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GL_TEXTURE_2D_MULTISAMPLE);
 	m_GBufferWitoutAliasing->initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GL_TEXTURE_2D);
-	m_BufferBlurPartial->initialize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	m_BufferBlur->initialize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	//m_BufferBlurPartial->initialize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	//m_BufferBlur->initialize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	STACK_MESSAGE("Initialisation of FrameBuffers [COMPLETE]");
+
+	STACK_MESSAGE("Setup of Post Process passes");
+	m_BlurPassPartI = new CPostProcessPass(m_ShaderList["blurH"], m_BufferBlurPartial);
+	m_BlurPassPartII = new CPostProcessPass(m_ShaderList["blurV"], m_BufferBlur);
+	m_RGBSplitPass = new CPostProcessPass(m_ShaderList["rgbsplit"], m_RGBSplitted);
+
+	m_BlurPassPartI->bindVariableName("image");
+	m_BlurPassPartI->bindVariableName("image");
+	m_RGBSplitPass->bindVariableName("image");
+	m_RGBSplitPass->bindVariableName("split");
+	STACK_MESSAGE("Setup of Post Process passes [COMPLETE]");
 
 	UNSTACK_TRACE;
 }
@@ -57,8 +91,8 @@ UCoreEngine::~UCoreEngine() {
 
 	m_GBufferMultiSampled->free();
 	m_GBufferWitoutAliasing->free();
-	m_BufferBlurPartial->free();
-	m_BufferBlur->free();
+	//m_BufferBlurPartial->free();
+	//m_BufferBlur->free();
 
 	for (auto const &it_shaderName : m_ShaderNames) {
 		delete m_ShaderList[it_shaderName];
@@ -158,13 +192,14 @@ void UCoreEngine::runGameLoop() {
 		/* =========================================================================================== */
 		m_ViewProjectionMatrix = m_Camera->getViewProjectionMatrix();
 		GLenum gBufferTargets[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_DEPTH_ATTACHMENT };
-		PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["basic"]->id(), m_GBufferMultiSampled->id, gBufferTargets, 3);
+		//PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["basic"]->id(), m_GBufferWitoutAliasing->id, gBufferTargets, 3);
+		PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["basic"]->id(), m_GBufferMS->getId(), gBufferTargets, 3);
 
 		/* Draw LionHeads */
 		pxFloat type_fox[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 		glBindVertexArray(m_MeshList["lionhead"]->getVBO());
 
-		for (size_t i_lionhead = 0; i_lionhead < 3000; ++i_lionhead) {
+		for (size_t i_lionhead = 0; i_lionhead < 10; ++i_lionhead) {
 
 			m_ModelMatrix = pxMat4f();
 			pxVec3f rotateY(0.0f, 1.0f, 0.0f);
@@ -188,21 +223,57 @@ void UCoreEngine::runGameLoop() {
 		glUseProgram(0);
 
 		STACK_MESSAGE("Scene Draw [COMPLETE]");
-		STACK_MESSAGE("Anti Aliasing filtering");
+
+		
+		
+		//STACK_MESSAGE("Anti Aliasing filtering");
 
 		/* =========================================================================================== */
 		/* ==== Anti Aliasing filtering ============================================================== */
 		/* =========================================================================================== */
-		PixPhetamine::LowLevelWrapper::multiSamplingAntiAliasing(m_GBufferMultiSampled, m_GBufferWitoutAliasing, WINDOW_WIDTH, WINDOW_HEIGHT);
+		//PixPhetamine::LowLevelWrapper::multiSamplingAntiAliasing(m_GBufferMultiSampled, m_GBufferWitoutAliasing, WINDOW_WIDTH, WINDOW_HEIGHT);
+		STACK_TRACE;
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_GBufferMS->getId()); // From the multi sampled aliased GBuffer
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_GBufferAA->getId()); // Result is going in the non aliased GBuffer
+		glClearColor(0.5, 0.5, 0.5, 1.0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDisable(GL_DEPTH_TEST);
+
+		// Resolve color multisampling
+		glReadBuffer(GL_COLOR_ATTACHMENT0);
+		glDrawBuffer(GL_COLOR_ATTACHMENT0);
+		glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+		// Resolve normal multisampling
+		glReadBuffer(GL_COLOR_ATTACHMENT1);
+		glDrawBuffer(GL_COLOR_ATTACHMENT1);
+		glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+		// Resolve type multisampling
+		glReadBuffer(GL_COLOR_ATTACHMENT2);
+		glDrawBuffer(GL_COLOR_ATTACHMENT2);
+		glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+		UNSTACK_TRACE;
 		
 		/* =========================================================================================== */
 		/* ==== Post Process ========================================================================= */
 		/* =========================================================================================== */
 
-
 		///* Blur ====================================================================================== */
 		if (pxUInt value = m_InputHandler->getBulletTime()) {
-			for (pxInt i = 0; i < 4; ++i) {
+
+			m_BlurPassPartI->activate();
+			m_BlurPassPartI->sendTexture(m_GBufferAA->getTexture("colorTexture"), "image", 0);
+			m_BlurPassPartI->process(1,"processedTexture");
+
+			m_BlurPassPartII->activate();
+			m_BlurPassPartII->sendTexture(m_BufferBlurPartial->getTexture("processedTexture"), "image", 0);
+			m_BlurPassPartII->process(1, "processedTexture");
+
+			m_GBufferAA->replaceTexture("colorTexture", m_BufferBlur, "processedTexture");
+
+			/*for (pxInt i = 0; i < 4; ++i) {
 				GLenum blurPassTargets[] = { GL_COLOR_ATTACHMENT0 };
 				PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["blurH"]->id(), m_BufferBlurPartial->id, blurPassTargets, 1);
 
@@ -232,7 +303,7 @@ void UCoreEngine::runGameLoop() {
 
 
 
-				/* Store the blurred texture to the G Buffer */
+				// Store the blurred texture to the G Buffer 
 				glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_GBufferWitoutAliasing->id); // Result is going in the non aliased GBuffer
 				glBindFramebuffer(GL_READ_FRAMEBUFFER, m_BufferBlur->id); // From the multi sampled aliased GBuffer
 				glClearColor(0.5, 0.5, 0.5, 1.0);
@@ -243,39 +314,23 @@ void UCoreEngine::runGameLoop() {
 				glReadBuffer(GL_COLOR_ATTACHMENT0);
 				glDrawBuffer(GL_COLOR_ATTACHMENT0);
 				glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-			}
+			}*/
 		}
 		
 
 
-		PixPhetamine::LowLevelWrapper::CFrameBuffer* processedFrame;
 		if (pxUInt value = m_InputHandler->getShoot()) {
 			/* RGB Split ================================================================================================================ */
 			
 			pxFloat split = (pxFloat)value / 10.0f;
-
-			using namespace PixPhetamine::PostProcess;
-			using namespace PixPhetamine::LowLevelWrapper;
-
-			CFrameBuffer* sceneFrame = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
-			processedFrame = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
-
-			CPostProcessPass* rgbSplitPass = new CPostProcessPass(m_ShaderList["rgbsplit"], sceneFrame, processedFrame);
-
-			glUseProgram(m_ShaderList["rgbsplit"]->id());
-
-			sceneFrame->addTexture("colorTexture", NORMAL);
-			processedFrame->addTexture("processedTexture", NORMAL);
 			
-			rgbSplitPass->bindVariableName("image");
-			rgbSplitPass->bindVariableName("split");
+			m_RGBSplitPass->activate();
+			m_RGBSplitPass->sendTexture(m_GBufferAA->getTexture("colorTexture"), "image", 0);
+			m_RGBSplitPass->sendVariable("split", split);
+			m_RGBSplitPass->process(1, "processedTexture");
 
-			rgbSplitPass->sendTexture("image", "colorTexture", 0);
+			m_GBufferAA->replaceTexture("colorTexture", m_RGBSplitted, "processedTexture");
 
-			rgbSplitPass->sendVariable("split", split);
-
-			rgbSplitPass->process();
-			
 			/*
 			GLenum rgbPassTarget[] = { GL_COLOR_ATTACHMENT0 };
 			PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["rgbsplit"]->id(), m_BufferBlur->id, rgbPassTarget, 1);
@@ -313,7 +368,7 @@ void UCoreEngine::runGameLoop() {
 		
 
 
-
+		
 
 
 		/* =========================================================================================== */
@@ -334,22 +389,23 @@ void UCoreEngine::runGameLoop() {
 		// send the textures
 		glActiveTexture(GL_TEXTURE0);
 		
-		if (m_InputHandler->getShoot())
-			glBindTexture(GL_TEXTURE_2D, processedFrame->getTexture("processedTexture")->getID());
-		else 
-			glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture);
+		//glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture);
+		glBindTexture(GL_TEXTURE_2D, m_GBufferAA->getTexture("colorTexture")->getID());
 		glUniform1i(glGetUniformLocation(m_ShaderList["postprocess"]->id(), "color_map"), 0);
 
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->normalTexture);
+		//glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->normalTexture);
+		glBindTexture(GL_TEXTURE_2D, m_GBufferAA->getTexture("normalTexture")->getID());
 		glUniform1i(glGetUniformLocation(m_ShaderList["postprocess"]->id(), "normal_map"), 1);
 
 		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->typeTexture);
+		//glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->typeTexture);
+		glBindTexture(GL_TEXTURE_2D, m_GBufferAA->getTexture("typeTexture")->getID());
 		glUniform1i(glGetUniformLocation(m_ShaderList["postprocess"]->id(), "type_map"), 2);
 
 		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->depthTexture);
+		//glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->depthTexture);
+		glBindTexture(GL_TEXTURE_2D, m_GBufferAA->getTexture("depthTexture")->getID());
 		glUniform1i(glGetUniformLocation(m_ShaderList["postprocess"]->id(), "depth_map"), 3);
 
 

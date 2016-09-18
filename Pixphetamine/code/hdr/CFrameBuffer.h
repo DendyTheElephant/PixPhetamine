@@ -17,18 +17,18 @@
 
 namespace PixPhetamine {
 
-	namespace LowLevelWrapper {
+	/// This part of the program is in charge of the post process pipeline
+	namespace PostProcess {
 
 		class CFrameBuffer {
 		/* Members */
 		private:
-			pxUInt16							m_width{ 0 };				///< Frame width
-			pxUInt16							m_height{ 0 };				///< Frame height
-			GLvramLocation						m_id{ 0 };					///< ID of the FBO, used to reference the active FBO in the rendering pipeline
-			std::map<std::string, CTexture*>	m_texture;					///< Texture map
-			std::map<std::string, GLenum>		m_textureAttachment;		///< Updated with m_texture but stores the attachment in the FBO of the texture
-			pxBool								m_isMultisampled{ false };	///< Required for texture generation: is it multisampled texture?
-			pxBool								m_isDepthAttached{ false };	///< A FBO can only hold 1 depth
+			pxUInt16											m_width{ 0 };				///< Frame width
+			pxUInt16											m_height{ 0 };				///< Frame height
+			GLvramLocation										m_id{ 0 };					///< ID of the FBO, used to reference the active FBO in the rendering pipeline
+			std::map<std::string, LowLevelWrapper::CTexture*>	m_texture;					///< Texture map
+			std::map<std::string, GLenum>						m_textureAttachment;		///< Updated with m_texture but stores the attachment in the FBO of the texture
+			pxBool												m_isMultisampled{ false };	///< Required for texture generation: is it multisampled texture?
 
 		/* Methods */
 		private:
@@ -36,12 +36,15 @@ namespace PixPhetamine {
 		public:
 			CFrameBuffer(pxUInt16 const& width, pxUInt16 const& height, pxBool const& willBeMultisampled);
 			~CFrameBuffer();
-			void addTexture(std::string const& textureName, ETextureType const& textureType);
+
+			void addTexture(std::string const& textureName, LowLevelWrapper::ETextureType const& textureType);
+			void replaceTexture(const char* textureNameToReplace, CFrameBuffer* readenFrame, const char* remplacementTexture);
+
 			GLvramLocation getId() const { return m_id; }
-			CTexture* getTexture(const char* textureName) { return m_texture[textureName]; }
+			pxUInt16 getWidth() const { return m_width; }
+			pxUInt16 getHeight() const { return m_height; }
+			LowLevelWrapper::CTexture* getTexture(const char* textureName) { return m_texture[textureName]; }
 			GLenum getTextureAttachment(const char* textureName) { return m_textureAttachment[textureName]; }
-			pxUInt16 getNumberOfColorAttachments() const;
-			pxBool isDepthAttached() const { return m_isDepthAttached; }
 		};
 	}
 }

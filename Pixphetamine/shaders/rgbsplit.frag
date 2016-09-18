@@ -35,4 +35,6 @@ void main() {
     
     
     OutColor = vec4(redColor, greenColor, blueColor, 1.0);
+	//OutColor = vec4(texture(image, texCoord));
+	//OutColor = vec4(1.0, 1.0, 0.0, 1.0);
 }

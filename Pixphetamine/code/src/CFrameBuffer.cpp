@@ -2,7 +2,7 @@
 
 namespace PixPhetamine {
 
-	namespace LowLevelWrapper {
+	namespace PostProcess {
 
 		void CFrameBuffer::checkFrameBufferErrors() {
 			GLenum status;
@@ -47,30 +47,34 @@ namespace PixPhetamine {
 		}
 
 
-		void CFrameBuffer::addTexture(std::string const& a_textureName, ETextureType const& a_textureType) {
+		void CFrameBuffer::addTexture(std::string const& a_textureName, LowLevelWrapper::ETextureType const& a_textureType) {
 			STACK_TRACE;
 			
 			GLenum textureTarget;
 			(m_isMultisampled) ? textureTarget = GL_TEXTURE_2D_MULTISAMPLE : textureTarget = GL_TEXTURE_2D;
 
 			// Resolve attachment
-			GLvramLocation attachment = m_textureAttachment.size();
+			GLvramLocation attachment = GL_COLOR_ATTACHMENT0 + m_textureAttachment.size();
+			if (a_textureType == LowLevelWrapper::DEPTH) {
+				attachment = GL_DEPTH_ATTACHMENT;
+			}
 
 			// Create attachment
 			m_textureAttachment[a_textureName] = attachment;
 
 			// Create texture
-			glActiveTexture(GL_TEXTURE0 + attachment);
-			m_texture[a_textureName] = new CTexture(m_width, m_height, a_textureType, m_isMultisampled);
+			glActiveTexture(GL_TEXTURE0 + m_texture.size());
+			m_texture[a_textureName] = new LowLevelWrapper::CTexture(m_width, m_height, a_textureType, m_isMultisampled);
 			
-			// Framebuffer link
+			// Framebuffer link (we can perform it everytime, because addTexture will be called as pre-process (not in main game loop))
 			glBindFramebuffer(GL_FRAMEBUFFER, m_id);
-			if (a_textureType == DEPTH) {
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, textureTarget, m_texture[a_textureName]->getID(), 0);
-				m_isDepthAttached = true;
+
+			// Attachment
+			if (a_textureType == LowLevelWrapper::DEPTH) {
+				glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, m_texture[a_textureName]->getID(), 0);
 			} 
 			else {
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + attachment, textureTarget, m_texture[a_textureName]->getID(), 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, textureTarget, m_texture[a_textureName]->getID(), 0);
 			}
 
 			STACK_MESSAGE("Checking Framebuffer errors");
@@ -85,12 +89,28 @@ namespace PixPhetamine {
 			UNSTACK_TRACE;
 		}
 
+		void CFrameBuffer::replaceTexture(const char* a_textureNameToReplace, CFrameBuffer* a_readenFrame, const char* a_remplacementTexture) {
+			// FIXME: Will only work with non depth textures I guess (GL_LINEAR and stuff)
+			STACK_TRACE;
 
-		pxUInt16 CFrameBuffer::getNumberOfColorAttachments() const {
-			pxUInt16 number = m_texture.size();
-			if (m_isDepthAttached)
-				number--;
-			return number;
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, a_readenFrame->getId());
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->m_id);
+			glClearColor(0.5, 0.5, 0.5, 1.0);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glDisable(GL_DEPTH_TEST);
+			// Resolve color multisampling
+			glReadBuffer(a_readenFrame->getTextureAttachment(a_remplacementTexture));
+			glDrawBuffer(this->getTextureAttachment(a_textureNameToReplace));
+			glBlitFramebuffer(0, 0, a_readenFrame->getWidth(), a_readenFrame->getHeight(), 0, 0, m_width, m_height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+			STACK_MESSAGE("Checking Framebuffer errors");
+			checkFrameBufferErrors();
+			STACK_MESSAGE("Checking Framebuffer errors [OK]");
+
+			STACK_MESSAGE("Checking OpenGL errors");
+			Utility::UErrorHandler::checkOpenGLErrors();
+
+			UNSTACK_TRACE;
 		}
 	}
 }
