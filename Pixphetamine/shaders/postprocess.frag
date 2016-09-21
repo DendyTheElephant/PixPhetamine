@@ -40,7 +40,7 @@ void main() {
   
     float diffuse = max(dot(lightDirection,normal.xyz), 0.0);
     
-    color = diffuse * color;
+    color =  color - ((0.0 + diffuse*0.5))*(0.5, 0.2, 0.2, 1.0) ;
     
     
     outColor = color;
