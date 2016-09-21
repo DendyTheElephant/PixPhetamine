@@ -1,5 +1,5 @@
-/// \file		UCoreEngine.h
-/// \author		Daniel Huc, Henry Lef�vre
+﻿/// \file		UCoreEngine.h
+/// \author		Daniel Huc, Henry Lefèvre
 /// \date		April 2016
 #pragma once
 
