@@ -42,45 +42,38 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	m_RGBSplitted = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
 	m_BufferBlurPartial = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
 	m_BufferBlur = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
-
-	m_GBufferMultiSampled = new PixPhetamine::LowLevelWrapper::GBuffer();
-	m_GBufferWitoutAliasing = new PixPhetamine::LowLevelWrapper::GBuffer();
-	//m_BufferBlurPartial = new PixPhetamine::LowLevelWrapper::ImageBuffer();
-	//m_BufferBlur = new PixPhetamine::LowLevelWrapper::ImageBuffer();
 	STACK_MESSAGE("Creation of FrameBuffers [COMPLETE]");
 
 	STACK_MESSAGE("Initialisation of FrameBuffers");
+	// Texture attachment
 	m_GBufferMS->addTexture("colorTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_GBufferMS->addTexture("normalTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_GBufferMS->addTexture("typeTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_GBufferMS->addTexture("depthTexture", PixPhetamine::LowLevelWrapper::DEPTH);
-
 	m_GBufferAA->addTexture("colorTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_GBufferAA->addTexture("normalTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_GBufferAA->addTexture("typeTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_GBufferAA->addTexture("depthTexture", PixPhetamine::LowLevelWrapper::DEPTH);
-
 	m_RGBSplitted->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::NORMAL);
-
 	m_BufferBlurPartial->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::NORMAL);
-
 	m_BufferBlur->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::NORMAL);
-
-	m_GBufferMultiSampled->initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GL_TEXTURE_2D_MULTISAMPLE);
-	m_GBufferWitoutAliasing->initialize(WINDOW_WIDTH, WINDOW_HEIGHT, GL_TEXTURE_2D);
-	//m_BufferBlurPartial->initialize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	//m_BufferBlur->initialize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	STACK_MESSAGE("Initialisation of FrameBuffers [COMPLETE]");
 
 	STACK_MESSAGE("Setup of Post Process passes");
 	m_BlurPassPartI = new CPostProcessPass(m_ShaderList["blurH"], m_BufferBlurPartial);
 	m_BlurPassPartII = new CPostProcessPass(m_ShaderList["blurV"], m_BufferBlur);
 	m_RGBSplitPass = new CPostProcessPass(m_ShaderList["rgbsplit"], m_RGBSplitted);
+	m_DeferredShadingPass = new CPostProcessPass(m_ShaderList["postprocess"], nullptr);
 
 	m_BlurPassPartI->bindVariableName("image");
 	m_BlurPassPartI->bindVariableName("image");
 	m_RGBSplitPass->bindVariableName("image");
 	m_RGBSplitPass->bindVariableName("split");
+	m_DeferredShadingPass->bindVariableName("color_map");
+	m_DeferredShadingPass->bindVariableName("normal_map");
+	m_DeferredShadingPass->bindVariableName("type_map");
+	m_DeferredShadingPass->bindVariableName("depth_map");
+	m_DeferredShadingPass->bindVariableName("sun_direction");
 	STACK_MESSAGE("Setup of Post Process passes [COMPLETE]");
 
 	UNSTACK_TRACE;
@@ -88,11 +81,6 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 
 UCoreEngine::~UCoreEngine() {
 	PixPhetamine::Display::shutdownSDL_GL(m_SDLWindow, m_GLContext);
-
-	m_GBufferMultiSampled->free();
-	m_GBufferWitoutAliasing->free();
-	//m_BufferBlurPartial->free();
-	//m_BufferBlur->free();
 
 	for (auto const &it_shaderName : m_ShaderNames) {
 		delete m_ShaderList[it_shaderName];
@@ -182,7 +170,8 @@ void UCoreEngine::runGameLoop() {
 
 		pxVec3f sunDirectionV = pxVec3f(0.5f, 0.5f, 0.0f);
 		sunDirectionV = glm::normalize(sunDirectionV);
-		pxFloat sunDirection[3] = { sunDirectionV.x, sunDirectionV.y, sunDirectionV.z };
+		pxFloat old_sunDirection[3] = { sunDirectionV.x, sunDirectionV.y, sunDirectionV.z };
+		pxVec3f sunDirection = pxVec3f(sunDirectionV.x, sunDirectionV.y, sunDirectionV.z);
 		pxFloat sunColor[3] = { 1.0f, 1.0f, 1.0f };
 
 
@@ -192,14 +181,13 @@ void UCoreEngine::runGameLoop() {
 		/* =========================================================================================== */
 		m_ViewProjectionMatrix = m_Camera->getViewProjectionMatrix();
 		GLenum gBufferTargets[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_DEPTH_ATTACHMENT };
-		//PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["basic"]->id(), m_GBufferWitoutAliasing->id, gBufferTargets, 3);
 		PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["basic"]->id(), m_GBufferMS->getId(), gBufferTargets, 3);
 
 		/* Draw LionHeads */
 		pxFloat type_fox[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
 		glBindVertexArray(m_MeshList["lionhead"]->getVBO());
 
-		for (size_t i_lionhead = 0; i_lionhead < 1000; ++i_lionhead) {
+		for (size_t i_lionhead = 0; i_lionhead < 300; ++i_lionhead) {
 
 			m_ModelMatrix = pxMat4f();
 			pxVec3f rotateY(0.0f, 1.0f, 0.0f);
@@ -210,11 +198,11 @@ void UCoreEngine::runGameLoop() {
 			m_ModelViewProjectionMatrix = m_ViewProjectionMatrix * m_ModelMatrix;
 
 			glUniformMatrix4fv(glGetUniformLocation(m_ShaderList["basic"]->id(), "MVP"), 1, GL_FALSE, glm::value_ptr(m_ModelViewProjectionMatrix));
-			glUniform3fv(glGetUniformLocation(m_ShaderList["basic"]->id(), "sun_direction"), 1, sunDirection);
+			glUniform3fv(glGetUniformLocation(m_ShaderList["basic"]->id(), "sun_direction"), 1, old_sunDirection);
 			glUniform3fv(glGetUniformLocation(m_ShaderList["basic"]->id(), "sun_color"), 1, sunColor);
 			glUniform4fv(glGetUniformLocation(m_ShaderList["basic"]->id(), "object_type"), 1, type_fox);
 
-			glDrawElements(GL_TRIANGLES, 3 * m_MeshList["lionhead"]->getNumberOfFaces(), GL_UNSIGNED_SHORT, (void *)0);
+			glDrawElements(GL_TRIANGLES, m_MeshList["lionhead"]->getNumberOfFaces(), GL_UNSIGNED_SHORT, (void *)0);
 		}
 
 		glBindVertexArray(0);
@@ -289,56 +277,19 @@ void UCoreEngine::runGameLoop() {
 			m_GBufferAA->replaceTexture("colorTexture", m_RGBSplitted, "processedTexture");
 		}
 		
-
-
 		
-
-
 		/* =========================================================================================== */
-		// Reset frame buffer to read/write to the default window
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-		glClearColor(0.5, 0.5, 0.5, 1.0);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glDisable(GL_DEPTH_TEST);
-
-		glUseProgram(m_ShaderList["postprocess"]->id());
-
-		// send the light
-		glUniform3fv(glGetUniformLocation(m_ShaderList["postprocess"]->id(), "sun_direction"), 1, sunDirection);
-		//glUniform3fv(glGetUniformLocation(m_ShaderList["ssao"]->id(), "view_direction"), 1, fview);
-
-		// send the textures
-		glActiveTexture(GL_TEXTURE0);
+		/* ============ Deferred Shading, final pass ================================================= */
+		/* =========================================================================================== */
+		m_DeferredShadingPass->activate();
+		m_DeferredShadingPass->sendVariable("sun_direction", sunDirection);
+		m_DeferredShadingPass->sendTexture(m_GBufferAA->getTexture("colorTexture"), "color_map", 0);
+		m_DeferredShadingPass->sendTexture(m_GBufferAA->getTexture("normalTexture"), "normal_map", 1);
+		m_DeferredShadingPass->sendTexture(m_GBufferAA->getTexture("typeTexture"), "type_map", 2);
+		m_DeferredShadingPass->sendTexture(m_GBufferAA->getTexture("depthTexture"), "depth_map", 3);
 		
-		//glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->colorTexture);
-		glBindTexture(GL_TEXTURE_2D, m_GBufferAA->getTexture("colorTexture")->getID());
-		glUniform1i(glGetUniformLocation(m_ShaderList["postprocess"]->id(), "color_map"), 0);
+		m_DeferredShadingPass->process({});
 
-		glActiveTexture(GL_TEXTURE1);
-		//glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->normalTexture);
-		glBindTexture(GL_TEXTURE_2D, m_GBufferAA->getTexture("normalTexture")->getID());
-		glUniform1i(glGetUniformLocation(m_ShaderList["postprocess"]->id(), "normal_map"), 1);
-
-		glActiveTexture(GL_TEXTURE2);
-		//glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->typeTexture);
-		glBindTexture(GL_TEXTURE_2D, m_GBufferAA->getTexture("typeTexture")->getID());
-		glUniform1i(glGetUniformLocation(m_ShaderList["postprocess"]->id(), "type_map"), 2);
-
-		glActiveTexture(GL_TEXTURE3);
-		//glBindTexture(GL_TEXTURE_2D, m_GBufferWitoutAliasing->depthTexture);
-		glBindTexture(GL_TEXTURE_2D, m_GBufferAA->getTexture("depthTexture")->getID());
-		glUniform1i(glGetUniformLocation(m_ShaderList["postprocess"]->id(), "depth_map"), 3);
-
-
-		// Send quad and draw
-		glBindVertexArray(m_GBufferWitoutAliasing->VAO_id);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		glBindVertexArray(0);
-
-
-		
 
 
 

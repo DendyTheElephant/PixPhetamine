@@ -40,7 +40,7 @@ namespace PixPhetamine {
 			void bindVariableName(const char* correspondingVariableNameInShader) { m_shader->bindVariableName(correspondingVariableNameInShader); }
 
 			// Process
-			void activate() const { glUseProgram(m_shader->id()); glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer->getId()); }
+			void activate() const;
 			void sendTexture(LowLevelWrapper::CTexture* textureToSend, const char* correspondingVariableNameInShader, pxUInt16 textureUnitLocation);
 			void process(std::initializer_list<const char*> textureTargets);
 			template<typename SHADER_FRIENDLY_TYPE>

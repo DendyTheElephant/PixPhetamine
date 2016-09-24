@@ -6,6 +6,16 @@ namespace PixPhetamine {
 
 	namespace PostProcess {
 
+		void CPostProcessPass::activate() const { 
+			glUseProgram(m_shader->id()); 
+			if (m_frameBuffer != nullptr) {
+				glBindFramebuffer(GL_FRAMEBUFFER, m_frameBuffer->getId());
+			}
+			else {
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			}
+		}
+
 		void CPostProcessPass::sendTexture(LowLevelWrapper::CTexture* a_textureToSend, const char* a_correspondingVariableNameInShader, pxUInt16 a_location) {
 			STACK_TRACE;
 			
@@ -15,7 +25,7 @@ namespace PixPhetamine {
 			glGetIntegerv(GL_CURRENT_PROGRAM, &currentShader);
 			glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &currentFBOIn);
 			glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &currentFBOOut);
-			if (currentShader != m_shader->id() || currentFBOOut != m_frameBuffer->getId()) {
+			if (currentShader != m_shader->id() || (currentFBOOut != 0 && currentFBOOut != m_frameBuffer->getId())) {
 				activate();
 			}
 
@@ -47,7 +57,7 @@ namespace PixPhetamine {
 			glGetIntegerv(GL_CURRENT_PROGRAM, &currentShader);
 			glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &currentFBOIn);
 			glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &currentFBOOut);
-			if (currentShader != m_shader->id() || currentFBOOut != m_frameBuffer->getId()) {
+			if (currentShader != m_shader->id() || (currentFBOOut != 0 && currentFBOOut != m_frameBuffer->getId())) {
 				activate();
 			}
 
@@ -58,9 +68,14 @@ namespace PixPhetamine {
 			std::vector<GLenum> textureUnits;
 			// Witch are the textures where we want to draw
 			for (auto &it_target : a_textureTargets) {
+				if (m_frameBuffer == nullptr) {
+					ERROR("Post process pass Error : No FBO attached but trying to draw into texture");
+				}
 				textureUnits.push_back(m_frameBuffer->getTextureAttachment(it_target));
 			}
-			glDrawBuffers(textureUnits.size(), textureUnits.data()); // Sending the output targets			
+			if (m_frameBuffer != nullptr) {
+				glDrawBuffers(textureUnits.size(), textureUnits.data()); // Sending the output targets
+			}
 
 			// Draw call
 			glBindVertexArray(m_quad.VAO_id);

@@ -74,11 +74,6 @@ private:
 	pxMat4f m_ViewProjectionMatrix;
 	pxMat4f m_ModelViewProjectionMatrix;
 
-	PixPhetamine::LowLevelWrapper::GBuffer* m_GBufferMultiSampled;
-	PixPhetamine::LowLevelWrapper::GBuffer* m_GBufferWitoutAliasing;
-	//PixPhetamine::LowLevelWrapper::ImageBuffer* m_BufferBlurPartial;
-	//PixPhetamine::LowLevelWrapper::ImageBuffer* m_BufferBlur;
-
 	PixPhetamine::PostProcess::CFrameBuffer* m_GBufferMS;
 	PixPhetamine::PostProcess::CFrameBuffer* m_GBufferAA;
 	PixPhetamine::PostProcess::CFrameBuffer* m_RGBSplitted;
@@ -88,6 +83,7 @@ private:
 	PixPhetamine::PostProcess::CPostProcessPass* m_BlurPassPartI;
 	PixPhetamine::PostProcess::CPostProcessPass* m_BlurPassPartII;
 	PixPhetamine::PostProcess::CPostProcessPass* m_RGBSplitPass;
+	PixPhetamine::PostProcess::CPostProcessPass* m_DeferredShadingPass;
 
 /* Methods */
 private:
