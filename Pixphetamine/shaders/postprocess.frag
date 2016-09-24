@@ -48,4 +48,5 @@ void main() {
     //outColor = texture(normal_map, texCoord);
     //outColor = texture(type_map, texCoord);
     //outColor = vec4(depth,depth,depth,1.0);
+	//outColor = texture(depth_map, texCoord);
 }

@@ -242,6 +242,10 @@ void UCoreEngine::runGameLoop() {
 		glDrawBuffer(GL_COLOR_ATTACHMENT2);
 		glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
+		glReadBuffer(GL_COLOR_ATTACHMENT3);
+		glDrawBuffer(GL_COLOR_ATTACHMENT3);
+		glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
 		UNSTACK_TRACE;
 		
 		/* =========================================================================================== */
