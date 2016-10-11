@@ -57,9 +57,6 @@ namespace Utility {
 			case GL_INVALID_FRAMEBUFFER_OPERATION:
 				ERROR("OpenGL error: GL_INVALID_FRAMEBUFFER_OPERATION");
 				break;
-			case GL_CONTEXT_LOST:
-				ERROR("OpenGL error: GL_CONTEXT_LOST");
-				break;
 			default:
 				ERROR("OpenGL error: Unknown error!");
 				break;
