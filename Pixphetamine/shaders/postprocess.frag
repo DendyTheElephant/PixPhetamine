@@ -11,14 +11,8 @@ uniform vec3 sun_direction; // sun light direction (constant for all the vertice
 
 out vec4 outColor;
 
-
-vec4 blur() {
-    return vec4(0.00);
-}
-
-
 void main() {  
-    ivec2 windowSize = textureSize(color_map, 0);
+    ivec2 windowSize = textureSize(depth_map, 0);
     vec2 texCoord = gl_FragCoord.xy / windowSize;
     vec2 centerCoord = windowSize / 2;
     
@@ -26,7 +20,7 @@ void main() {
 
     vec3 lightDirection = normalize(sun_direction);
 
-    vec4 color = texture(color_map, texCoord);
+	vec4 color = texture(color_map, texCoord);
     vec4 normal = texture(normal_map, texCoord);
     vec4 type = texture(type_map, texCoord);
   
