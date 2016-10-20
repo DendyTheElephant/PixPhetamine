@@ -43,6 +43,7 @@
 #define SHADER_FRAGMENT_EXTENSION	".frag"
 #define SHADER_VERTEX_EXTENSION		".vert"
 
+#define DOWNSAMPLING				2.0
 
 
 /* Singleton */
@@ -76,10 +77,12 @@ private:
 
 	PixPhetamine::PostProcess::CFrameBuffer* m_GBufferMS;
 	PixPhetamine::PostProcess::CFrameBuffer* m_GBufferAA;
+	PixPhetamine::PostProcess::CFrameBuffer* m_DownSampled;
 	PixPhetamine::PostProcess::CFrameBuffer* m_RGBSplitted;
 	PixPhetamine::PostProcess::CFrameBuffer* m_BufferBlurPartial;
 	PixPhetamine::PostProcess::CFrameBuffer* m_BufferBlur;
 
+	PixPhetamine::PostProcess::CPostProcessPass* m_DownSamplingPass;
 	PixPhetamine::PostProcess::CPostProcessPass* m_BlurPassPartI;
 	PixPhetamine::PostProcess::CPostProcessPass* m_BlurPassPartII;
 	PixPhetamine::PostProcess::CPostProcessPass* m_RGBSplitPass;

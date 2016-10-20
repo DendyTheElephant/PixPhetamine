@@ -93,7 +93,7 @@ namespace PixPhetamine {
 
 
 	pxMat4f CCamera::getViewProjectionMatrix() {
-		m_ProjectionMatrix = glm::perspective((m_viewAngle), m_width / m_height, MIN_FIELD_OF_VIEW, MAX_FIELD_OF_VIEW);
+		m_ProjectionMatrix = glm::perspective((m_viewAngle), m_width / m_height, MIN_DEPTH_OF_FIELD, MAX_DEPTH_OF_FIELD);
 		m_ViewMatrix = glm::lookAt(m_position, m_sight, Y_AXIS);
 		return m_ProjectionMatrix * m_ViewMatrix;
 	}

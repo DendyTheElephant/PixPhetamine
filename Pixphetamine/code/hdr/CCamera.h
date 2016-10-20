@@ -26,8 +26,8 @@ namespace PixPhetamine {
 	/* Members */
 	private:
 		pxFloat m_viewAngle{ 70.0f };
-		const pxFloat MIN_FIELD_OF_VIEW{ 0.1f };
-		const pxFloat MAX_FIELD_OF_VIEW{ 1000.0f };
+		const pxFloat MIN_DEPTH_OF_FIELD{ 0.1f };
+		const pxFloat MAX_DEPTH_OF_FIELD{ 1000.0f };
 		const pxVec3f Y_AXIS{ 0.0f, 1.0f, 0.0f };
 		pxFloat m_width;
 		pxFloat m_height;
@@ -60,6 +60,8 @@ namespace PixPhetamine {
 		pxMat4f getViewProjectionMatrix();
 		pxVec3f getPosition() const { return m_position; }
 		pxVec3f getView() const { return m_direction; }
+		pxFloat getNearDOF() const { return MIN_DEPTH_OF_FIELD; }
+		pxFloat getFarDOF() const { return MAX_DEPTH_OF_FIELD; }
 
 	};
 }

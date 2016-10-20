@@ -16,6 +16,7 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	/* ============================================== */
 	m_ShaderNames.push_back("basic");
 	m_ShaderNames.push_back("postprocess");
+	m_ShaderNames.push_back("downsampling");
 	m_ShaderNames.push_back("blurH");
 	m_ShaderNames.push_back("blurV");
 	m_ShaderNames.push_back("rgbsplit");
@@ -39,9 +40,10 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	STACK_MESSAGE("Creation of FrameBuffers");
 	m_GBufferMS = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, true);
 	m_GBufferAA = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
+	m_DownSampled = new CFrameBuffer(WINDOW_WIDTH / DOWNSAMPLING, WINDOW_HEIGHT / DOWNSAMPLING, false);
 	m_RGBSplitted = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
-	m_BufferBlurPartial = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
-	m_BufferBlur = new CFrameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, false);
+	m_BufferBlurPartial = new CFrameBuffer(WINDOW_WIDTH / DOWNSAMPLING, WINDOW_HEIGHT / DOWNSAMPLING, false);
+	m_BufferBlur = new CFrameBuffer(WINDOW_WIDTH / DOWNSAMPLING, WINDOW_HEIGHT / DOWNSAMPLING, false);
 	STACK_MESSAGE("Creation of FrameBuffers [COMPLETE]");
 
 	STACK_MESSAGE("Initialisation of FrameBuffers");
@@ -54,17 +56,21 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	m_GBufferAA->addTexture("normalTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_GBufferAA->addTexture("typeTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_GBufferAA->addTexture("depthTexture", PixPhetamine::LowLevelWrapper::DEPTH);
+	m_DownSampled->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_RGBSplitted->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_BufferBlurPartial->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_BufferBlur->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	STACK_MESSAGE("Initialisation of FrameBuffers [COMPLETE]");
 
 	STACK_MESSAGE("Setup of Post Process passes");
+	m_DownSamplingPass = new CPostProcessPass(m_ShaderList["downsampling"], m_DownSampled);
 	m_BlurPassPartI = new CPostProcessPass(m_ShaderList["blurH"], m_BufferBlurPartial);
 	m_BlurPassPartII = new CPostProcessPass(m_ShaderList["blurV"], m_BufferBlur);
 	m_RGBSplitPass = new CPostProcessPass(m_ShaderList["rgbsplit"], m_RGBSplitted);
 	m_DeferredShadingPass = new CPostProcessPass(m_ShaderList["postprocess"], nullptr);
 
+	m_DownSamplingPass->bindVariableName("image");
+	m_DownSamplingPass->bindVariableName("scale");
 	m_BlurPassPartI->bindVariableName("image");
 	m_BlurPassPartI->bindVariableName("image");
 	m_RGBSplitPass->bindVariableName("image");
@@ -245,7 +251,7 @@ void UCoreEngine::runGameLoop() {
 		glReadBuffer(GL_COLOR_ATTACHMENT3);
 		glDrawBuffer(GL_COLOR_ATTACHMENT3);
 		glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-
+		
 		UNSTACK_TRACE;
 		
 		/* =========================================================================================== */
@@ -255,10 +261,18 @@ void UCoreEngine::runGameLoop() {
 		///* Blur ====================================================================================== */
 		if (pxUInt value = m_InputHandler->getBulletTime()) {
 
+			// Downsampling
+			m_DownSamplingPass->activate();
+			m_DownSamplingPass->sendTexture(m_GBufferAA->getTexture("colorTexture"), "image", 0);
+			m_DownSamplingPass->sendVariable("scale", float(DOWNSAMPLING));
+			m_DownSamplingPass->process({ "processedTexture" });
+
+			// Horizontal blur
 			m_BlurPassPartI->activate();
-			m_BlurPassPartI->sendTexture(m_GBufferAA->getTexture("colorTexture"), "image", 0);
+			m_BlurPassPartI->sendTexture(m_DownSampled->getTexture("processedTexture"), "image", 0);
 			m_BlurPassPartI->process({ "processedTexture" });
 
+			// Vertical blur
 			m_BlurPassPartII->activate();
 			m_BlurPassPartII->sendTexture(m_BufferBlurPartial->getTexture("processedTexture"), "image", 0);
 			m_BlurPassPartII->process({ "processedTexture" });
