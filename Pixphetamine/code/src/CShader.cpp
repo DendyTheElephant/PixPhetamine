@@ -4,6 +4,11 @@ namespace PixPhetamine {
 
 	namespace LowLevelWrapper {
 
+		CShader::CShader(const char* a_vertexPath, const char* a_fragmentPath) {
+			load(a_vertexPath, a_fragmentPath);
+		}
+
+
 		CShader::~CShader() {
 			if (glIsProgram(m_id)) {
 				glDeleteProgram(m_id);
@@ -58,7 +63,7 @@ namespace PixPhetamine {
 
 		void CShader::reload(const char *a_vertexPath, const char *a_fragmentPath) {
 			STACK_TRACE;
-			// check if the program already contains a shader 
+			// check if the program already contains a shader
 			if (glIsProgram(m_id)) {
 				// delete it...
 				glDeleteProgram(m_id);
@@ -94,7 +99,7 @@ namespace PixPhetamine {
 
 		void CShader::checkLinks(pxUInt a_programId) const {
 			// check if links were successfull (and display errors)
-			// call it after linking the program  
+			// call it after linking the program
 			pxInt result = GL_FALSE;
 			pxInt infoLogLength;
 
@@ -142,12 +147,12 @@ namespace PixPhetamine {
 		// Here goes the specifications of the sendVariable():
 
 		// Template specification <pxFloat> to send
-		template <> 
+		template <>
 		void CShader::sendVariable(const char * a_correspondingVariableNameInShader, pxFloat const& a_variable) {
 			STACK_TRACE;
 			if (m_variableNames.count(a_correspondingVariableNameInShader) != 0) {
 				glUniform1f(m_variableNames[a_correspondingVariableNameInShader], a_variable);
-				STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader)); 
+				STACK_MESSAGE("Sending " + std::string(a_correspondingVariableNameInShader));
 				Utility::UErrorHandler::checkOpenGLErrors();
 			}
 			else {

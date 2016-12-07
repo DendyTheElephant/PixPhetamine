@@ -16,6 +16,7 @@
 /* External dependencies */
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -41,7 +42,7 @@ namespace PixPhetamine {
 
 		/// \brief		My VertexArrayObject structure to handle 3D models efficiently in VRAM
 		/// \details	Allocate VBOs (buffers) to store vertices, normals and colors of the mesh \n
-		///				Then load mesh attributes to the GPU (VRAM) \n 
+		///				Then load mesh attributes to the GPU (VRAM) \n
 		///				Use the ID of the VBO to display from the VRAM \n
 		///				Then free ressources on the GPU!
 		struct VAO {
@@ -82,7 +83,7 @@ namespace PixPhetamine {
 
 			/// \brief	Default constructor, to make static declaration then use with initialize
 			GBuffer() { ; }
-			/// \brief		Allocate the textures (create them in VRAM) 
+			/// \brief		Allocate the textures (create them in VRAM)
 			/// \details    Will creates sized textured of specified type, with depth special texture ready to be rendered in.
 			/// \param		width			Width of the texture
 			/// \param		height			Height of the texture
@@ -104,7 +105,7 @@ namespace PixPhetamine {
 
 			/// \brief	Default constructor, to make static declaration then use with initialize
 			ImageBuffer() { ; }
-			/// \brief		Allocate the textures (create them in VRAM) 
+			/// \brief		Allocate the textures (create them in VRAM)
 			/// \details    Will creates sized texture (GL_TEXTURE_2D), ready to be rendered in.
 			/// \param		width			Width of the texture
 			/// \param		height			Height of the texture
@@ -118,5 +119,5 @@ namespace PixPhetamine {
 		void multiSamplingAntiAliasing(GBuffer* Aliased, GBuffer* Output, pxInt width, pxInt height);
 
 	}
-	
+
 }

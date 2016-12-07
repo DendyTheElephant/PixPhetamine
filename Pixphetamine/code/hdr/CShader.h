@@ -21,7 +21,7 @@
 #include "UErrorHandler.h"
 
 namespace PixPhetamine {
-	
+
 	namespace LowLevelWrapper {
 
 
@@ -37,16 +37,16 @@ namespace PixPhetamine {
 		private:
 			// string containing the source code of the input file
 			std::string getCode(const char * filePath) const;
+			void load(const char * vertexFilePath, const char * fragmentFilePath);
 			// call it after each shader compilation
 			void checkCompilation(pxUInt shaderId) const;
 			// call it after linking the program
 			void checkLinks(pxUInt programId) const;
 
 		public:
-			CShader() { /***/ };
+			CShader(const char * vertexFilePath, const char * fragmentFilePath);
 			~CShader();
 
-			void load(const char * vertexFilePath, const char * fragmentFilePath);
 			void reload(const char * vertexFilePath, const char * fragmentFilePath);
 			inline pxUInt id() { return m_id; }
 

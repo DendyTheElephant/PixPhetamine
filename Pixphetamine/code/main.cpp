@@ -19,7 +19,7 @@ pxInt main(pxInt argc, char *argv[]) {
 	std::ofstream logStream("PixPhetamine.log");
 	std::streambuf* originErrorStream = std::cerr.rdbuf();
 	std::cerr.rdbuf(logStream.rdbuf());
-	
+
 #endif
 
 	Utility::UErrorHandler* ErrorLog = &Utility::UErrorHandler::getInstance();

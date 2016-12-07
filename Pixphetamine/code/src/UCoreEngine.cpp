@@ -5,9 +5,9 @@ using namespace PixPhetamine::PostProcess;
 
 UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	STACK_TRACE;
-	
+
 	PixPhetamine::Display::openWindowAndInitializeOpenGL(m_SDLWindow, &m_GLContext, WINDOW_CAPTION, WINDOW_WIDTH, WINDOW_HEIGHT);
-	
+
 	m_InputHandler = new CInputHandler(m_SDLWindow);
 	m_Camera = new PixPhetamine::CCamera(m_SDLWindow);
 
@@ -86,6 +86,7 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 }
 
 UCoreEngine::~UCoreEngine() {
+	STACK_TRACE;
 	PixPhetamine::Display::shutdownSDL_GL(m_SDLWindow, m_GLContext);
 
 	for (auto const &it_shaderName : m_ShaderNames) {
@@ -95,6 +96,7 @@ UCoreEngine::~UCoreEngine() {
 	for (auto const &it_meshName : m_MeshNames) {
 		delete m_MeshList[it_meshName];
 	}
+	UNSTACK_TRACE;
 }
 
 UCoreEngine& UCoreEngine::getInstance() {
@@ -115,10 +117,9 @@ void UCoreEngine::destroyInstance() {
 void UCoreEngine::loadShaders() {
 	STACK_TRACE;
 	for (auto const &it_shaderName : m_ShaderNames) {
-		m_ShaderList[it_shaderName] = new PixPhetamine::LowLevelWrapper::CShader();
 		std::string vertexShader = SHADERS_FOLDER + it_shaderName + SHADER_VERTEX_EXTENSION;
 		std::string fragmentShader = SHADERS_FOLDER + it_shaderName + SHADER_FRAGMENT_EXTENSION;
-		m_ShaderList[it_shaderName]->load(vertexShader.c_str(), fragmentShader.c_str());
+		m_ShaderList[it_shaderName] = new PixPhetamine::LowLevelWrapper::CShader(vertexShader.c_str(), fragmentShader.c_str());
 	}
 	UNSTACK_TRACE;
 }
@@ -145,7 +146,7 @@ void UCoreEngine::runGameLoop() {
 
 	do {
 		STACK_TRACE;
-		
+
 		const pxUInt startFrameTime = SDL_GetTicks();
 
 		m_InputHandler->update();
@@ -212,14 +213,14 @@ void UCoreEngine::runGameLoop() {
 		}
 
 		glBindVertexArray(0);
-		
-		// disable shader 
+
+		// disable shader
 		glUseProgram(0);
 
 		STACK_MESSAGE("Scene Draw [COMPLETE]");
 
-		
-		
+
+
 		STACK_MESSAGE("Anti Aliasing filtering");
 
 		/* =========================================================================================== */
@@ -251,9 +252,9 @@ void UCoreEngine::runGameLoop() {
 		glReadBuffer(GL_COLOR_ATTACHMENT3);
 		glDrawBuffer(GL_COLOR_ATTACHMENT3);
 		glBlitFramebuffer(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-		
+
 		UNSTACK_TRACE;
-		
+
 		/* =========================================================================================== */
 		/* ==== Post Process ========================================================================= */
 		/* =========================================================================================== */
@@ -279,14 +280,14 @@ void UCoreEngine::runGameLoop() {
 
 			m_GBufferAA->replaceTexture("colorTexture", m_BufferBlur, "processedTexture");
 		}
-		
+
 
 
 		if (pxUInt value = m_InputHandler->getShoot()) {
 			/* RGB Split ================================================================================================================ */
-			
+
 			pxFloat split = (pxFloat)value / 10.0f;
-			
+
 			m_RGBSplitPass->activate();
 			m_RGBSplitPass->sendTexture(m_GBufferAA->getTexture("colorTexture"), "image", 0);
 			m_RGBSplitPass->sendVariable("split", split);
@@ -294,8 +295,8 @@ void UCoreEngine::runGameLoop() {
 
 			m_GBufferAA->replaceTexture("colorTexture", m_RGBSplitted, "processedTexture");
 		}
-		
-		
+
+
 		/* =========================================================================================== */
 		/* ============ Deferred Shading, final pass ================================================= */
 		/* =========================================================================================== */
@@ -305,7 +306,7 @@ void UCoreEngine::runGameLoop() {
 		m_DeferredShadingPass->sendTexture(m_GBufferAA->getTexture("normalTexture"), "normal_map", 1);
 		m_DeferredShadingPass->sendTexture(m_GBufferAA->getTexture("typeTexture"), "type_map", 2);
 		m_DeferredShadingPass->sendTexture(m_GBufferAA->getTexture("depthTexture"), "depth_map", 3);
-		
+
 		m_DeferredShadingPass->process({});
 
 
@@ -323,7 +324,7 @@ void UCoreEngine::runGameLoop() {
 		const Uint32 endFrameTime = SDL_GetTicks();
 
 		if (m_secondTimer.getElapsedTime() > 1000.0) {
-			
+
 			m_elapsedTime += endFrameTime - startFrameTime;
 			++m_frame;
 
@@ -332,7 +333,7 @@ void UCoreEngine::runGameLoop() {
 #else
 			snprintf(m_windowCaption, 64, "%s    FPS: %f", WINDOW_CAPTION, m_frame / (m_elapsedTime / 1000.0));
 #endif
-            
+
 			SDL_SetWindowTitle(m_SDLWindow, m_windowCaption);
 			/*
 			std::cout << "==========================================" << std::endl;
@@ -344,12 +345,12 @@ void UCoreEngine::runGameLoop() {
 			m_secondTimer.start();
 		}
 
-		// Every 10 sec 
+		// Every 10 sec
 		if (m_elapsedTime > 10000) {
 			m_elapsedTime = 0;
 			m_frame = 0;
 		}
-		
+
 		UNSTACK_TRACE;
 
 	} while (m_InputHandler->isNotQuit());
