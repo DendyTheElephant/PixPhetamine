@@ -33,6 +33,10 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	STACK_MESSAGE("Loading Shaders");
 	loadShaders();
 	STACK_MESSAGE("Loading Shaders [COMPLETE]");
+
+	STACK_MESSAGE("Checking OpenGL errors");
+	Utility::UErrorHandler::checkOpenGLErrors();
+
 	STACK_MESSAGE("Loading Meshes");
 	loadMeshes();
 	STACK_MESSAGE("Loading Meshes [COMPLETE]");
@@ -55,6 +59,7 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	m_GBufferAA->addTexture("colorTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_GBufferAA->addTexture("normalTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_GBufferAA->addTexture("typeTexture", PixPhetamine::LowLevelWrapper::NORMAL);
+	m_GBufferAA->addTexture("blurredColorTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_GBufferAA->addTexture("depthTexture", PixPhetamine::LowLevelWrapper::DEPTH);
 	m_DownSampled->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::NORMAL);
 	m_RGBSplitted->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::NORMAL);
@@ -63,24 +68,39 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	STACK_MESSAGE("Initialisation of FrameBuffers [COMPLETE]");
 
 	STACK_MESSAGE("Setup of Post Process passes");
+	// Creation
 	m_DownSamplingPass = new CPostProcessPass(m_ShaderList["downsampling"], m_DownSampled);
 	m_BlurPassPartI = new CPostProcessPass(m_ShaderList["blurH"], m_BufferBlurPartial);
 	m_BlurPassPartII = new CPostProcessPass(m_ShaderList["blurV"], m_BufferBlur);
 	m_RGBSplitPass = new CPostProcessPass(m_ShaderList["rgbsplit"], m_RGBSplitted);
-	m_DeferredShadingPass = new CPostProcessPass(m_ShaderList["postprocess"], nullptr);
-
-	m_DownSamplingPass->bindVariableName("image");
+	m_DeferredShadingPass = new CPostProcessPass(m_ShaderList["postprocess"]);
+	// Downsampling pass set-up
+	m_DownSamplingPass->bindTexture(m_GBufferAA->getTexture("colorTexture"), "image", 0);
 	m_DownSamplingPass->bindVariableName("scale");
-	m_BlurPassPartI->bindVariableName("image");
-	m_BlurPassPartI->bindVariableName("image");
-	m_RGBSplitPass->bindVariableName("image");
+	// Blur pass I pass set-up
+	m_BlurPassPartI->bindTexture(m_DownSampled->getTexture("processedTexture"), "image", 0);
+	// Blur pass II pass set-up
+	m_BlurPassPartII->bindTexture(m_BufferBlurPartial->getTexture("processedTexture"), "image", 0);
+	// RGB Split pass set-up
+	m_RGBSplitPass->bindTexture(m_GBufferAA->getTexture("colorTexture"), "image", 0);
 	m_RGBSplitPass->bindVariableName("split");
-	m_DeferredShadingPass->bindVariableName("color_map");
-	m_DeferredShadingPass->bindVariableName("normal_map");
-	m_DeferredShadingPass->bindVariableName("type_map");
-	m_DeferredShadingPass->bindVariableName("depth_map");
+	// Deferred shading pass set-up
+	m_DeferredShadingPass->bindTexture(m_GBufferAA->getTexture("colorTexture"), "color_map", 0);
+	m_DeferredShadingPass->bindTexture(m_GBufferAA->getTexture("normalTexture"), "normal_map", 1);
+	m_DeferredShadingPass->bindTexture(m_GBufferAA->getTexture("typeTexture"), "type_map", 2);
+	m_DeferredShadingPass->bindTexture(m_GBufferAA->getTexture("blurredColorTexture"), "blurred_color_map", 3);
+	m_DeferredShadingPass->bindTexture(m_GBufferAA->getTexture("depthTexture"), "depth_map", 4);
 	m_DeferredShadingPass->bindVariableName("sun_direction");
 	STACK_MESSAGE("Setup of Post Process passes [COMPLETE]");
+
+	std::vector<std::string> skyboxTextures;
+	skyboxTextures.push_back("textures/skyboxRight.png");
+	skyboxTextures.push_back("textures/skyboxLeft.png");
+	skyboxTextures.push_back("textures/skyboxTop.png");
+	skyboxTextures.push_back("textures/skyboxBottom.png");
+	skyboxTextures.push_back("textures/skyboxFront.png");
+	skyboxTextures.push_back("textures/skyboxBack.png");
+	m_skyBox = new PixPhetamine::SceneRendering::CSkybox("textures/skybox");	
 
 	UNSTACK_TRACE;
 }
@@ -120,6 +140,14 @@ void UCoreEngine::loadShaders() {
 		std::string vertexShader = SHADERS_FOLDER + it_shaderName + SHADER_VERTEX_EXTENSION;
 		std::string fragmentShader = SHADERS_FOLDER + it_shaderName + SHADER_FRAGMENT_EXTENSION;
 		m_ShaderList[it_shaderName] = new PixPhetamine::LowLevelWrapper::CShader(vertexShader.c_str(), fragmentShader.c_str());
+	}
+	UNSTACK_TRACE;
+}
+
+void UCoreEngine::reloadShaders() {
+	STACK_TRACE;
+	for (auto const &it_shaderName : m_ShaderNames) {
+		m_ShaderList[it_shaderName]->reload();
 	}
 	UNSTACK_TRACE;
 }
@@ -174,6 +202,10 @@ void UCoreEngine::runGameLoop() {
 			m_Camera->moveCameraDown(speed);
 		}
 
+		if (pxUInt value = m_InputHandler->getBulletTime()) {
+			reloadShaders();
+		}
+
 
 		pxVec3f sunDirectionV = pxVec3f(0.5f, 0.5f, 0.0f);
 		sunDirectionV = glm::normalize(sunDirectionV);
@@ -192,6 +224,14 @@ void UCoreEngine::runGameLoop() {
 
 		/* Draw LionHeads */
 		pxFloat type_fox[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+
+
+		// PRE SKYBOX OPENGL DIRECTIVES:
+		m_skyBox->draw(m_ViewProjectionMatrix, m_Camera->getPosition());
+		// POST SKYBOX OPENGL DIRECTIVES:
+		glEnable(GL_DEPTH_TEST);
+		glUseProgram(m_ShaderList["basic"]->id());
+
 		glBindVertexArray(m_MeshList["lionhead"]->getVBO());
 
 		for (size_t i_lionhead = 0; i_lionhead < 300; ++i_lionhead) {
@@ -211,7 +251,6 @@ void UCoreEngine::runGameLoop() {
 
 			glDrawElements(GL_TRIANGLES, m_MeshList["lionhead"]->getNumberOfFaces(), GL_UNSIGNED_SHORT, (void *)0);
 		}
-
 		glBindVertexArray(0);
 
 		// disable shader
@@ -260,26 +299,20 @@ void UCoreEngine::runGameLoop() {
 		/* =========================================================================================== */
 
 		///* Blur ====================================================================================== */
-		if (pxUInt value = m_InputHandler->getBulletTime()) {
+		// Downsampling
+		
+		m_DownSamplingPass->sendVariable("scale", float(DOWNSAMPLING));
+		m_DownSamplingPass->process({ "processedTexture" });
 
-			// Downsampling
-			m_DownSamplingPass->activate();
-			m_DownSamplingPass->sendTexture(m_GBufferAA->getTexture("colorTexture"), "image", 0);
-			m_DownSamplingPass->sendVariable("scale", float(DOWNSAMPLING));
-			m_DownSamplingPass->process({ "processedTexture" });
+		// Horizontal blur
+		m_BlurPassPartI->process({ "processedTexture" });
 
-			// Horizontal blur
-			m_BlurPassPartI->activate();
-			m_BlurPassPartI->sendTexture(m_DownSampled->getTexture("processedTexture"), "image", 0);
-			m_BlurPassPartI->process({ "processedTexture" });
+		// Vertical blur
+		m_BlurPassPartII->process({ "processedTexture" });
 
-			// Vertical blur
-			m_BlurPassPartII->activate();
-			m_BlurPassPartII->sendTexture(m_BufferBlurPartial->getTexture("processedTexture"), "image", 0);
-			m_BlurPassPartII->process({ "processedTexture" });
+		//m_GBufferAA->replaceTexture("colorTexture", m_BufferBlur, "processedTexture");
+		m_GBufferAA->replaceTexture("blurredColorTexture", m_BufferBlur, "processedTexture");
 
-			m_GBufferAA->replaceTexture("colorTexture", m_BufferBlur, "processedTexture");
-		}
 
 
 
@@ -287,27 +320,18 @@ void UCoreEngine::runGameLoop() {
 			/* RGB Split ================================================================================================================ */
 
 			pxFloat split = (pxFloat)value / 10.0f;
-
-			m_RGBSplitPass->activate();
-			m_RGBSplitPass->sendTexture(m_GBufferAA->getTexture("colorTexture"), "image", 0);
+			
 			m_RGBSplitPass->sendVariable("split", split);
 			m_RGBSplitPass->process({ "processedTexture" });
 
 			m_GBufferAA->replaceTexture("colorTexture", m_RGBSplitted, "processedTexture");
 		}
 
-
 		/* =========================================================================================== */
 		/* ============ Deferred Shading, final pass ================================================= */
 		/* =========================================================================================== */
-		m_DeferredShadingPass->activate();
 		m_DeferredShadingPass->sendVariable("sun_direction", sunDirection);
-		m_DeferredShadingPass->sendTexture(m_GBufferAA->getTexture("colorTexture"), "color_map", 0);
-		m_DeferredShadingPass->sendTexture(m_GBufferAA->getTexture("normalTexture"), "normal_map", 1);
-		m_DeferredShadingPass->sendTexture(m_GBufferAA->getTexture("typeTexture"), "type_map", 2);
-		m_DeferredShadingPass->sendTexture(m_GBufferAA->getTexture("depthTexture"), "depth_map", 3);
-
-		m_DeferredShadingPass->process({});
+		m_DeferredShadingPass->process();
 
 
 
@@ -323,7 +347,7 @@ void UCoreEngine::runGameLoop() {
 
 		const Uint32 endFrameTime = SDL_GetTicks();
 
-		if (m_secondTimer.getElapsedTime() > 1000.0) {
+		if (m_secondTimer.getElapsedTime() > 500) {
 
 			m_elapsedTime += endFrameTime - startFrameTime;
 			++m_frame;
@@ -346,7 +370,7 @@ void UCoreEngine::runGameLoop() {
 		}
 
 		// Every 10 sec
-		if (m_elapsedTime > 10000) {
+		if (m_elapsedTime > 1000) {
 			m_elapsedTime = 0;
 			m_frame = 0;
 		}

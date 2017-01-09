@@ -28,7 +28,7 @@ namespace PixPhetamine {
 
 		class CTexture {
 		/* Members */
-		private:
+		protected:
 			pxUInt16		m_width{ 0 };				///< Texture width
 			pxUInt16		m_height{ 0 };				///< Texture height
 			GLvramLocation	m_id{ 0 };					///< ID of the Texture, used to reference the active Tetxure in the rendering pipeline
@@ -36,7 +36,7 @@ namespace PixPhetamine {
 			ETextureType	m_textureType{ NORMAL };	///< Texture type, see ETextureType to know more about textures
 		
 		/* Methods */
-		private:
+		protected:
 			void initializeTexture(pxUInt16 const& width, pxUInt16 const& height, ETextureType const& textureType, pxBool const& willBeMultisampled, const void* data);
 
 		public:

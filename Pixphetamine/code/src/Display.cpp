@@ -105,8 +105,11 @@ namespace PixPhetamine {
 			std::cerr << "  Max uniform block fragment: " << uboFragment << std::endl;
 			std::cerr << "  Max uniform block geometry: " << uboGeometry << std::endl;
 			std::cerr << "----------------------------------------------------------------" << std::endl;
-
-			std::cerr << "===============================================================" << std::endl;
+			std::cerr << ">Texture specifications:" << std::endl;
+			pxInt texUnits;
+			glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &texUnits);
+			std::cerr << "     Max texture image units: " << uboBindings << std::endl;
+			std::cerr << "----------------------------------------------------------------" << std::endl;
 			UNSTACK_TRACE;
 		}
 

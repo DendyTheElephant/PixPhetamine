@@ -44,6 +44,15 @@
     <ClCompile Include="code\src\SMeshQuad.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="code\src\CSkyboxTexture.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CSkybox.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CBasicMesh.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\hdr\CCamera.h">
@@ -88,6 +97,15 @@
     <ClInclude Include="code\hdr\SMeshQuad.h">
       <Filter>hdr</Filter>
     </ClInclude>
+    <ClInclude Include="code\hdr\CSkyboxTexture.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\CSkybox.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\CBasicMesh.h">
+      <Filter>hdr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -96,5 +114,8 @@
     <Filter Include="hdr">
       <UniqueIdentifier>{3ab68260-e232-4ab4-92b3-e4cc2683e010}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

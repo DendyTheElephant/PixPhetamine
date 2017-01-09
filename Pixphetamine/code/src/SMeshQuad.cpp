@@ -7,13 +7,15 @@ namespace PixPhetamine {
 		SMeshQuad::SMeshQuad() {
 			STACK_TRACE;
 			/* Generation of the Quad VBO (to draw the Post Process image) */
-			pxFloat quadData[] = { -1.0f, -1.0f, 0.0f, 
-									1.0f, -1.0f, 0.0f, 
-									-1.0f, 1.0f, 0.0f,
+			pxFloat quadData[] = {
+				-1.0f, -1.0f, 0.0f, 
+				1.0f, -1.0f, 0.0f, 
+				-1.0f, 1.0f, 0.0f,
 
-									-1.0f, 1.0f, 0.0f,
-									1.0f, -1.0f, 0.0f,
-									1.0f, 1.0f, 0.0f };
+				-1.0f, 1.0f, 0.0f,
+				1.0f, -1.0f, 0.0f,
+				1.0f, 1.0f, 0.0f 
+			};
 			
 			// Create the buffer inside the GPU memory
 			glGenVertexArrays(1, &VAO_id);

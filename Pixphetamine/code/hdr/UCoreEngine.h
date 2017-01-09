@@ -29,6 +29,7 @@
 #include "Display.h"
 #include "CFrameBuffer.h"
 #include "CPostProcessPass.h"
+#include "CSkybox.h"
 
 #define WINDOW_WIDTH				1200
 #define WINDOW_HEIGHT				800
@@ -44,7 +45,7 @@
 #define SHADER_FRAGMENT_EXTENSION	".frag"
 #define SHADER_VERTEX_EXTENSION		".vert"
 
-#define DOWNSAMPLING				2.0
+#define DOWNSAMPLING				4.0
 
 
 /* Singleton */
@@ -89,11 +90,14 @@ private:
 	PixPhetamine::PostProcess::CPostProcessPass* m_RGBSplitPass;
 	PixPhetamine::PostProcess::CPostProcessPass* m_DeferredShadingPass;
 
+	PixPhetamine::SceneRendering::CSkybox* m_skyBox;
+
 /* Methods */
 private:
 	UCoreEngine();
 	~UCoreEngine();
 	void loadShaders();
+	void reloadShaders();
 	void loadMeshes();
 
 public:

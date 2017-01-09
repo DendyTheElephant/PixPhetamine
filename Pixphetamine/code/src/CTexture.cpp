@@ -5,6 +5,8 @@ namespace PixPhetamine {
 	namespace LowLevelWrapper {
 
 		void CTexture::initializeTexture(pxUInt16 const& a_width, pxUInt16 const& a_height, ETextureType const& a_textureType, pxBool const& a_willBeMultisampled, const void* a_data) {
+			STACK_TRACE;
+
 			m_textureType = a_textureType;
 			m_isMultisampled = a_willBeMultisampled;
 			m_width = a_width;
@@ -13,8 +15,8 @@ namespace PixPhetamine {
 			GLenum target;
 			GLint internalFormat;
 			GLenum format;
-			const void* data;
-			(a_data == nullptr) ? data = a_data : data = NULL;
+
+			(a_willBeMultisampled) ? target = GL_TEXTURE_2D_MULTISAMPLE : target = GL_TEXTURE_2D;
 
 			switch (a_textureType) {
 			case NORMAL:
@@ -39,8 +41,6 @@ namespace PixPhetamine {
 				break;
 			}
 
-			(a_willBeMultisampled) ? target = GL_TEXTURE_2D_MULTISAMPLE : target = GL_TEXTURE_2D;
-
 			glGenTextures(1, &m_id);
 			glBindTexture(target, m_id);
 
@@ -52,16 +52,21 @@ namespace PixPhetamine {
 				glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_REPEAT);
 				glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, a_width, a_height, 0, format, GL_FLOAT, data);
+				glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, a_width, a_height, 0, format, GL_FLOAT, a_data);
 			}
 
 			glBindTexture(target, 0);
+
+			STACK_MESSAGE("Checking OpenGL errors");
+			Utility::UErrorHandler::checkOpenGLErrors();
+
+			UNSTACK_TRACE;
 		}
 
 		CTexture::CTexture(std::string const& a_texturePath, ETextureType const& a_textureType, pxBool const& a_willBeMultisampled) {
 			STACK_TRACE;
 			SDL_Surface *image = IMG_Load(a_texturePath.c_str());
-			if (image == NULL) {
+			if (image == nullptr) {
 				STACK_TRACE;
 				ERROR("Failed to load image: " + a_texturePath + " please check if it exists");
 			}
@@ -71,7 +76,9 @@ namespace PixPhetamine {
 		}
 
 		CTexture::CTexture(pxUInt16 const& a_width, pxUInt16 const& a_height, ETextureType const& a_textureType, pxBool const& a_willBeMultisampled) {
+			STACK_TRACE;
 			initializeTexture(a_width, a_height, a_textureType, a_willBeMultisampled, nullptr);
+			UNSTACK_TRACE;
 		}
 
 		CTexture::~CTexture() {
