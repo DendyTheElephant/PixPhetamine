@@ -30,7 +30,7 @@ using pxVec4f		= glm::f32vec4;		/// Signed 32*4b floating-point vector
 using pxVec3f64		= glm::f64vec3;		/// Signed 64*3b floating-point vector
 using pxMat4f		= glm::f32mat4;		/// Signed 32*4*4b floating-point matrix
 
-using pxFloatArray	= std::vector<pxFloat>;
+using pxFloatArray = std::vector<pxFloat>;
 using pxUInt16Array = std::vector<pxUInt16>;
 
 namespace MathPhetamine {

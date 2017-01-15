@@ -10,17 +10,11 @@
 
 /* Internal headers includes */
 #include "HInternalTypesAliases.h"
+#include "HConstants.h"
 #include "UErrorHandler.h"
 #include "FBasicMeshes.h"
 #include "CSkyboxTexture.h"
 #include "CShader.h"
-
-#define TEXTURE_SUFFIX_RIGHT	"Right.png"
-#define TEXTURE_SUFFIX_LEFT		"Left.png"
-#define TEXTURE_SUFFIX_TOP		"Top.png"
-#define TEXTURE_SUFFIX_BOTTOM	"Bottom.png"
-#define TEXTURE_SUFFIX_BACK		"Back.png"
-#define TEXTURE_SUFFIX_FRONT	"Front.png"
 
 namespace PixPhetamine {
 
