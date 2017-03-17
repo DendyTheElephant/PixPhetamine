@@ -6,12 +6,12 @@ namespace PixPhetamine {
 
 		CSkybox::CSkybox(std::string a_skyboxTexturePathName) {
 			std::vector<std::string> skyboxTexturePaths;
-			skyboxTexturePaths.push_back(a_skyboxTexturePathName + TEXTURE_SUFFIX_RIGHT);
-			skyboxTexturePaths.push_back(a_skyboxTexturePathName + TEXTURE_SUFFIX_LEFT);
-			skyboxTexturePaths.push_back(a_skyboxTexturePathName + TEXTURE_SUFFIX_TOP);
-			skyboxTexturePaths.push_back(a_skyboxTexturePathName + TEXTURE_SUFFIX_BOTTOM);
-			skyboxTexturePaths.push_back(a_skyboxTexturePathName + TEXTURE_SUFFIX_BACK);
-			skyboxTexturePaths.push_back(a_skyboxTexturePathName + TEXTURE_SUFFIX_FRONT);
+			skyboxTexturePaths.push_back(a_skyboxTexturePathName + PIX::SKYBOX_SUFFIX_RIGHT);
+			skyboxTexturePaths.push_back(a_skyboxTexturePathName + PIX::SKYBOX_SUFFIX_LEFT);
+			skyboxTexturePaths.push_back(a_skyboxTexturePathName + PIX::SKYBOX_SUFFIX_TOP);
+			skyboxTexturePaths.push_back(a_skyboxTexturePathName + PIX::SKYBOX_SUFFIX_BOTTOM);
+			skyboxTexturePaths.push_back(a_skyboxTexturePathName + PIX::SKYBOX_SUFFIX_BACK);
+			skyboxTexturePaths.push_back(a_skyboxTexturePathName + PIX::SKYBOX_SUFFIX_FRONT);
 			m_texture = new LowLevelWrapper::CSkyboxTexture(skyboxTexturePaths);
 
 			static std::string vertex =
@@ -47,6 +47,7 @@ namespace PixPhetamine {
 		}
 
 		void CSkybox::draw(pxMat4f a_modelViewMatrix, pxVec3f a_cameraPosition) {
+			STACK_TRACE;
 			glDepthMask(GL_FALSE);
 			glUseProgram(m_shader->id());
 			glActiveTexture(GL_TEXTURE0);
@@ -62,6 +63,7 @@ namespace PixPhetamine {
 			glBindVertexArray(0);
 			glUseProgram(0);
 			glDepthMask(GL_TRUE);
+			UNSTACK_TRACE;
 		}
 
 	}

@@ -64,7 +64,7 @@ namespace PixPhetamine {
 			*SDL_GLContextReference = SDL_GL_CreateContext(SDL_WindowReference);
 
 			/* Enable vertical synchronization */
-			SDL_GL_SetSwapInterval(1); 
+			//SDL_GL_SetSwapInterval(1); 
 
 			STACK_MESSAGE("Checking for OpenGL errors");
 			Utility::UErrorHandler::checkOpenGLErrors();
@@ -108,6 +108,8 @@ namespace PixPhetamine {
 			std::cerr << ">Texture specifications:" << std::endl;
 			pxInt texUnits;
 			glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &texUnits);
+			//GL_MAX_COLOR_ATTACHMENTS
+			//
 			std::cerr << "     Max texture image units: " << uboBindings << std::endl;
 			std::cerr << "----------------------------------------------------------------" << std::endl;
 			UNSTACK_TRACE;

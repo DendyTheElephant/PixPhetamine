@@ -9,84 +9,39 @@
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
-  <PropertyGroup Label="Globals">
-    <ProjectGuid>{CF4273F8-4C48-4FD2-99F7-EB65A0749F75}</ProjectGuid>
-    <RootNamespace>Pixphetamine</RootNamespace>
-    <ProjectName>Pixphetamine</ProjectName>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-  </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-	<CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
-  </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>libs\glm;code\hdr\;$(IncludePath)</IncludePath>
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)\Builds\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\Builds\Temp\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-    <IncludePath>libs\SDL_image\include;libs\glm;code\hdr\;libs\glew;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)\Builds\$(Configuration)\</OutDir>
-  </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Bullet3\build\src;libs\SDL_image\include;libs\glew;libs\SDL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ShowIncludes>true</ShowIncludes>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>libs\SDL_image\lib;libs\glew\lib;libs\SDL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;SDL2main.lib;SDL2.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Console</SubSystem>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>libs\SDL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>libs\SDL_image\lib;libs\glew\lib;libs\SDL\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;SDL2main.lib;SDL2.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Console</SubSystem>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="code\hdr\CPostProcessPass.h" />
+    <ClInclude Include="code\hdr\FBasicMeshes.h" />
+    <ClInclude Include="code\hdr\CCamera.h" />
+    <ClInclude Include="code\hdr\CFrameBuffer.h" />
+    <ClInclude Include="code\hdr\CInputHandler.h" />
+    <ClInclude Include="code\hdr\CPostProcessPass.h" />
+    <ClInclude Include="code\hdr\CShader.h" />
+    <ClInclude Include="code\hdr\CSkybox.h" />
+    <ClInclude Include="code\hdr\CSkyboxTexture.h" />
+    <ClInclude Include="code\hdr\CStaticMesh.h" />
+    <ClInclude Include="code\hdr\CTexture.h" />
+    <ClInclude Include="code\hdr\CTimer.h" />
+    <ClInclude Include="code\hdr\Display.h" />
+    <ClInclude Include="code\hdr\HConstants.h" />
+    <ClInclude Include="code\hdr\HInternalTypesAliases.h" />
+    <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h" />
+    <ClInclude Include="code\hdr\SMeshQuad.h" />
+    <ClInclude Include="code\hdr\UCoreEngine.h" />
+    <ClInclude Include="code\hdr\UErrorHandler.h" />
+    <ClInclude Include="code\hdr\VSingleton.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="code\main.cpp" />
+    <ClCompile Include="code\src\FBasicMeshes.cpp" />
     <ClCompile Include="code\src\CCamera.cpp" />
     <ClCompile Include="code\src\CFrameBuffer.cpp" />
     <ClCompile Include="code\src\CInputHandler.cpp" />
@@ -98,45 +53,142 @@
     <ClCompile Include="code\src\CTexture.cpp" />
     <ClCompile Include="code\src\CTimer.cpp" />
     <ClCompile Include="code\src\Display.cpp" />
-    <ClCompile Include="code\src\CBasicMesh.cpp" />
-    <ClCompile Include="code\src\SMeshQuad.cpp" />
-    <ClCompile Include="code\src\UErrorHandler.cpp" />
     <ClCompile Include="code\src\LowLevelRenderingWrapper.cpp" />
+    <ClCompile Include="code\src\SMeshQuad.cpp" />
     <ClCompile Include="code\src\UCoreEngine.cpp" />
+    <ClCompile Include="code\src\UErrorHandler.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="code\hdr\CCamera.h" />
-    <ClInclude Include="code\hdr\CFrameBuffer.h" />
-    <ClInclude Include="code\hdr\CInputHandler.h" />
-    <ClInclude Include="code\hdr\CShader.h" />
-    <ClInclude Include="code\hdr\CSkybox.h" />
-    <ClInclude Include="code\hdr\CSkyboxTexture.h" />
-    <ClInclude Include="code\hdr\CStaticMesh.h" />
-    <ClInclude Include="code\hdr\CTexture.h" />
-    <ClInclude Include="code\hdr\CTimer.h" />
-    <ClInclude Include="code\hdr\Display.h" />
-    <ClInclude Include="code\hdr\CBasicMesh.h" />
-    <ClInclude Include="code\hdr\SMeshQuad.h" />
-    <ClInclude Include="code\hdr\UErrorHandler.h" />
-    <ClInclude Include="code\hdr\HInternalTypesAliases.h" />
-    <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h" />
-    <ClInclude Include="code\hdr\UCoreEngine.h" />
-    <ClInclude Include="code\hdr\VSingleton.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="D:\Bullet3\build\src\Bullet3Collision\Bullet3Collision.vcxproj">
-      <Project>{d5a1b976-b0f4-3bfb-b0b6-9300812bf321}</Project>
-    </ProjectReference>
-    <ProjectReference Include="D:\Bullet3\build\src\Bullet3Dynamics\Bullet3Dynamics.vcxproj">
-      <Project>{7fc47c7b-6a33-337a-b4a2-4644ad198a99}</Project>
-    </ProjectReference>
-    <ProjectReference Include="D:\Bullet3\build\src\LinearMath\LinearMath.vcxproj">
-      <Project>{996a2735-906b-323f-a5e7-8e15a07ee235}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B0CA1011-2674-42F7-A481-DE3CC64FE6F0}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Pixphetamine</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>code\hdr;libs\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>libs\SDL_image\lib;libs\SDL\lib;libs\glew\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>code\hdr;libs\glm;$(IncludePath)</IncludePath>
+    <LibraryPath>libs\SDL_image\lib;libs\SDL\lib;libs\glew\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>libs\glew;libs\SDL\include;libs\SDL_image\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2main.lib;glew32.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>libs\glew;libs\SDL\include;libs\SDL_image\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2main.lib;glew32.lib;glu32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

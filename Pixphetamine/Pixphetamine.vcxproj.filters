@@ -1,121 +1,129 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="code\src\CCamera.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\CInputHandler.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\CTimer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\main.cpp" />
-    <ClCompile Include="code\src\LowLevelRenderingWrapper.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\CShader.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\CStaticMesh.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\CFrameBuffer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\UCoreEngine.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\UErrorHandler.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\CTexture.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\Display.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\CPostProcessPass.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\hdr\CPostProcessPass.h">
-      <Filter>hdr</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\SMeshQuad.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\CSkyboxTexture.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\CSkybox.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="code\src\CBasicMesh.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="code\hdr\CCamera.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\CInputHandler.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\CTimer.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\CShader.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\CStaticMesh.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\HInternalTypesAliases.h">
-      <Filter>hdr</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\hdr\CFrameBuffer.h">
-      <Filter>hdr</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\hdr\UCoreEngine.h">
-      <Filter>hdr</Filter>
+    <ClInclude Include="code\hdr\CInputHandler.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\hdr\UErrorHandler.h">
-      <Filter>hdr</Filter>
+    <ClInclude Include="code\hdr\CPostProcessPass.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\hdr\CTexture.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\Display.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\VSingleton.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\SMeshQuad.h">
-      <Filter>hdr</Filter>
-    </ClInclude>
-    <ClInclude Include="code\hdr\CSkyboxTexture.h">
-      <Filter>hdr</Filter>
+    <ClInclude Include="code\hdr\CShader.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="code\hdr\CSkybox.h">
-      <Filter>hdr</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="code\hdr\CBasicMesh.h">
-      <Filter>hdr</Filter>
+    <ClInclude Include="code\hdr\CSkyboxTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\CStaticMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\CTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\CTimer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\Display.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\HInternalTypesAliases.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\LowLevelRenderingWrapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\SMeshQuad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\UCoreEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\UErrorHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\VSingleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\FBasicMeshes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="code\hdr\HConstants.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="src">
-      <UniqueIdentifier>{4a617964-414d-4245-a1ba-332d1982e4f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="hdr">
-      <UniqueIdentifier>{3ab68260-e232-4ab4-92b3-e4cc2683e010}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClCompile Include="code\src\CCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CFrameBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CInputHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CPostProcessPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CSkybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CSkyboxTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CStaticMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\CTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\Display.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\LowLevelRenderingWrapper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\SMeshQuad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\UCoreEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\UErrorHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="code\src\FBasicMeshes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

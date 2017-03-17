@@ -6,8 +6,8 @@ namespace PixPhetamine {
 	CCamera::CCamera(SDL_Window* a_window) {
 		pxInt width, height;
 		SDL_GetWindowSize(a_window, &width, &height);
-		m_width		= width;
-		m_height	= height;
+		m_width		= static_cast<pxFloat>(width);
+		m_height	= static_cast<pxFloat>(height);
 
 		m_direction = normalize(m_direction);
 
@@ -64,8 +64,8 @@ namespace PixPhetamine {
 
 
 	void CCamera::moveView(pxFloat const& a_dx, pxFloat const& a_dy) {
-		m_angleX -= a_dx / 5.0;
-		m_angleY -= a_dy / 5.0;
+		m_angleX -= a_dx / 5.0f;
+		m_angleY -= a_dy / 5.0f;
 
 		m_angleX = mod(m_angleX, 360.0f);
 		m_angleY = mod(m_angleY, 360.0f);

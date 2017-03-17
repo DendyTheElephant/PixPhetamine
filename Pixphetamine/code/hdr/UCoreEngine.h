@@ -19,6 +19,7 @@
 
 /* Internal headers includes */
 #include "HInternalTypesAliases.h"
+#include "HConstants.h"
 #include "CStaticMesh.h"
 #include "CShader.h"
 #include "CInputHandler.h"
@@ -30,23 +31,6 @@
 #include "CFrameBuffer.h"
 #include "CPostProcessPass.h"
 #include "CSkybox.h"
-
-#define WINDOW_WIDTH				1200
-#define WINDOW_HEIGHT				800
-#define WINDOW_CAPTION				"Sick Beam Phetamine"
-#ifdef _MSC_VER
-#define SHADERS_FOLDER				"shaders/"
-#define MESHES_FOLDER				"models/"
-#else
-#define SHADERS_FOLDER				"../Pixphetamine/shaders/"
-#define MESHES_FOLDER				"../Pixphetamine/models/"
-#endif
-#define MESHES_EXTENSION			".lowpoly"
-#define SHADER_FRAGMENT_EXTENSION	".frag"
-#define SHADER_VERTEX_EXTENSION		".vert"
-
-#define DOWNSAMPLING				4.0
-
 
 /* Singleton */
 class UCoreEngine {
@@ -64,7 +48,7 @@ private:
 	SDL_Window* m_SDLWindow; // Our window handle
 	SDL_GLContext m_GLContext; // Our opengl context handle
 
-	CInputHandler* m_InputHandler; // Retrieve the inputs of player one
+	Utility::CInputHandler* m_InputHandler; // Retrieve the inputs of player one
 	PixPhetamine::CCamera* m_Camera; // Camera for the player one
 
 	std::vector<std::string> m_ShaderNames;
