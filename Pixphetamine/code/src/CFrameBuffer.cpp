@@ -64,6 +64,7 @@ namespace PixPhetamine {
 				m_texture[M_DEPTH_TEXTURE_NAME] = std::unique_ptr<LowLevelWrapper::CTexture>(
 					new LowLevelWrapper::CTexture(m_width, m_height, LowLevelWrapper::CTexture::ETextureType::DEPTH, m_isMultisampled)
 				);
+				
 				bindToFBO(m_texture[M_DEPTH_TEXTURE_NAME]->getID(), GL_DEPTH_ATTACHMENT, m_isMultisampled);
 			}
 
@@ -94,7 +95,9 @@ namespace PixPhetamine {
 			);
 
 			// Bind it to this Frame Buffer!
-			bindToFBO(m_texture[a_textureName]->getID(), a_attachment, m_isMultisampled);
+			bindToFBO(m_texture[a_textureName]->getID(), attachment, m_isMultisampled);
+
+			UNSTACK_TRACE;
 		}
 
 		void CFrameBuffer::blit(CFrameBuffer* a_destination, std::initializer_list<SBlit> a_blits) {
@@ -112,12 +115,7 @@ namespace PixPhetamine {
 			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glDisable(GL_DEPTH_TEST); // FIXME: Is this needed?
 
-			for (auto &it_blit : a_blits) {
-				if (!m_textureAttachment.count(it_blit.textureToReadFrom) && !m_textureAttachment.count(it_blit.textureToWriteInto)) {
-					ERROR("Error! On bind: '" + it_blit.textureToReadFrom + "' or '" + it_blit.textureToWriteInto + "' not found!");
-				}
-				
-				
+			for (auto &it_blit : a_blits) {				
 				// Special blit for depth! 
 				if (it_blit.textureToReadFrom == M_DEPTH_TEXTURE_NAME) {
 					//If this one is depth, the other one must be depth to!
@@ -125,16 +123,19 @@ namespace PixPhetamine {
 						ERROR("Error! Try to blit depth texture into something else");
 					}
 					// As I've understood, no need to specify attachment since there can be only one depth attachment!
-					glBlitFramebuffer(0, 0, a_destination->getWidth(), a_destination->getHeight(), 0, 0, m_width, m_height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+					glBlitFramebuffer(0, 0, m_width, m_height, 0, 0, a_destination->getWidth(), a_destination->getHeight(), GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 				}
 				else {
 					if (it_blit.textureToWriteInto == M_DEPTH_TEXTURE_NAME) {
 						ERROR("Error! Try to blit into depth texture from something else");
 					}
+					if (!m_textureAttachment.count(it_blit.textureToReadFrom) && !m_textureAttachment.count(it_blit.textureToWriteInto)) {
+						ERROR("Error! On bind: '" + it_blit.textureToReadFrom + "' or '" + it_blit.textureToWriteInto + "' not found!");
+					}
 					glReadBuffer(m_textureAttachment[it_blit.textureToReadFrom]);
 					glDrawBuffer(a_destination->getTextureAttachment(it_blit.textureToWriteInto));
 
-					glBlitFramebuffer(0, 0, a_destination->getWidth(), a_destination->getHeight(), 0, 0, m_width, m_height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+					glBlitFramebuffer(0, 0, m_width, m_height, 0, 0, a_destination->getWidth(), a_destination->getHeight(), GL_COLOR_BUFFER_BIT, GL_LINEAR);
 				}
 
 				STACK_MESSAGE("Checking OpenGL errors");

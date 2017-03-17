@@ -19,8 +19,8 @@ namespace PixPhetamine {
 
 			switch (a_textureType) {
 			case ETextureType::NORMAL:
-				internalFormat = GL_RGB;
-				format = GL_RGB;
+				internalFormat = GL_RGBA;
+				format = GL_RGBA;
 				filtering = GL_LINEAR;
 				dataType = GL_FLOAT;
 				break;

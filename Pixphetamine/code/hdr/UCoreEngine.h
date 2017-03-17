@@ -48,7 +48,7 @@ private:
 	SDL_Window* m_SDLWindow; // Our window handle
 	SDL_GLContext m_GLContext; // Our opengl context handle
 
-	CInputHandler* m_InputHandler; // Retrieve the inputs of player one
+	Utility::CInputHandler* m_InputHandler; // Retrieve the inputs of player one
 	PixPhetamine::CCamera* m_Camera; // Camera for the player one
 
 	std::vector<std::string> m_ShaderNames;

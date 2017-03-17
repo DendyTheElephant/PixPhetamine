@@ -3,13 +3,15 @@
 UCoreEngine* UCoreEngine::game = nullptr;
 using namespace PixPhetamine::PostProcess;
 using namespace PixPhetamine;
+using namespace Utility;
+using namespace PixPhetamine::Display;
 
 UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	STACK_TRACE;
 
-	PixPhetamine::Display::openWindowAndInitializeOpenGL(m_SDLWindow, &m_GLContext, PIX::WINDOW_CAPTION, PIX::WINDOW_WIDTH, PIX::WINDOW_HEIGHT);
+	openWindowAndInitializeOpenGL(m_SDLWindow, &m_GLContext, PIX::WINDOW_CAPTION, PIX::WINDOW_WIDTH, PIX::WINDOW_HEIGHT);
 
-	m_InputHandler = new CInputHandler(m_SDLWindow);
+	m_InputHandler = new Utility::CInputHandler(m_SDLWindow);
 	m_Camera = new PixPhetamine::CCamera(m_SDLWindow);
 
 	/* ============================================== */
@@ -48,10 +50,10 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	STACK_MESSAGE("Creation of FrameBuffers");
 	m_GBufferMS = new CFrameBuffer(PIX::WINDOW_WIDTH, PIX::WINDOW_HEIGHT, CFrameBuffer::EType::WITH_DEPTH_MULTISAMPLED);
 	m_GBufferAA = new CFrameBuffer(PIX::WINDOW_WIDTH, PIX::WINDOW_HEIGHT, CFrameBuffer::EType::WITH_DEPTH);
-	m_DownSampled = new CFrameBuffer(PIX::WINDOW_WIDTH / PIX::DOWNSCALING, PIX::WINDOW_HEIGHT / PIX::DOWNSCALING, CFrameBuffer::EType::NORMAL);
+	m_DownSampled = new CFrameBuffer(PIX::WINDOW_WIDTH / static_cast<pxUInt>(PIX::DOWNSCALING), PIX::WINDOW_HEIGHT / static_cast<pxUInt>(PIX::DOWNSCALING), CFrameBuffer::EType::NORMAL);
 	m_RGBSplitted = new CFrameBuffer(PIX::WINDOW_WIDTH, PIX::WINDOW_HEIGHT, CFrameBuffer::EType::NORMAL);
-	m_BufferBlurPartial = new CFrameBuffer(PIX::WINDOW_WIDTH / PIX::DOWNSCALING, PIX::WINDOW_HEIGHT / PIX::DOWNSCALING, CFrameBuffer::EType::NORMAL);
-	m_BufferBlur = new CFrameBuffer(PIX::WINDOW_WIDTH / PIX::DOWNSCALING, PIX::WINDOW_HEIGHT / PIX::DOWNSCALING, CFrameBuffer::EType::NORMAL);
+	m_BufferBlurPartial = new CFrameBuffer(PIX::WINDOW_WIDTH / static_cast<pxUInt>(PIX::DOWNSCALING), PIX::WINDOW_HEIGHT / static_cast<pxUInt>(PIX::DOWNSCALING), CFrameBuffer::EType::NORMAL);
+	m_BufferBlur = new CFrameBuffer(PIX::WINDOW_WIDTH / static_cast<pxUInt>(PIX::DOWNSCALING), PIX::WINDOW_HEIGHT / static_cast<pxUInt>(PIX::DOWNSCALING), CFrameBuffer::EType::NORMAL);
 	STACK_MESSAGE("Creation of FrameBuffers [COMPLETE]");
 
 	STACK_MESSAGE("Checking OpenGL errors");
@@ -62,10 +64,12 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	m_GBufferMS->addTexture("colorTexture", PixPhetamine::LowLevelWrapper::CTexture::ETextureType::NORMAL, 0);
 	m_GBufferMS->addTexture("normalTexture", PixPhetamine::LowLevelWrapper::CTexture::ETextureType::NORMAL, 1);
 	m_GBufferMS->addTexture("typeTexture", PixPhetamine::LowLevelWrapper::CTexture::ETextureType::NORMAL, 2);
+
 	m_GBufferAA->addTexture("colorTexture", PixPhetamine::LowLevelWrapper::CTexture::ETextureType::NORMAL, 0);
 	m_GBufferAA->addTexture("normalTexture", PixPhetamine::LowLevelWrapper::CTexture::ETextureType::NORMAL, 1);
 	m_GBufferAA->addTexture("typeTexture", PixPhetamine::LowLevelWrapper::CTexture::ETextureType::NORMAL, 2);
 	m_GBufferAA->addTexture("blurredColorTexture", PixPhetamine::LowLevelWrapper::CTexture::ETextureType::NORMAL, 3);
+
 	m_DownSampled->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::CTexture::ETextureType::NORMAL, 0);
 	m_RGBSplitted->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::CTexture::ETextureType::NORMAL, 0);
 	m_BufferBlurPartial->addTexture("processedTexture", PixPhetamine::LowLevelWrapper::CTexture::ETextureType::NORMAL, 0);
@@ -97,7 +101,7 @@ UCoreEngine::UCoreEngine() : m_isRunning(false) {
 	m_DeferredShadingPass->bindTexture(m_GBufferAA->getTexture("normalTexture"), "normal_map", 1);
 	m_DeferredShadingPass->bindTexture(m_GBufferAA->getTexture("typeTexture"), "type_map", 2);
 	m_DeferredShadingPass->bindTexture(m_GBufferAA->getTexture("blurredColorTexture"), "blurred_color_map", 3);
-	m_DeferredShadingPass->bindTexture(m_GBufferAA->getTexture("depthTexture"), "depth_map", 4);
+	m_DeferredShadingPass->bindTexture(m_GBufferAA->getTexture("depth_texture"), "depth_map", 4);
 	m_DeferredShadingPass->bindVariableName("sun_direction");
 	STACK_MESSAGE("Setup of Post Process passes [COMPLETE]");
 
@@ -197,28 +201,28 @@ void UCoreEngine::runGameLoop() {
 
 		pxFloat speed = 0.4f;
 
-		if (m_InputHandler->getMoveLeft()) {
+		if (m_InputHandler->getKey(CInputHandler::EInput::LEFT)) {
 			m_Camera->moveCameraLeft(speed);
 		}
-		if (m_InputHandler->getMoveRight()) {
+		if (m_InputHandler->getKey(CInputHandler::EInput::RIGHT)) {
 			m_Camera->moveCameraRight(speed);
 		}
-		if (m_InputHandler->getMoveForward()) {
+		if (m_InputHandler->getKey(CInputHandler::EInput::UP)) {
 			m_Camera->moveCameraForward(speed);
 		}
-		if (m_InputHandler->getMoveBackward()) {
+		if (m_InputHandler->getKey(CInputHandler::EInput::DOWN)) {
 			m_Camera->moveCameraBackward(speed);
 		}
-		if (m_InputHandler->getMoveUp()) {
+		if (m_InputHandler->getKey(CInputHandler::EInput::SHOULDER_RIGHT)) {
 			m_Camera->moveCameraUp(speed);
 		}
-		if (m_InputHandler->getMoveDown()) {
+		if (m_InputHandler->getKey(CInputHandler::EInput::SHOULDER_LEFT)) {
 			m_Camera->moveCameraDown(speed);
 		}
 
-		if (pxUInt value = m_InputHandler->getBulletTime()) {
+		/*if (pxUInt value = m_InputHandler->getBulletTime()) {
 			reloadShaders();
-		}
+		}*/
 
 
 		pxVec3f sunDirectionV = pxVec3f(0.5f, 0.5f, 0.0f);
@@ -236,7 +240,7 @@ void UCoreEngine::runGameLoop() {
 		/* ==== Draw the Scene ======================================================================= */
 		/* =========================================================================================== */
 		m_ViewProjectionMatrix = m_Camera->getViewProjectionMatrix();
-		GLenum gBufferTargets[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+		GLenum gBufferTargets[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_DEPTH_ATTACHMENT };
 		PixPhetamine::LowLevelWrapper::initialiseDrawIntoBuffer(m_ShaderList["basic"]->id(), m_GBufferMS->getId(), gBufferTargets, 3);
 
 		/* Draw LionHeads */
@@ -244,9 +248,9 @@ void UCoreEngine::runGameLoop() {
 
 
 		// PRE SKYBOX OPENGL DIRECTIVES:
-		//m_skyBox->draw(m_ViewProjectionMatrix, m_Camera->getPosition());
+		m_skyBox->draw(m_ViewProjectionMatrix, m_Camera->getPosition());
 		// POST SKYBOX OPENGL DIRECTIVES:
-		//glEnable(GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST);
 		glUseProgram(m_ShaderList["basic"]->id());
 
 		glBindVertexArray(m_MeshList["lionhead"]->getVBO());
@@ -286,31 +290,13 @@ void UCoreEngine::runGameLoop() {
 		/* =========================================================================================== */
 		//PixPhetamine::LowLevelWrapper::multiSamplingAntiAliasing(m_GBufferMultiSampled, m_GBufferWitoutAliasing, WINDOW_WIDTH, WINDOW_HEIGHT);
 		STACK_TRACE;
-		glClearColor(0.5, 0.5, 0.5, 1.0);
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glDisable(GL_DEPTH_TEST);
 
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_GBufferMS->getId()); // From the multi sampled aliased GBuffer
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_GBufferAA->getId()); // Result is going in the non aliased GBuffer
-
-		// Resolve color multisampling
-		glReadBuffer(GL_COLOR_ATTACHMENT0);
-		glDrawBuffer(GL_COLOR_ATTACHMENT0);
-		glBlitFramebuffer(0, 0, PIX::WINDOW_WIDTH, PIX::WINDOW_HEIGHT, 0, 0, PIX::WINDOW_WIDTH, PIX::WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-		// Resolve normal multisampling
-		glReadBuffer(GL_COLOR_ATTACHMENT1);
-		glDrawBuffer(GL_COLOR_ATTACHMENT1);
-		glBlitFramebuffer(0, 0, PIX::WINDOW_WIDTH, PIX::WINDOW_HEIGHT, 0, 0, PIX::WINDOW_WIDTH, PIX::WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-		// Resolve type multisampling
-		glReadBuffer(GL_COLOR_ATTACHMENT2);
-		glDrawBuffer(GL_COLOR_ATTACHMENT2);
-		glBlitFramebuffer(0, 0, PIX::WINDOW_WIDTH, PIX::WINDOW_HEIGHT, 0, 0, PIX::WINDOW_WIDTH, PIX::WINDOW_HEIGHT, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-		//glReadBuffer(GL_DEPTH_ATTACHMENT);
-		//glDrawBuffer(GL_DEPTH_ATTACHMENT);
-		glBlitFramebuffer(0, 0, PIX::WINDOW_WIDTH, PIX::WINDOW_HEIGHT, 0, 0, PIX::WINDOW_WIDTH, PIX::WINDOW_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+		m_GBufferMS->blit(m_GBufferAA, { 
+			CFrameBuffer::SBlit("colorTexture", "colorTexture"),
+			CFrameBuffer::SBlit("normalTexture", "normalTexture"),
+			CFrameBuffer::SBlit("typeTexture", "typeTexture"),
+			CFrameBuffer::SBlit("depth_texture", "depth_texture")
+		});
 
 		UNSTACK_TRACE;
 
@@ -341,17 +327,17 @@ void UCoreEngine::runGameLoop() {
 
 
 
-		if (pxUInt value = m_InputHandler->getShoot()) {
+		//if (pxUInt value = m_InputHandler->getShoot()) {
 			/* RGB Split ================================================================================================================ */
 
-			pxFloat split = (pxFloat)value / 10.0f;
-			
-			m_RGBSplitPass->sendVariable("split", split);
-			m_RGBSplitPass->process({ "processedTexture" });
+			//pxFloat split = (pxFloat)value / 10.0f;
+			//
+			//m_RGBSplitPass->sendVariable("split", split);
+			//m_RGBSplitPass->process({ "processedTexture" });
 
-			//m_GBufferAA->replaceTexture("colorTexture", m_RGBSplitted, "processedTexture");
-			m_RGBSplitted->blit(m_GBufferAA, { CFrameBuffer::SBlit("processedTexture", "colorTexture") });
-		}
+			////m_GBufferAA->replaceTexture("colorTexture", m_RGBSplitted, "processedTexture");
+			//m_RGBSplitted->blit(m_GBufferAA, { CFrameBuffer::SBlit("processedTexture", "colorTexture") });
+		//}
 
 		/* =========================================================================================== */
 		/* ============ Deferred Shading, final pass ================================================= */
@@ -385,13 +371,13 @@ void UCoreEngine::runGameLoop() {
 #endif
 
 			SDL_SetWindowTitle(m_SDLWindow, m_windowCaption);
-			
+			/*
 			std::cout << "==========================================" << std::endl;
 			std::cout << "Scene rendering:        ";//< m_renderSceneTimer.getElapsedTime() << " ms" << std::endl;
 			std::cout << "MSAAfiltering:          ";//<< m_renderAntiAliasingTimer.getElapsedTime() << " ms" << std::endl;
 			std::cout << "Post-process rendering: ";//<< m_renderPostProcessTimer.getElapsedTime() << " ms" << std::endl;
 			std::cout << "==========================================" << std::endl;
-			
+			*/
 			m_secondTimer.start();
 		}
 
@@ -407,5 +393,5 @@ void UCoreEngine::runGameLoop() {
 
 		UNSTACK_TRACE;
 
-	} while (m_InputHandler->isNotQuit());
+	} while (m_InputHandler->isQuit() == false);
 }

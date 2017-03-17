@@ -69,8 +69,8 @@ namespace Utility {
 		m_errorCallStack.push(a_context);
 	}
 
-	void UErrorHandler::stackMessage(std::string a_message) {
-		m_errorCallStack.push(a_message+"\n");
+	void UErrorHandler::stackMessage(std::string a_message, std::string a_context) {
+		m_errorCallStack.push(a_context+" "+a_message+"\n");
 	}
 
 	void UErrorHandler::unstack() {

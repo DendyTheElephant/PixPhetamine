@@ -47,6 +47,7 @@ namespace PixPhetamine {
 		}
 
 		void CSkybox::draw(pxMat4f a_modelViewMatrix, pxVec3f a_cameraPosition) {
+			STACK_TRACE;
 			glDepthMask(GL_FALSE);
 			glUseProgram(m_shader->id());
 			glActiveTexture(GL_TEXTURE0);
@@ -62,6 +63,7 @@ namespace PixPhetamine {
 			glBindVertexArray(0);
 			glUseProgram(0);
 			glDepthMask(GL_TRUE);
+			UNSTACK_TRACE;
 		}
 
 	}

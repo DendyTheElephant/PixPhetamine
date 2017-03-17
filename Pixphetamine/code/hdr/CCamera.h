@@ -1,15 +1,26 @@
-﻿/// \file		CCamera.h
-///	\author		Daniel Huc
-/// \date		April 2016
+﻿////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////====================================================================================================================================////
+/// | \file		CCamera.h
+///	| \author	Daniel Huc
+/// | \date		April 2016
+/// |----------------------------------------------------------------------------------------------------------------------------------
+/// | \brief	Camera class
+/// | \details	Handling the camera and creates the ViewProjection matrix is easier with this abstraction! \n
+///	|			Usage: set the OpenGL camera parameters at the instanciation (static values)\n
+///	|			then move this camera with basic primitives (move view along axis, move view by angles, set position) \n
+///	|			finally, get the ViewProjection matrix, it's simple, just ask!
+////====================================================================================================================================////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
-
 /* Standard library includes */
 #include <iostream>
 #include <math.h>       /* fmod */
 
+/* Specific defines */
+#define GLM_FORCE_RADIANS
+
 /* External dependencies */
 #include <SDL2/SDL.h>
-#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -17,14 +28,21 @@
 /* Internal headers includes */
 #include "HInternalTypesAliases.h"
 
+//// ---- Namespaces ---- ////
 namespace PixPhetamine {
-	/// \brief		Camera class
-	/// \details	Handling the camera and creates the ViewProjection matrix is easier with this abstraction! \n
-	///				Usage: set the OpenGL camera parameters at the instanciation (static values)\n
-	///				then move this camera with basic primitives (move view along axis, move view by angles, set position) \n
-	///				finally, get the ViewProjection matrix, it's simple, just ask!
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////====================================================================================================================================////
+	//// ClassName
+	/// \brief		Blabla
+	/// \details	Blabla
+	////====================================================================================================================================////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	class CCamera {
-	/* Members */
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//// ---- Members -----																													//// 
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private:
 		pxFloat m_viewAngle{ 70.0f };
 		const pxFloat MIN_DEPTH_OF_FIELD{ 0.1f };
@@ -43,26 +61,35 @@ namespace PixPhetamine {
 		pxMat4f m_ProjectionMatrix;
 		pxMat4f m_ViewMatrix;
 
-	/* Methods */
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//// ---- Methods -----																													////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public:
+	//// ---- Constructor/Destructor ---- ////
 		/// \brief		Constructor
 		/// \details    Provide the window context, and change initialisation values in the header file (static init).
 		/// \param		window		SDL_Window to provide context.
 		CCamera(SDL_Window* window);
-		void setFOV(pxFloat const& newAngle);
-		void moveCameraForward(pxFloat const& distance);
-		void moveCameraBackward(pxFloat const& distance);
-		void moveCameraLeft(pxFloat const& distance);
-		void moveCameraRight(pxFloat const& distance);
-		void moveCameraUp(pxFloat const& distance);
-		void moveCameraDown(pxFloat const& distance);
-		void setPosition(pxVec3f const& newPosition);
-		void moveView(pxFloat const& dx, pxFloat const& dy);
+
+	//// ---- Getter ---- ////
 		pxMat4f getViewProjectionMatrix();
 		pxVec3f getPosition() const { return m_position; }
 		pxVec3f getView() const { return m_direction; }
 		pxFloat getNearDOF() const { return MIN_DEPTH_OF_FIELD; }
 		pxFloat getFarDOF() const { return MAX_DEPTH_OF_FIELD; }
 
+	//// ---- Setter ---- ////
+		void setFOV(pxFloat const& newAngle);
+		void setPosition(pxVec3f const& newPosition);
+
+	//// ---- Core ---- ////
+		void moveView(pxFloat const& dx, pxFloat const& dy);
+		void moveCameraForward(pxFloat const& distance);
+		void moveCameraBackward(pxFloat const& distance);
+		void moveCameraLeft(pxFloat const& distance);
+		void moveCameraRight(pxFloat const& distance);
+		void moveCameraUp(pxFloat const& distance);
+		void moveCameraDown(pxFloat const& distance);
 	};
 }
